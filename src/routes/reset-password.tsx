@@ -22,26 +22,22 @@ const ResetPassword = () => {
   const [isComplete, setIsComplete] = useState(false);
   const [errors, setErrors] = useState<{ password?: string; confirmPassword?: string }>({});
   
-  const { updatePassword, session } = useAuth();
+  const { updatePassword } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  // Check if user arrived via reset link (they'll have a session from the magic link)
+  // Check if user arrived via reset link (token in URL query)
   useEffect(() => {
-    // Give a moment for the session to be established from the URL token
-    const timer = setTimeout(() => {
-      if (!session) {
-        toast({
-          title: "Lien invalide ou expiré",
-          description: "Veuillez demander un nouveau lien de réinitialisation.",
-          variant: "destructive",
-        });
-        navigate("/auth");
-      }
-    }, 2000);
-    
-    return () => clearTimeout(timer);
-  }, [session, navigate, toast]);
+    const token = new URLSearchParams(window.location.search).get('token');
+    if (!token) {
+      toast({
+        title: "Lien invalide ou expiré",
+        description: "Veuillez demander un nouveau lien de réinitialisation.",
+        variant: "destructive",
+      });
+      navigate("/auth");
+    }
+  }, [navigate, toast]);
 
   const validateForm = () => {
     const newErrors: { password?: string; confirmPassword?: string } = {};

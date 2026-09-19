@@ -1,104 +1,103 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { User, Session } from "@supabase/supabase-js";
-import { supabase } from "@/integrations/supabase/client";
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
+import { authClient } from '@/lib/auth-client'
+import type { Session } from 'better-auth'
 
-interface AuthContextType {
-  user: User | null;
-  session: Session | null;
-  loading: boolean;
-  signUp: (email: string, password: string, displayName?: string) => Promise<{ error: Error | null }>;
-  signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
-  signOut: () => Promise<void>;
-  resetPassword: (email: string) => Promise<{ error: Error | null }>;
-  updatePassword: (newPassword: string) => Promise<{ error: Error | null }>;
+export interface AuthUser {
+  id: string
+  email: string
+  name: string
+  image: string | null
+  emailVerified: boolean
+  createdAt: Date
+  updatedAt: Date
+  user_metadata?: Record<string, unknown>
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+interface AuthContextType {
+  user: AuthUser | null
+  session: Session | null
+  loading: boolean
+  signUp: (email: string, password: string, displayName?: string) => Promise<{ error: Error | null }>
+  signIn: (email: string, password: string) => Promise<{ error: Error | null }>
+  signOut: () => Promise<void>
+  resetPassword: (email: string) => Promise<{ error: Error | null }>
+  updatePassword: (newPassword: string) => Promise<{ error: Error | null }>
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined)
+
+function toAuthUser(u: { id: string; email: string; name: string; image?: string | null; emailVerified: boolean; createdAt: Date; updatedAt: Date } | null | undefined): AuthUser | null {
+  if (!u) return null
+  return {
+    id: u.id,
+    email: u.email,
+    name: u.name,
+    image: u.image ?? null,
+    emailVerified: u.emailVerified,
+    createdAt: u.createdAt,
+    updatedAt: u.updatedAt,
+    user_metadata: { display_name: u.name },
+  }
+}
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<AuthUser | null>(null)
+  const [session, setSession] = useState<Session | null>(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        setLoading(false);
-      }
-    );
-
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
+    authClient.getSession().then(({ data }) => {
+      setSession(data?.session ?? null)
+      setUser(toAuthUser(data?.user))
+      setLoading(false)
+    })
+  }, [])
 
   const signUp = async (email: string, password: string, displayName?: string) => {
-    const redirectUrl = `${window.location.origin}/`;
-    
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: redirectUrl,
-        data: {
-          display_name: displayName,
-        },
-      },
-    });
-    
-    return { error };
-  };
+    const { error } = await authClient.signUp.email({ email, password, name: displayName ?? '' })
+    return { error: error ? new Error(error.message ?? 'Sign up failed') : null }
+  }
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    
-    return { error };
-  };
+    const { data, error } = await authClient.signIn.email({ email, password })
+    if (!error && data) {
+      setSession(data.session)
+      setUser(toAuthUser(data.user))
+    }
+    return { error: error ? new Error(error.message ?? 'Sign in failed') : null }
+  }
 
   const signOut = async () => {
-    await supabase.auth.signOut();
-  };
+    await authClient.signOut()
+    setUser(null)
+    setSession(null)
+  }
 
   const resetPassword = async (email: string) => {
-    const redirectUrl = `${window.location.origin}/reset-password`;
-    
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: redirectUrl,
-    });
-    
-    return { error };
-  };
+    const { error } = await authClient.forgetPassword({
+      email,
+      redirectTo: `${window.location.origin}/reset-password`,
+    })
+    return { error: error ? new Error(error.message ?? 'Reset failed') : null }
+  }
 
   const updatePassword = async (newPassword: string) => {
-    const { error } = await supabase.auth.updateUser({
-      password: newPassword,
-    });
-    
-    return { error };
-  };
+    const token = new URLSearchParams(window.location.search).get('token') ?? undefined
+    const { error } = await authClient.resetPassword({ newPassword, token })
+    return { error: error ? new Error(error.message ?? 'Update failed') : null }
+  }
 
   return (
     <AuthContext.Provider value={{ user, session, loading, signUp, signIn, signOut, resetPassword, updatePassword }}>
       {children}
     </AuthContext.Provider>
-  );
-};
+  )
+}
 
 export const useAuth = () => {
-  const context = useContext(AuthContext);
+  const context = useContext(AuthContext)
   if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error('useAuth must be used within an AuthProvider')
   }
-  return context;
-};
+  return context
+}
