@@ -15,6 +15,23 @@ export const auth = betterAuth({
     },
   }),
   emailAndPassword: { enabled: true },
+  databaseHooks: {
+    user: {
+      create: {
+        after: async (user) => {
+          await db
+            .insert(schema.profiles)
+            .values({ user_id: user.id, display_name: user.name || null })
+            .onConflictDoNothing()
+          const role = process.env.ADMIN_EMAIL && user.email === process.env.ADMIN_EMAIL ? 'admin' : 'user'
+          await db
+            .insert(schema.user_roles)
+            .values({ user_id: user.id, role: role as 'admin' | 'user' })
+            .onConflictDoNothing()
+        },
+      },
+    },
+  },
 })
 
 export async function getSession() {

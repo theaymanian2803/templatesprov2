@@ -2,7 +2,7 @@ import { Search, X, Loader2 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "@/lib/router";
 import { motion, AnimatePresence } from "framer-motion";
-import { supabase } from "@/integrations/supabase/client";
+import { searchTemplates } from "@/server/functions/templates";
 import type { Template } from "@/hooks/useTemplates";
 
 const NavbarSearch = () => {
@@ -35,11 +35,7 @@ const NavbarSearch = () => {
     }
     const timeout = setTimeout(async () => {
       setLoading(true);
-      const { data } = await supabase
-        .from("templates")
-        .select("*")
-        .ilike("title", `%${query}%`)
-        .limit(5);
+      const data = await searchTemplates({ data: query });
       setResults((data as Template[]) || []);
       setLoading(false);
     }, 300);

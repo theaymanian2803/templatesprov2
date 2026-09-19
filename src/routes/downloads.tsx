@@ -11,7 +11,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useToast } from '@/hooks/use-toast'
 import { useAllAccessPass } from '@/hooks/useAllAccessPass'
 import { usePurchasedTemplates } from '@/hooks/useDashboard'
-import { supabase } from '@/integrations/supabase/client'
+import { removePurchasedTemplate } from '@/server/functions/orders'
 import { getDirectDownloadUrl } from '@/lib/utils'
 import { Crown, Download, FileArchive, Loader2, Package, Rocket, Search, Star, Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -48,18 +48,8 @@ const Downloads = () => {
         return
       }
 
-      const { data, error } = await supabase.storage
-        .from('template-files')
-        .createSignedUrl(cleanUrl, 60)
-
-      if (error) throw error
-
-      const link = document.createElement('a')
-      link.href = data.signedUrl
-      link.download = `${title}.zip`
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
+      window.open(cleanUrl, '_blank', 'noopener,noreferrer')
+      setDownloadingId(null)
     } catch (error: unknown) {
       toast({
         title: 'Échec du téléchargement',
@@ -75,16 +65,7 @@ const Downloads = () => {
     if (!confirm(`Supprimer "${title}" de vos téléchargements ? Cette action est irréversible.`)) return
     setDeletingId(itemId)
     try {
-      const { data: sessionData } = await supabase.auth.getSession()
-      const accessToken = sessionData?.session?.access_token
-
-      const response = await supabase.functions.invoke('remove-purchased-template', {
-        body: { itemId },
-        headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
-      })
-
-      if (response.error) throw new Error(response.error.error || response.data?.error || 'Échec de la suppression')
-      if (response.data?.error) throw new Error(response.data.error)
+      await removePurchasedTemplate({ data: itemId })
 
       queryClient.invalidateQueries({ queryKey: ['purchased-templates'] })
       queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] })

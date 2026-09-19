@@ -3,23 +3,14 @@ import { Check, Crown } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useNavigate } from "@/lib/router";
 import { ALL_ACCESS_PRICE } from "@/hooks/useAllAccessPass";
-import { supabase } from "@/integrations/supabase/client";
+import { getCatalogPriceRange } from "@/server/functions/templates";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 
 const useCatalogPriceRange = () => {
   return useQuery({
     queryKey: ["catalog-price-range"],
-    queryFn: async () => {
-      const [minRes, maxRes] = await Promise.all([
-        supabase.from("templates").select("price").order("price").limit(1),
-        supabase.from("templates").select("price").order("price", { ascending: false }).limit(1),
-      ]);
-      const min = minRes.data?.[0]?.price as number | undefined;
-      const max = maxRes.data?.[0]?.price as number | undefined;
-      if (minRes.error || maxRes.error) throw minRes.error || maxRes.error;
-      return { min, max };
-    },
+    queryFn: async () => getCatalogPriceRange(),
     staleTime: 60_000,
   });
 };

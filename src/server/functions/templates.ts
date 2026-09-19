@@ -1,7 +1,7 @@
 import { createServerFn } from '@tanstack/react-start'
 import { db } from '../db/client'
 import { templates } from '../db/schema'
-import { eq, desc, count } from 'drizzle-orm'
+import { eq, desc, count, like } from 'drizzle-orm'
 
 type ListOptions = { featured?: boolean; category?: string; limit?: number }
 
@@ -45,4 +45,16 @@ export const getTemplate = createServerFn({ method: 'GET' })
 export const getCategories = createServerFn({ method: 'GET' }).handler(async () => {
   const rows = await db.select({ category: templates.category }).from(templates)
   return [...new Set(rows.map((r) => r.category))]
+})
+
+export const searchTemplates = createServerFn({ method: 'GET' })
+  .validator((query: string) => query)
+  .handler(async ({ data }) => {
+    return db.select().from(templates).where(like(templates.title, `%${data}%`)).limit(5)
+  })
+
+export const getCatalogPriceRange = createServerFn({ method: 'GET' }).handler(async () => {
+  const minRow = (await db.select({ price: templates.price }).from(templates).orderBy(templates.price).limit(1))[0]
+  const maxRow = (await db.select({ price: templates.price }).from(templates).orderBy(desc(templates.price)).limit(1))[0]
+  return { min: minRow?.price, max: maxRow?.price }
 })

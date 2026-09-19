@@ -19,7 +19,8 @@ import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useAuth } from '@/contexts/AuthContext'
 import { useToast } from '@/hooks/use-toast'
-import { supabase } from '@/integrations/supabase/client'
+import { getMyProfile, updateProfile } from '@/server/functions/admin'
+import { authClient } from '@/lib/auth-client'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Eye, EyeOff, KeyRound, Loader2, Lock, Mail, Save, User } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -89,13 +90,7 @@ const Profile = () => {
       if (!user) return
 
       try {
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('display_name, avatar_url')
-          .eq('user_id', user.id)
-          .maybeSingle()
-
-        if (error) throw error
+        const data = await getMyProfile()
 
         if (data) {
           profileForm.reset({
@@ -120,15 +115,7 @@ const Profile = () => {
 
     setIsSavingProfile(true)
     try {
-      const { error } = await supabase
-        .from('profiles')
-        .update({
-          display_name: data.displayName,
-          avatar_url: data.avatarUrl || null,
-        })
-        .eq('user_id', user.id)
-
-      if (error) throw error
+      await updateProfile({ data: { displayName: data.displayName, avatarUrl: data.avatarUrl || null } })
 
       toast({
         title: 'Profil mis à jour',
@@ -148,21 +135,14 @@ const Profile = () => {
   const onPasswordSubmit = async (data: PasswordFormData) => {
     setIsChangingPassword(true)
     try {
-      // Re-authenticate with current password first
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email: user!.email!,
-        password: data.currentPassword,
+      const { error } = await authClient.changePassword({
+        newPassword: data.newPassword,
+        currentPassword: data.currentPassword,
       })
 
-      if (signInError) {
-        throw new Error('Le mot de passe actuel est incorrect')
+      if (error) {
+        throw new Error(error.message || 'Le mot de passe actuel est incorrect')
       }
-
-      const { error } = await supabase.auth.updateUser({
-        password: data.newPassword,
-      })
-
-      if (error) throw error
 
       passwordForm.reset()
       toast({

@@ -103,3 +103,27 @@ export const deleteReview = createServerFn({ method: 'POST' })
     await recalcReviewCount(data.templateId)
     return { success: true }
   })
+
+export const listReviewsForTemplates = createServerFn({ method: 'GET' })
+  .validator((templateIds: string[]) => templateIds)
+  .handler(async ({ data: templateIds }) => {
+    if (templateIds.length === 0) return []
+    const rows = await db
+      .select()
+      .from(reviews)
+      .where(and(inArray(reviews.template_id, templateIds), eq(reviews.status, 'approved')))
+    const userIds = [...new Set(rows.map((r) => r.user_id))]
+    const profileRows = userIds.length
+      ? await db.select({ user_id: profiles.user_id, display_name: profiles.display_name }).from(profiles).where(inArray(profiles.user_id, userIds))
+      : []
+    const profileMap = new Map(profileRows.map((p) => [p.user_id, p.display_name]))
+    return rows.map((r) => ({
+      id: r.id,
+      template_id: r.template_id,
+      rating: r.rating,
+      comment: r.comment,
+      user_id: r.user_id,
+      created_at: r.created_at.toISOString(),
+      display_name: profileMap.get(r.user_id) ?? null,
+    }))
+  })

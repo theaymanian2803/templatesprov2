@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { submitContact } from "@/server/functions/contact";
 import { Loader2, Send } from "lucide-react";
 import { z } from "zod";
 
@@ -49,14 +49,21 @@ const ContactModal = ({ open, onOpenChange, templateId, templateTitle }: Contact
     }
 
     setIsSubmitting(true);
-    const { error } = await supabase.from("contacts").insert([{
-      name: result.data.name,
-      email: result.data.email,
-      subject: result.data.subject,
-      message: result.data.message,
-      template_id: templateId || null,
-      template_title: templateTitle || null,
-    }]);
+    let error: Error | null = null;
+    try {
+      await submitContact({
+        data: {
+          name: result.data.name,
+          email: result.data.email,
+          subject: result.data.subject,
+          message: result.data.message,
+          templateId: templateId,
+          templateTitle: templateTitle,
+        },
+      });
+    } catch (e: any) {
+      error = e;
+    }
 
     setIsSubmitting(false);
 

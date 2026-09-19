@@ -56,6 +56,42 @@ export const getPurchasedTemplates = createServerFn({ method: 'GET' }).handler(a
   }))
 })
 
+export const getTemplateDownloadUrl = createServerFn({ method: 'GET' })
+  .validator((templateId: string) => templateId)
+  .handler(async ({ data: templateId }) => {
+    const user = await requireUser()
+    const pass = (await db.select().from(all_access_passes).where(eq(all_access_passes.user_id, user.id)).limit(1))[0]
+    let hasAccess = !!pass
+    if (!hasAccess) {
+      const items = await db.select({ order_id: order_items.order_id }).from(order_items).where(eq(order_items.template_id, templateId))
+      const orderIds = items.map((i) => i.order_id)
+      if (orderIds.length) {
+        const completed = await db
+          .select()
+          .from(orders)
+          .where(and(inArray(orders.id, orderIds), eq(orders.user_id, user.id), eq(orders.status, 'completed')))
+          .limit(1)
+        hasAccess = completed.length > 0
+      }
+    }
+    if (!hasAccess) return null
+    const row = (await db.select().from(template_downloads).where(eq(template_downloads.template_id, templateId)).limit(1))[0]
+    return row ? { source_file_url: row.source_file_url } : null
+  })
+
+export const getOrderItemsWithDownloads = createServerFn({ method: 'GET' })
+  .validator((orderId: string) => orderId)
+  .handler(async ({ data: orderId }) => {
+    await requireUser()
+    const items = await db.select().from(order_items).where(eq(order_items.order_id, orderId))
+    const templateIds = items.map((i) => i.template_id)
+    const downloads = templateIds.length
+      ? await db.select().from(template_downloads).where(inArray(template_downloads.template_id, templateIds))
+      : []
+    const fileMap = new Map(downloads.map((d) => [d.template_id, d.source_file_url]))
+    return items.map((item) => ({ ...item, source_file_url: fileMap.get(item.template_id) ?? null }))
+  })
+
 export const getDashboardStats = createServerFn({ method: 'GET' }).handler(async () => {
   const user = await requireUser()
   const orderRows = await db.select().from(orders).where(eq(orders.user_id, user.id))

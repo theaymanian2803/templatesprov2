@@ -15,7 +15,7 @@ import { useCart } from '@/contexts/CartContext'
 import { useToast } from '@/hooks/use-toast'
 import { useAllAccessPass } from '@/hooks/useAllAccessPass'
 import { useTemplate } from '@/hooks/useTemplates'
-import { supabase } from '@/integrations/supabase/client'
+import { getTemplateDownloadUrl } from '@/server/functions/dashboard'
 import { getDirectDownloadUrl } from '@/lib/utils'
 import { ArrowLeft, BadgeCheck, Download, Home, Loader2, Maximize2, ShoppingBag } from 'lucide-react'
 import { useState } from 'react'
@@ -37,15 +37,7 @@ const TemplatePreview = () => {
 
   const { data: downloadInfo } = useQuery({
     queryKey: ['template-download-url', id, user?.id],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('template_downloads')
-        .select('source_file_url')
-        .eq('template_id', id)
-        .maybeSingle()
-      if (error) throw error
-      return data as { source_file_url: string | null } | null
-    },
+    queryFn: async () => getTemplateDownloadUrl({ data: id! }),
     enabled: !!id && !!allAccessPass,
   })
 
@@ -54,20 +46,7 @@ const TemplatePreview = () => {
     setDownloading(true)
     try {
       const cleanUrl = downloadInfo.source_file_url.trim()
-      if (cleanUrl.startsWith('http://') || cleanUrl.startsWith('https://')) {
-        window.open(getDirectDownloadUrl(cleanUrl), '_blank', 'noopener,noreferrer')
-      } else {
-        const { data, error } = await supabase.storage
-          .from('template-files')
-          .createSignedUrl(cleanUrl, 60)
-        if (error) throw error
-        const link = document.createElement('a')
-        link.href = data.signedUrl
-        link.download = `${template?.title || 'template'}.zip`
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-      }
+      window.open(getDirectDownloadUrl(cleanUrl), '_blank', 'noopener,noreferrer')
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : t('preview.downloadFailedDesc')
       toast({

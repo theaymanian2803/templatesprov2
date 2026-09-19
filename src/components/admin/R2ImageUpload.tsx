@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
-import { supabase } from '@/integrations/supabase/client'
+import { getR2UploadUrl } from '@/server/functions/r2'
 import { Loader2, UploadCloud, X } from 'lucide-react'
 import { useRef, useState } from 'react'
 
@@ -24,15 +24,11 @@ export function R2ImageUpload({ value, onChange }: R2ImageUploadProps) {
       const fileExt = file.name.split('.').pop()
       const fileName = `${Math.random().toString(36).substring(2, 15)}-${Date.now()}.${fileExt}`
 
-      console.log('1. Asking Supabase for upload ticket...')
+      console.log('1. Asking for upload ticket...')
 
-      const { data, error } = await supabase.functions.invoke('r2-upload-url', {
-        body: { fileName, contentType: file.type },
+      const { uploadUrl, publicUrl } = await getR2UploadUrl({
+        data: { fileName, contentType: file.type },
       })
-
-      if (error) throw new Error(error.message)
-
-      const { uploadUrl, publicUrl } = data
 
       console.log('2. UPLOAD URL (Should be ugly and long):', uploadUrl)
       console.log('3. PUBLIC URL (Should be pub-):', publicUrl)

@@ -22,4 +22,4 @@ const NotFound = () => {
   );
 };
 
-export const Route = createFileRoute('/)({ component: NotFound })
+export const Route = createFileRoute('/$')({ component: NotFound })

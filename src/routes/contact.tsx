@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { useToast } from '@/hooks/use-toast'
-import { supabase } from '@/integrations/supabase/client'
+import { submitContact } from '@/server/functions/contact'
 import {
   Clock,
   FileQuestion,
@@ -97,14 +97,12 @@ const Contact = () => {
     const fullName = `${firstName} ${lastName}`.trim()
     const finalMessage = orderNumber ? `Order Number: ${orderNumber}\n\n${rawMessage}` : rawMessage
 
-    const { error } = await supabase.from('contacts').insert([
-      {
-        name: fullName,
-        email: email,
-        subject: subject,
-        message: finalMessage,
-      },
-    ])
+    let error: Error | null = null
+    try {
+      await submitContact({ data: { name: fullName, email, subject, message: finalMessage } })
+    } catch (e: any) {
+      error = e
+    }
 
     setIsSubmitting(false)
 

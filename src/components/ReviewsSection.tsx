@@ -2,7 +2,8 @@ import { motion } from 'framer-motion'
 import { Star, Quote, MapPin } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
-import { supabase } from '@/integrations/supabase/client'
+import { listTemplates } from '@/server/functions/templates'
+import { listReviewsForTemplates } from '@/server/functions/reviews'
 import type { Template } from '@/hooks/useTemplates'
 import { Skeleton } from '@/components/ui/skeleton'
 import { seededRandom, seededShuffle } from '@/lib/seeded'
@@ -83,13 +84,8 @@ const ReviewsSection = () => {
   const { data: templates, isLoading } = useQuery({
     queryKey: ['landing-templates-for-reviews'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('templates')
-        .select('id, title, image_url')
-        .order('sales', { ascending: false })
-
-      if (error) throw error
-      return data as Pick<Template, 'id' | 'title' | 'image_url'>[]
+      const data = (await listTemplates({ data: { limit: 100 } })) as Template[]
+      return data.map((t) => ({ id: t.id, title: t.title, image_url: t.image_url }))
     },
   })
 
@@ -99,29 +95,10 @@ const ReviewsSection = () => {
     queryKey: ['landing-real-reviews', templateIds],
     queryFn: async () => {
       if (templateIds.length === 0) return []
-      const { data: reviews, error } = await supabase
-        .from('reviews')
-        .select('id, template_id, rating, comment, user_id, created_at')
-        .in('template_id', templateIds)
-        .eq('status', 'approved')
-
-      if (error) throw error
-
-      const reviewsList = reviews ?? []
-      const userIds = [...new Set(reviewsList.map((r) => r.user_id))]
-      let profiles: { user_id: string; display_name: string | null }[] = []
-      if (userIds.length > 0) {
-        const { data } = await supabase
-          .from('profiles')
-          .select('user_id, display_name')
-          .in('user_id', userIds)
-        profiles = data ?? []
-      }
-      const profileMap = new Map(profiles.map((p) => [p.user_id, p.display_name]))
-
+      const reviewsList = await listReviewsForTemplates({ data: templateIds })
       return reviewsList.map((r) => ({
         ...r,
-        display_name: profileMap.get(r.user_id) || t('reviews.anonymous'),
+        display_name: r.display_name || t('reviews.anonymous'),
       }))
     },
     enabled: templateIds.length > 0,

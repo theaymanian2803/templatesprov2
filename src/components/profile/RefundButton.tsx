@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { createRefundRequest, getRefundRequestByOrder } from "@/server/functions/refunds";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
@@ -37,28 +37,13 @@ const RefundButton = ({ orderId, orderStatus }: RefundButtonProps) => {
 
   const { data: existingRequest, isLoading } = useQuery({
     queryKey: ["refund-request", orderId],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("refund_requests" as any)
-        .select("*")
-        .eq("order_id", orderId)
-        .maybeSingle();
-      if (error) throw error;
-      return data as any;
-    },
+    queryFn: async () => getRefundRequestByOrder({ data: orderId }),
     enabled: !!user,
   });
 
   const submitMutation = useMutation({
     mutationFn: async () => {
-      const { error } = await supabase
-        .from("refund_requests" as any)
-        .insert({
-          order_id: orderId,
-          user_id: user!.id,
-          reason,
-        } as any);
-      if (error) throw error;
+      await createRefundRequest({ data: { orderId, reason } })
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["refund-request", orderId] });

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { adminListReviewsWithDetails, adminUpdateReviewsStatus, adminDeleteReviews } from "@/server/functions/admin";
 import { useToast } from "@/hooks/use-toast";
 import { Star, Trash2, Search, Loader2, CheckCircle, XCircle, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -34,35 +34,7 @@ interface AdminReview {
 const useAdminReviews = () => {
   return useQuery({
     queryKey: ["admin-reviews"],
-    queryFn: async () => {
-      const { data: reviews, error } = await supabase
-        .from("reviews")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (error) throw error;
-
-      const userIds = [...new Set((reviews || []).map((r: any) => r.user_id))];
-      const templateIds = [...new Set((reviews || []).map((r: any) => r.template_id))];
-
-      const [profilesRes, templatesRes] = await Promise.all([
-        userIds.length > 0
-          ? supabase.from("profiles").select("user_id, display_name").in("user_id", userIds)
-          : { data: [] },
-        templateIds.length > 0
-          ? supabase.from("templates").select("id, title").in("id", templateIds)
-          : { data: [] },
-      ]);
-
-      const profileMap = new Map((profilesRes.data || []).map((p: any) => [p.user_id, p.display_name]));
-      const templateMap = new Map((templatesRes.data || []).map((t: any) => [t.id, t.title]));
-
-      return (reviews || []).map((r: any) => ({
-        ...r,
-        display_name: profileMap.get(r.user_id) || "Anonymous",
-        template_title: templateMap.get(r.template_id) || "Unknown Template",
-      })) as AdminReview[];
-    },
+    queryFn: async () => adminListReviewsWithDetails() as unknown as AdminReview[],
   });
 };
 
@@ -84,8 +56,7 @@ export const ReviewList = () => {
 
   const updateStatusMutation = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
-      const { error } = await supabase.from("reviews").update({ status }).eq("id", id);
-      if (error) throw error;
+      await adminUpdateReviewsStatus({ data: { ids: [id], status } })
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-reviews"] });
@@ -103,8 +74,7 @@ export const ReviewList = () => {
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
       setDeletingId(id);
-      const { error } = await supabase.from("reviews").delete().eq("id", id);
-      if (error) throw error;
+      await adminDeleteReviews({ data: [id] })
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-reviews"] });
@@ -127,12 +97,10 @@ export const ReviewList = () => {
     try {
       const ids = Array.from(selectedIds);
       if (action === "delete") {
-        const { error } = await supabase.from("reviews").delete().in("id", ids);
-        if (error) throw error;
+        await adminDeleteReviews({ data: ids })
         toast({ title: `${ids.length} avis${ids.length > 1 ? "" : ""} supprimé${ids.length > 1 ? "s" : ""}` });
       } else {
-        const { error } = await supabase.from("reviews").update({ status: action }).in("id", ids);
-        if (error) throw error;
+        await adminUpdateReviewsStatus({ data: { ids, status: action } })
         toast({ title: `${ids.length} avis ${action === "approved" ? "approuvé" : "rejeté"}${ids.length > 1 ? "s" : ""}` });
       }
       setSelectedIds(new Set());

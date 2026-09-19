@@ -4,7 +4,7 @@ import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { Template } from '@/hooks/useTemplates'
-import { supabase } from '@/integrations/supabase/client'
+import { adminGetTemplateDownloadUrl } from '@/server/functions/admin'
 import { Loader2, Plus, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { z } from 'zod'
@@ -64,14 +64,9 @@ export const TemplateForm = ({ template, onSubmit, onCancel, isLoading }: Templa
       setYoutubeId(template.youtube_id || '')
 
       // Fetch source_file_url from template_downloads
-      supabase
-        .from('template_downloads' as any)
-        .select('source_file_url')
-        .eq('template_id', template.id)
-        .single()
-        .then(({ data }) => {
-          setSourceFileUrl((data as any)?.source_file_url || '')
-        })
+      adminGetTemplateDownloadUrl({ data: template.id }).then((url) => {
+        setSourceFileUrl(url || '')
+      })
     }
   }, [template])
 

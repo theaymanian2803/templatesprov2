@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useToast } from '@/hooks/use-toast'
-import { supabase } from '@/integrations/supabase/client'
+import { getOrderItemsWithDownloads } from '@/server/functions/dashboard'
 import { getDirectDownloadUrl } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
 import { Download, FileArchive, Loader2 } from 'lucide-react'
@@ -18,57 +18,16 @@ const OrderItemsList = ({ orderId, orderStatus }: OrderItemsListProps) => {
 
   const { data: items, isLoading } = useQuery({
     queryKey: ['order-items-with-files', orderId],
-    queryFn: async () => {
-      // Fetch order items
-      const { data: orderItems, error } = await supabase
-        .from('order_items')
-        .select('*')
-        .eq('order_id', orderId)
-
-      if (error) throw error
-
-      // Fetch download URLs from secure template_downloads table (RLS-gated)
-      const templateIds = orderItems.map((item) => item.template_id)
-      const { data: downloads, error: dlError } = await supabase
-        .from('template_downloads' as any)
-        .select('template_id, source_file_url')
-        .in('template_id', templateIds)
-
-      const fileMap = new Map(
-        ((downloads as any[]) ?? []).map((d: any) => [d.template_id, d.source_file_url])
-      )
-
-      return orderItems.map((item) => ({
-        ...item,
-        source_file_url: fileMap.get(item.template_id) ?? null,
-      }))
-    },
+    queryFn: async () => getOrderItemsWithDownloads({ data: orderId }),
   })
 
   const handleDownload = async (sourceFileUrl: string, templateTitle: string) => {
     setDownloadingId(sourceFileUrl)
     try {
       const cleanUrl = sourceFileUrl.trim()
-
-      if (cleanUrl.startsWith('http://') || cleanUrl.startsWith('https://')) {
-        const directUrl = getDirectDownloadUrl(cleanUrl)
-        window.open(directUrl, '_blank', 'noopener,noreferrer')
-        setDownloadingId(null)
-        return
-      }
-
-      const { data, error } = await supabase.storage
-        .from('template-files')
-        .createSignedUrl(cleanUrl, 60)
-
-      if (error) throw error
-
-      const link = document.createElement('a')
-      link.href = data.signedUrl
-      link.download = `${templateTitle}.zip`
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
+      const directUrl = getDirectDownloadUrl(cleanUrl)
+      window.open(directUrl, '_blank', 'noopener,noreferrer')
+      setDownloadingId(null)
     } catch (error: any) {
       toast({
         title: 'Échec du téléchargement',

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { adminListRefundRequestsWithDetails, updateRefundRequest, adminDeleteRefundRequest } from "@/server/functions/refunds";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -60,38 +60,12 @@ const RefundRequestList = () => {
 
   const { data: requests, isLoading } = useQuery({
     queryKey: ["admin-refund-requests"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("refund_requests" as any)
-        .select("*")
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-
-      // Fetch order details and user emails
-      const items = data as any[];
-      const orderIds = [...new Set(items.map((r: any) => r.order_id))];
-      const { data: orders } = await supabase
-        .from("orders")
-        .select("id, user_email, total_amount")
-        .in("id", orderIds);
-
-      const orderMap = new Map((orders || []).map(o => [o.id, o]));
-
-      return items.map((r: any) => ({
-        ...r,
-        user_email: orderMap.get(r.order_id)?.user_email || "Unknown",
-        order_total: orderMap.get(r.order_id)?.total_amount || 0,
-      }));
-    },
+    queryFn: async () => adminListRefundRequestsWithDetails(),
   });
 
   const updateMutation = useMutation({
     mutationFn: async ({ id, status, admin_notes }: { id: string; status: string; admin_notes: string }) => {
-      const { error } = await supabase
-        .from("refund_requests" as any)
-        .update({ status, admin_notes } as any)
-        .eq("id", id);
-      if (error) throw error;
+      await updateRefundRequest({ data: { id, status, adminNotes: admin_notes } })
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-refund-requests"] });
@@ -105,11 +79,7 @@ const RefundRequestList = () => {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase
-        .from("refund_requests" as any)
-        .delete()
-        .eq("id", id);
-      if (error) throw error;
+      await adminDeleteRefundRequest({ data: id })
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-refund-requests"] });

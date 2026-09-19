@@ -3,7 +3,7 @@ import { ArrowRight, Sparkles } from 'lucide-react'
 import { Link } from '@/lib/router'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
-import { supabase } from '@/integrations/supabase/client'
+import { listTemplates } from '@/server/functions/templates'
 import type { Template } from '@/hooks/useTemplates'
 import ThemeCard, { ThemeCardSkeleton } from '@/components/ThemeCard'
 
@@ -12,15 +12,14 @@ const SpaThemes = () => {
   const { data: templates, isLoading } = useQuery({
     queryKey: ['spa-themes'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('templates')
-        .select('*')
-        .or('title.ilike.*spa*,features.cs.{spa},tech_stack.cs.{spa}')
-        .order('sales', { ascending: false })
-        .limit(4)
-
-      if (error) throw error
-      return data as Template[]
+      const rows = (await listTemplates({ data: { limit: 100 } })) as Template[]
+      const spa = rows.filter((t) => {
+        const title = t.title?.toLowerCase() || ''
+        const features = (t.features || []).map((f) => f.toLowerCase())
+        const stack = (t.tech_stack || []).map((s) => s.toLowerCase())
+        return title.includes('spa') || features.some((f) => f.includes('spa')) || stack.some((s) => s.includes('spa'))
+      })
+      return spa.sort((a, b) => b.sales - a.sales).slice(0, 4)
     },
   })
 

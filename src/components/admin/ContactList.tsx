@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { listContacts, markContactRead, deleteContact } from "@/server/functions/contact";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
@@ -40,28 +40,19 @@ export const ContactList = () => {
 
   const { data: contacts = [], isLoading } = useQuery({
     queryKey: ["admin-contacts"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("contacts")
-        .select("*")
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return data as Contact[];
-    },
+    queryFn: async () => listContacts() as unknown as Contact[],
   });
 
   const markReadMutation = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from("contacts").update({ is_read: true }).eq("id", id);
-      if (error) throw error;
+      await markContactRead({ data: id })
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["admin-contacts"] }),
   });
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase.from("contacts").delete().eq("id", id);
-      if (error) throw error;
+      await deleteContact({ data: id })
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-contacts"] });

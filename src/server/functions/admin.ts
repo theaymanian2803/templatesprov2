@@ -1,7 +1,7 @@
 import { createServerFn } from '@tanstack/react-start'
 import { db } from '../db/client'
 import { templates, template_downloads, site_settings, orders, reviews, profiles } from '../db/schema'
-import { eq, desc } from 'drizzle-orm'
+import { eq, desc, inArray } from 'drizzle-orm'
 import { requireAdmin, isAdmin, requireUser } from '../admin'
 
 export const getIsAdmin = createServerFn({ method: 'GET' }).handler(async () => {
@@ -119,6 +119,38 @@ export const adminDeleteReview = createServerFn({ method: 'POST' })
     return { success: true }
   })
 
+export const adminListReviewsWithDetails = createServerFn({ method: 'GET' }).handler(async () => {
+  await requireAdmin()
+  const rows = await db.select().from(reviews).orderBy(desc(reviews.created_at))
+  const userIds = [...new Set(rows.map((r) => r.user_id))]
+  const templateIds = [...new Set(rows.map((r) => r.template_id))]
+  const profileRows = userIds.length ? await db.select().from(profiles).where(inArray(profiles.user_id, userIds)) : []
+  const templateRows = templateIds.length ? await db.select().from(templates).where(inArray(templates.id, templateIds)) : []
+  const profileMap = new Map(profileRows.map((p) => [p.user_id, p.display_name]))
+  const templateMap = new Map(templateRows.map((t) => [t.id, t.title]))
+  return rows.map((r) => ({
+    ...r,
+    display_name: profileMap.get(r.user_id) || 'Anonymous',
+    template_title: templateMap.get(r.template_id) || 'Unknown Template',
+  }))
+})
+
+export const adminUpdateReviewsStatus = createServerFn({ method: 'POST' })
+  .validator((v: { ids: string[]; status: string }) => v)
+  .handler(async ({ data }) => {
+    await requireAdmin()
+    await db.update(reviews).set({ status: data.status as any, updated_at: new Date() }).where(inArray(reviews.id, data.ids))
+    return { success: true }
+  })
+
+export const adminDeleteReviews = createServerFn({ method: 'POST' })
+  .validator((ids: string[]) => ids)
+  .handler(async ({ data: ids }) => {
+    await requireAdmin()
+    await db.delete(reviews).where(inArray(reviews.id, ids))
+    return { success: true }
+  })
+
 export const getSiteSettings = createServerFn({ method: 'GET' }).handler(async () => {
   const rows = await db.select().from(site_settings)
   return Object.fromEntries(rows.map((r) => [r.key, r.value]))
@@ -144,4 +176,18 @@ export const updateProfile = createServerFn({ method: 'POST' })
       .set({ display_name: data.displayName ?? null, avatar_url: data.avatarUrl ?? null, updated_at: new Date() })
       .where(eq(profiles.user_id, user.id))
     return { success: true }
+  })
+
+export const getMyProfile = createServerFn({ method: 'GET' }).handler(async () => {
+  const user = await requireUser()
+  const rows = await db.select().from(profiles).where(eq(profiles.user_id, user.id)).limit(1)
+  return rows[0] ?? null
+})
+
+export const adminGetTemplateDownloadUrl = createServerFn({ method: 'GET' })
+  .validator((templateId: string) => templateId)
+  .handler(async ({ data: templateId }) => {
+    await requireAdmin()
+    const row = (await db.select().from(template_downloads).where(eq(template_downloads.template_id, templateId)).limit(1))[0]
+    return row ? row.source_file_url : null
   })

@@ -10,7 +10,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useCart } from '@/contexts/CartContext'
 import { useToast } from '@/hooks/use-toast'
 import { useValidateCoupon } from '@/hooks/useCoupons'
-import { supabase } from '@/integrations/supabase/client'
+import { claimFreeOrder, createPayPalOrder, capturePayPalOrder } from '@/server/functions/orders'
 import {
   ArrowLeft,
   CheckCircle2,
@@ -82,25 +82,14 @@ const Checkout = () => {
     if (isAllAccess || items.length === 0) return
     setIsClaiming(true)
     try {
-      const { data: sessionData } = await supabase.auth.getSession()
-      const accessToken = sessionData?.session?.access_token
-
-      const response = await supabase.functions.invoke('claim-free-order', {
-        body: {
+      const result = await claimFreeOrder({
+        data: {
           items: items.map((i) => ({ id: i.id, license: i.license })),
           couponCode: appliedCoupon?.code,
         },
-        headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
       })
 
-      if (response.error) {
-        throw new Error(response.error.error || response.data?.error || t('checkout.orderFailed'))
-      }
-      if (response.data?.error) {
-        throw new Error(response.data.error)
-      }
-
-      setOrderId(response.data.orderId)
+      setOrderId(result.orderId)
       setOrderComplete(true)
       clearCart()
 
@@ -209,31 +198,15 @@ const Checkout = () => {
         createOrder: async () => {
           setIsLoading(true)
           try {
-            const { data: sessionData } = await supabase.auth.getSession()
-            const accessToken = sessionData?.session?.access_token
-
-            const response = await supabase.functions.invoke('create-paypal-order', {
-              body: {
+            const result = await createPayPalOrder({
+              data: {
                 items: isAllAccess ? [] : items.map((i) => ({ id: i.id, license: i.license })),
                 isAllAccess,
                 couponCode: appliedCoupon?.code,
               },
-              headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
             })
 
-            if (response.error) {
-              let errorMsg = response.error.message || t('checkout.orderCreationFailed')
-              if (errorMsg.includes('non-2xx')) {
-                errorMsg = t('checkout.paymentSystemUnavailable')
-              }
-              throw new Error(response.error.error || response.data?.error || errorMsg)
-            }
-
-            if (response.data?.error) {
-              throw new Error(response.data.error)
-            }
-
-            return response.data.orderId
+            return result.orderId
           } catch (error: any) {
             console.error('Create order error:', error)
             toast({
@@ -249,32 +222,16 @@ const Checkout = () => {
         onApprove: async (data: any) => {
           setIsLoading(true)
           try {
-            const { data: sessionData } = await supabase.auth.getSession()
-            const accessToken = sessionData?.session?.access_token
-
-            const response = await supabase.functions.invoke('capture-paypal-order', {
-              body: {
+            const result = await capturePayPalOrder({
+              data: {
                 paypalOrderId: data.orderID,
                 items: isAllAccess ? [] : items.map((i) => ({ id: i.id, license: i.license })),
                 isAllAccess,
                 couponCode: appliedCoupon?.code,
               },
-              headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
             })
 
-            if (response.error) {
-              let errorMsg = response.error.message || t('checkout.paymentValidationFailed')
-              if (errorMsg.includes('non-2xx')) {
-                errorMsg = t('checkout.paymentDeclined')
-              }
-              throw new Error(response.error.error || response.data?.error || errorMsg)
-            }
-
-            if (response.data?.error) {
-              throw new Error(response.data.error)
-            }
-
-            setOrderId(response.data.orderId)
+            setOrderId(result.orderId)
             setOrderComplete(true)
             clearCart()
 
@@ -607,4 +564,4 @@ const Checkout = () => {
   )
 }
 
-export const Route = createFileRoute('/checkout')({ component: Checkout })
+export const Route = createFileRoute('/checkout/')({ component: Checkout })

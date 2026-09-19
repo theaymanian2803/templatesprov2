@@ -11,8 +11,8 @@ import ScrollToTop from '@/components/ScrollToTop'
 import CookieConsent from '@/components/CookieConsent'
 import ChatBubble from '@/components/ChatBubble'
 
-import './index.css'
-import './i18n'
+import '@/index.css'
+import '@/i18n'
 
 const queryClient = new QueryClient()
 

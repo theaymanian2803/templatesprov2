@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { createPayPalOrder, capturePayPalOrder } from "@/server/functions/orders";
 import {
   ArrowLeft,
   ShieldCheck,
@@ -103,16 +103,11 @@ const ProHostingCheckout = () => {
         createOrder: async () => {
           setIsLoading(true);
           try {
-            const { data: sessionData } = await supabase.auth.getSession();
-            const accessToken = sessionData?.session?.access_token;
-
-            const response = await supabase.functions.invoke("create-paypal-order", {
-              body: { items: [], isAllAccess: false, isProHosting: true, templateTitle },
-              headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
+            const result = await createPayPalOrder({
+              data: { items: [], isAllAccess: false, isProHosting: true, templateTitle },
             });
 
-            if (response.error) throw new Error(response.error.message || "Échec de la création de la commande");
-            return response.data.orderId;
+            return result.orderId;
           } catch (error: any) {
             toast({ title: "Erreur de commande", description: error.message, variant: "destructive" });
             throw error;
@@ -123,11 +118,8 @@ const ProHostingCheckout = () => {
         onApprove: async (data: any) => {
           setIsLoading(true);
           try {
-            const { data: sessionData } = await supabase.auth.getSession();
-            const accessToken = sessionData?.session?.access_token;
-
-            const response = await supabase.functions.invoke("capture-paypal-order", {
-              body: {
+            const result = await capturePayPalOrder({
+              data: {
                 paypalOrderId: data.orderID,
                 items: [],
                 isAllAccess: false,
@@ -135,12 +127,9 @@ const ProHostingCheckout = () => {
                 templateTitle,
                 proHostingNotes: notes,
               },
-              headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
             });
 
-            if (response.error) throw new Error(response.error.message || "Failed to capture payment");
-
-            setOrderId(response.data.orderId);
+            setOrderId(result.orderId);
             setOrderComplete(true);
             toast({ title: "Paiement réussi !", description: "Notre équipe vous contactera sous peu." });
           } catch (error: any) {

@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
-import { supabase } from '@/integrations/supabase/client'
+import { getR2UploadUrl } from '@/server/functions/r2'
 import { CheckCircle2, ExternalLink, Loader2, UploadCloud, X } from 'lucide-react'
 import { useRef, useState } from 'react'
 
@@ -57,13 +57,9 @@ export function R2FileUpload({ value, onChange }: R2FileUploadProps) {
       const fileName = `${Math.random().toString(36).substring(2, 15)}-${Date.now()}.${fileExt}`
       const contentType = file.type || guessContentType(file.name)
 
-      const { data, error } = await supabase.functions.invoke('r2-upload-url', {
-        body: { fileName, contentType, folder: 'sources' },
+      const { uploadUrl, publicUrl } = await getR2UploadUrl({
+        data: { fileName, contentType, folder: 'sources' },
       })
-
-      if (error) throw new Error(error.message)
-
-      const { uploadUrl, publicUrl } = data
 
       if (uploadUrl.includes('pub-')) {
         throw new Error('Edge function returned the read-only link instead of the upload link.')

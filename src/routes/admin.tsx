@@ -32,7 +32,8 @@ import {
   useUpdateOrderStatus,
 } from '@/hooks/useOrders'
 import { Template, useTemplates } from '@/hooks/useTemplates'
-import { supabase } from '@/integrations/supabase/client'
+import { adminSaveTemplate, adminDeleteTemplate } from '@/server/functions/admin'
+import { getOrderWithItems } from '@/server/functions/orders'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { DollarSign, Loader2, MonitorSmartphone, Package, Plus, Search, ShieldAlert } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -68,33 +69,7 @@ const Admin = () => {
 
   const createMutation = useMutation({
     mutationFn: async (data: Partial<Template>) => {
-      const sourceFileUrl = data.source_file_url
-      const insertData = {
-        title: data.title!,
-        category: data.category!,
-        image_url: data.image_url!,
-        price: data.price ?? 0,
-        description: data.description,
-        extended_price: data.extended_price,
-        demo_url: data.demo_url,
-        featured: data.featured ?? false,
-        tech_stack: data.tech_stack,
-        features: data.features,
-        gallery_images: data.gallery_images,
-        youtube_id: data.youtube_id,
-      }
-      const { data: inserted, error } = await supabase
-        .from('templates')
-        .insert([insertData])
-        .select()
-        .single()
-      if (error) throw error
-      if (sourceFileUrl && inserted) {
-        await supabase.from('template_downloads' as any).upsert({
-          template_id: inserted.id,
-          source_file_url: sourceFileUrl,
-        }, { onConflict: 'template_id' } as any)
-      }
+      await adminSaveTemplate({ data })
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['templates'] })
@@ -112,17 +87,7 @@ const Admin = () => {
 
   const updateMutation = useMutation({
     mutationFn: async ({ id, data }: { id: string; data: Partial<Template> }) => {
-      const sourceFileUrl = data.source_file_url
-      const updateData = { ...data }
-      delete updateData.source_file_url
-      const { error } = await supabase.from('templates').update(updateData).eq('id', id)
-      if (error) throw error
-      if (sourceFileUrl) {
-        await supabase.from('template_downloads' as any).upsert({
-          template_id: id,
-          source_file_url: sourceFileUrl,
-        }, { onConflict: 'template_id' } as any)
-      }
+      await adminSaveTemplate({ data: { ...data, id } })
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['templates'] })
@@ -142,8 +107,7 @@ const Admin = () => {
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
       setDeletingId(id)
-      const { error } = await supabase.from('templates').delete().eq('id', id)
-      if (error) throw error
+      await adminDeleteTemplate({ data: id })
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['templates'] })
@@ -208,8 +172,8 @@ const Admin = () => {
   }
 
   const handleViewOrderDetails = async (order: Order) => {
-    const { data: items } = await supabase.from('order_items').select('*').eq('order_id', order.id)
-    setSelectedOrder({ ...order, items: items || [] })
+    const result = await getOrderWithItems({ data: order.id })
+    setSelectedOrder({ ...result, items: result.items || [] })
   }
 
   const filteredTemplates = templates.filter(
