@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "@/lib/router";
 import { useCategories } from "@/hooks/useTemplates";
 import {
   Grid3X3,

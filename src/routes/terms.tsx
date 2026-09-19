@@ -1,3 +1,4 @@
+import { createFileRoute } from '@tanstack/react-router'
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -67,4 +68,4 @@ const Terms = () => {
   );
 };
 
-export default Terms;
+export const Route = createFileRoute('/terms')({ component: Terms })

@@ -3,7 +3,7 @@ import { useFavorites } from '@/contexts/FavoritesContext'
 import { ArrowRight, Heart, ShoppingCart, Star } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from '@/lib/router'
 import { Template } from '@/hooks/useTemplates'
 import {
   getDisplayReviewCount,

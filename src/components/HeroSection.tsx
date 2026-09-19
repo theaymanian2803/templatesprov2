@@ -3,7 +3,7 @@ import { useTemplates } from '@/hooks/useTemplates'
 import { ArrowRight, Search, Sparkles } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from '@/lib/router'
 
 /*
   HERO — bolt-spec centered stage: warm off-white ground, cold-orange radial

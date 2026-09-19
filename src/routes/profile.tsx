@@ -1,3 +1,4 @@
+import { createFileRoute } from '@tanstack/react-router'
 import Footer from '@/components/Footer'
 import Navbar from '@/components/Navbar'
 import OrderHistory from '@/components/profile/OrderHistory'
@@ -23,7 +24,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Eye, EyeOff, KeyRound, Loader2, Lock, Mail, Save, User } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from '@/lib/router'
 import { z } from 'zod'
 
 const profileSchema = z.object({
@@ -430,4 +431,4 @@ const Profile = () => {
   )
 }
 
-export default Profile
+export const Route = createFileRoute('/profile')({ component: Profile })

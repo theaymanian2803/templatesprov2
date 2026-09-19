@@ -1,3 +1,4 @@
+import { createFileRoute } from '@tanstack/react-router'
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -15,7 +16,7 @@ import {
   Code,
   Palette,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router";
 import { motion } from "framer-motion";
 
 const fadeUp = {
@@ -339,4 +340,4 @@ const AboutUs = () => {
   );
 };
 
-export default AboutUs;
+export const Route = createFileRoute('/about')({ component: AboutUs })

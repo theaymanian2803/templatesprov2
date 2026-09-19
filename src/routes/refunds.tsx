@@ -1,6 +1,7 @@
+import { createFileRoute } from '@tanstack/react-router'
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router";
 
 const Refunds = () => {
   return (
@@ -73,4 +74,4 @@ const Refunds = () => {
   );
 };
 
-export default Refunds;
+export const Route = createFileRoute('/refunds')({ component: Refunds })

@@ -1,7 +1,7 @@
 import { useCart } from '@/contexts/CartContext'
 import { ArrowRight, ShoppingCart, Star } from 'lucide-react'
 import { toast } from 'sonner'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from '@/lib/router'
 import { useTranslation } from 'react-i18next'
 import {
   getDisplayReviewCount,

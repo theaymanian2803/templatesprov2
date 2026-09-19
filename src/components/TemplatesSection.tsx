@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import { Link } from '@/lib/router'
 import { useTranslation } from 'react-i18next'
 import { useTemplates, useCategories } from '@/hooks/useTemplates'
 import ThemeCard, { ThemeCardSkeleton } from '@/components/ThemeCard'

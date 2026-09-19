@@ -1,4 +1,5 @@
-import { useLocation } from "react-router-dom";
+import { createFileRoute } from '@tanstack/react-router'
+import { useLocation } from "@/lib/router";
 import { useEffect } from "react";
 
 const NotFound = () => {
@@ -21,4 +22,4 @@ const NotFound = () => {
   );
 };
 
-export default NotFound;
+export const Route = createFileRoute('/)({ component: NotFound })

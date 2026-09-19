@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link } from '@/lib/router'
 import { useTranslation } from 'react-i18next'
 import { useTemplates } from '@/hooks/useTemplates'
 import ThemeCard, { ThemeCardSkeleton } from '@/components/ThemeCard'

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Check, Crown } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/lib/router";
 import { ALL_ACCESS_PRICE } from "@/hooks/useAllAccessPass";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";

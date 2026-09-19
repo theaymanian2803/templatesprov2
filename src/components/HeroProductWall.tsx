@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link } from '@/lib/router'
 import { ArrowUpRight } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { topTemplates } from '@/data/topTemplates'

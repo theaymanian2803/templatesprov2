@@ -1,3 +1,4 @@
+import { createFileRoute } from '@tanstack/react-router'
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -60,4 +61,4 @@ const Cookies = () => {
   );
 };
 
-export default Cookies;
+export const Route = createFileRoute('/cookies')({ component: Cookies })

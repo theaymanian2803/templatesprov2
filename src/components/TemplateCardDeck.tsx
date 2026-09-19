@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link } from '@/lib/router'
 import { ArrowUpRight, Star } from 'lucide-react'
 import { useTemplates } from '@/hooks/useTemplates'
 

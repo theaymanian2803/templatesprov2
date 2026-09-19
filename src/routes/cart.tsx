@@ -1,9 +1,10 @@
+import { createFileRoute } from '@tanstack/react-router'
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useCart } from "@/contexts/CartContext";
 import { Button } from "@/components/ui/button";
 import { Trash2, ShoppingBag, ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router";
 import { useTranslation } from "react-i18next";
 
 const Cart = () => {
@@ -122,4 +123,4 @@ const Cart = () => {
   );
 };
 
-export default Cart;
+export const Route = createFileRoute('/cart')({ component: Cart })

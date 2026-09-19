@@ -1,3 +1,4 @@
+import { createFileRoute } from '@tanstack/react-router'
 import Footer from '@/components/Footer'
 import HostingWizard from '@/components/HostingWizard'
 import Navbar from '@/components/Navbar'
@@ -21,7 +22,7 @@ import {
   X,
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from '@/lib/router'
 import { useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 
@@ -606,4 +607,4 @@ const Checkout = () => {
   )
 }
 
-export default Checkout
+export const Route = createFileRoute('/checkout')({ component: Checkout })

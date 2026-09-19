@@ -10,7 +10,7 @@ import { useTemplate } from '@/hooks/useTemplates'
 import { Check, Facebook, Linkedin, MessageCircle, Play, Share2, Twitter } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useParams } from 'react-router-dom'
+import { useParams } from '@/lib/router'
 
 const TemplateSidebar = () => {
   const { id } = useParams()

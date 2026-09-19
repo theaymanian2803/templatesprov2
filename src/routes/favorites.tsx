@@ -1,5 +1,6 @@
+import { createFileRoute } from '@tanstack/react-router'
 import { useState, useMemo } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate } from "@/lib/router";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import TemplateCard from "@/components/TemplateCard";
@@ -221,4 +222,4 @@ const Favorites = () => {
   );
 };
 
-export default Favorites;
+export const Route = createFileRoute('/favorites')({ component: Favorites })

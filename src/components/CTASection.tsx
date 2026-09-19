@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { ArrowRight, Users, Wallet, TrendingUp } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link } from '@/lib/router'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef } from 'react'
 

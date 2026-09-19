@@ -1,5 +1,6 @@
+import { createFileRoute } from '@tanstack/react-router'
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/lib/router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -403,4 +404,4 @@ const Auth = () => {
   );
 };
 
-export default Auth;
+export const Route = createFileRoute('/auth')({ component: Auth })

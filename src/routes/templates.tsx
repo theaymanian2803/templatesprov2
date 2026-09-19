@@ -1,3 +1,4 @@
+import { createFileRoute } from '@tanstack/react-router'
 import ShopFilters, { ShopFilterState, defaultFilters } from '@/components/shop/ShopFilters'
 import ShopProductCard from '@/components/shop/ShopProductCard'
 import ShopPromoBanner from '@/components/shop/ShopPromoBanner'
@@ -19,7 +20,7 @@ import { getDisplayRating, getDisplaySales } from '@/lib/seeded'
 import { Filter, LayoutGrid, List, Search, SlidersHorizontal, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useEffect, useMemo, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams } from '@/lib/router'
 
 const ITEMS_PER_PAGE = 10
 
@@ -454,4 +455,4 @@ const Templates = () => {
   )
 }
 
-export default Templates
+export const Route = createFileRoute('/templates')({ component: Templates })

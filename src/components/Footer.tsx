@@ -1,5 +1,5 @@
 import { Twitter, Instagram, Linkedin, Github, Youtube, Mail } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link } from '@/lib/router'
 import { useTranslation } from 'react-i18next'
 
 const footerLinkKeys: Record<string, { key: string; to: string }[]> = {

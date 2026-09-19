@@ -1,3 +1,4 @@
+import { createFileRoute } from '@tanstack/react-router'
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import {
@@ -8,7 +9,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { MessageCircle, HelpCircle, FileText, Shield, CreditCard, Headphones } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link } from "@/lib/router";
 
 const faqCategories = [
   {
@@ -238,4 +239,4 @@ const FAQ = () => {
   );
 };
 
-export default FAQ;
+export const Route = createFileRoute('/faq')({ component: FAQ })

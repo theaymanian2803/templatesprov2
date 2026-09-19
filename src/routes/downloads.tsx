@@ -1,3 +1,4 @@
+import { createFileRoute } from '@tanstack/react-router'
 import Footer from '@/components/Footer'
 import HostingWizard from '@/components/HostingWizard'
 import Navbar from '@/components/Navbar'
@@ -14,7 +15,7 @@ import { supabase } from '@/integrations/supabase/client'
 import { getDirectDownloadUrl } from '@/lib/utils'
 import { Crown, Download, FileArchive, Loader2, Package, Rocket, Search, Star, Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from '@/lib/router'
 import { useQueryClient } from '@tanstack/react-query'
 
 const Downloads = () => {
@@ -274,4 +275,4 @@ const Downloads = () => {
   )
 }
 
-export default Downloads
+export const Route = createFileRoute('/downloads')({ component: Downloads })

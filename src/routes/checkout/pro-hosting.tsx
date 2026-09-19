@@ -1,5 +1,6 @@
+import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link } from "@/lib/router";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
@@ -317,4 +318,4 @@ const ProHostingCheckout = () => {
   );
 };
 
-export default ProHostingCheckout;
+export const Route = createFileRoute('/checkout/pro-hosting')({ component: ProHostingCheckout })

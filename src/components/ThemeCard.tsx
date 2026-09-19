@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { ArrowRight, ShoppingCart, Star } from 'lucide-react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from '@/lib/router'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { useCart } from '@/contexts/CartContext'

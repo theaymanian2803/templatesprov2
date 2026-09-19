@@ -1,3 +1,4 @@
+import { createFileRoute } from '@tanstack/react-router'
 import { AdminSidebar } from '@/components/admin/AdminSidebar'
 import { ContactList } from '@/components/admin/ContactList'
 import { CouponList } from '@/components/admin/CouponList'
@@ -35,7 +36,7 @@ import { supabase } from '@/integrations/supabase/client'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { DollarSign, Loader2, MonitorSmartphone, Package, Plus, Search, ShieldAlert } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from '@/lib/router'
 
 const Admin = () => {
   const { user, loading: authLoading } = useAuth()
@@ -484,4 +485,4 @@ const LoadingState = () => (
   </div>
 )
 
-export default Admin
+export const Route = createFileRoute('/admin')({ component: Admin })

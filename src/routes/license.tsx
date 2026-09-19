@@ -1,3 +1,4 @@
+import { createFileRoute } from '@tanstack/react-router'
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -79,4 +80,4 @@ const License = () => {
   );
 };
 
-export default License;
+export const Route = createFileRoute('/license')({ component: License })

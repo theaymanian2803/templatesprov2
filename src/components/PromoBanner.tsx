@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { ArrowRight, Check } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from '@/lib/router'
 import { useTranslation } from 'react-i18next'
 import { useCart } from '@/contexts/CartContext'
 

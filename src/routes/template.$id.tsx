@@ -1,3 +1,4 @@
+import { createFileRoute } from '@tanstack/react-router'
 import Footer from '@/components/Footer'
 import Navbar from '@/components/Navbar'
 import FullScreenPreview from '@/components/preview/FullScreenPreview'
@@ -20,7 +21,7 @@ import { ArrowLeft, BadgeCheck, Download, Home, Loader2, Maximize2, ShoppingBag 
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from '@/lib/router'
 
 const TemplatePreview = () => {
   const { id } = useParams<{ id: string }>()
@@ -307,4 +308,4 @@ const TemplatePreview = () => {
   )
 }
 
-export default TemplatePreview
+export const Route = createFileRoute('/template/$id')({ component: TemplatePreview })

@@ -1,5 +1,6 @@
+import { createFileRoute } from '@tanstack/react-router'
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "@/lib/router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -222,4 +223,4 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+export const Route = createFileRoute('/reset-password')({ component: ResetPassword })

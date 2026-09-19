@@ -1,3 +1,4 @@
+import { createFileRoute } from '@tanstack/react-router'
 import Footer from '@/components/Footer'
 import Navbar from '@/components/Navbar'
 import { Button } from '@/components/ui/button'
@@ -24,7 +25,7 @@ import {
   Send,
 } from 'lucide-react'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from '@/lib/router'
 
 const methodIcons = [Mail, Phone, MessageSquare, MapPin]
 
@@ -363,4 +364,4 @@ const Contact = () => {
   )
 }
 
-export default Contact
+export const Route = createFileRoute('/contact')({ component: Contact })

@@ -1,3 +1,4 @@
+import { createFileRoute } from '@tanstack/react-router'
 import CategoriesSection from '@/components/CategoriesSection'
 import FeaturedThemes from '@/components/FeaturedThemes'
 import Footer from '@/components/Footer'
@@ -28,4 +29,4 @@ const Index = () => {
   )
 }
 
-export default Index
+export const Route = createFileRoute('/')({ component: Index })
