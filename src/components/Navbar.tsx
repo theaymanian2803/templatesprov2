@@ -11,6 +11,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useCart } from '@/contexts/CartContext'
 import { useFavorites } from '@/contexts/FavoritesContext'
 import { useAllAccessPass, ALL_ACCESS_PRICE } from '@/hooks/useAllAccessPass'
+import { useAdminRole } from '@/hooks/useAdminRole'
 import {
   ArrowRight,
   ChevronDown,
@@ -44,7 +45,7 @@ import {
   User,
   X,
 } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from '@/lib/router'
 import { useTranslation } from 'react-i18next'
 import LanguageSwitcher from '@/components/LanguageSwitcher'
@@ -107,10 +108,12 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [openMegaMenu, setOpenMegaMenu] = useState<string | null>(null)
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const { user, signOut } = useAuth()
   const { totalItems, setAllAccess } = useCart()
   const { favorites } = useFavorites()
   const { data: allAccessPass } = useAllAccessPass()
+  const { data: isAdmin } = useAdminRole()
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { data: categories } = useCategories()
@@ -121,7 +124,18 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const isAdmin = user?.email === 'theaymanian@yahoo.com' || user?.user_metadata?.role === 'admin'
+  const openMega = (menu: string) => {
+    if (closeTimer.current) {
+      clearTimeout(closeTimer.current)
+      closeTimer.current = null
+    }
+    setOpenMegaMenu(menu)
+  }
+
+  const closeMega = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current)
+    closeTimer.current = setTimeout(() => setOpenMegaMenu(null), 120)
+  }
 
   const handleSignOut = async () => {
     await signOut()
@@ -163,10 +177,12 @@ const Navbar = () => {
           {/* Desktop Nav with Mega Menus */}
           <div className="hidden lg:flex items-center gap-1 shrink-0">
             {/* Browse Templates Mega Menu — full-viewport panel */}
-            <div className="relative">
+            <div
+              className="relative"
+              onMouseEnter={() => openMega('browse')}
+              onMouseLeave={closeMega}>
               <button
                 type="button"
-                onClick={() => setOpenMegaMenu(openMegaMenu === 'browse' ? null : 'browse')}
                 aria-expanded={openMegaMenu === 'browse'}
                 aria-haspopup="true"
                 className={`inline-flex items-center gap-1 px-3 py-2 text-sm font-semibold transition-colors ${openMegaMenu === 'browse' ? 'text-[#111111]' : 'text-[#2F3437] hover:text-[#111111]'}`}>
@@ -174,7 +190,10 @@ const Navbar = () => {
                 <ChevronDown className={`w-3.5 h-3.5 transition-transform ${openMegaMenu === 'browse' ? 'rotate-180' : ''}`} />
               </button>
               {openMegaMenu === 'browse' && (
-                <div className="fixed top-16 left-0 right-0 z-50 border-b border-[#EAEAEA] bg-white shadow-[0_12px_40px_-8px_rgba(0,0,0,0.08)]">
+                <div
+                  className="fixed top-16 left-0 right-0 z-50 border-b border-[#EAEAEA] bg-white shadow-[0_12px_40px_-8px_rgba(0,0,0,0.08)]"
+                  onMouseEnter={() => openMega('browse')}
+                  onMouseLeave={closeMega}>
                   <div className="max-w-[1400px] mx-auto px-8 py-6 grid grid-cols-3 gap-8">
                     <div>
                       <p className="text-[11px] font-bold text-[#787774]/70 uppercase tracking-widest mb-3">{t('nav.categories')}</p>
@@ -229,10 +248,12 @@ const Navbar = () => {
             </div>
 
             {/* Company Mega Menu — centered small panel */}
-            <div className="relative">
+            <div
+              className="relative"
+              onMouseEnter={() => openMega('company')}
+              onMouseLeave={closeMega}>
               <button
                 type="button"
-                onClick={() => setOpenMegaMenu(openMegaMenu === 'company' ? null : 'company')}
                 aria-expanded={openMegaMenu === 'company'}
                 aria-haspopup="true"
                 className={`inline-flex items-center gap-1 px-3 py-2 text-sm font-semibold transition-colors ${openMegaMenu === 'company' ? 'text-[#111111]' : 'text-[#2F3437] hover:text-[#111111]'}`}>
@@ -259,10 +280,12 @@ const Navbar = () => {
             </Link>
 
             {/* Help & Legal Mega Menu — centered small panel */}
-            <div className="relative">
+            <div
+              className="relative"
+              onMouseEnter={() => openMega('legal')}
+              onMouseLeave={closeMega}>
               <button
                 type="button"
-                onClick={() => setOpenMegaMenu(openMegaMenu === 'legal' ? null : 'legal')}
                 aria-expanded={openMegaMenu === 'legal'}
                 aria-haspopup="true"
                 className={`inline-flex items-center gap-1 px-3 py-2 text-sm font-semibold transition-colors ${openMegaMenu === 'legal' ? 'text-[#111111]' : 'text-[#2F3437] hover:text-[#111111]'}`}>
@@ -270,7 +293,10 @@ const Navbar = () => {
                 <ChevronDown className={`w-3.5 h-3.5 transition-transform ${openMegaMenu === 'legal' ? 'rotate-180' : ''}`} />
               </button>
               {openMegaMenu === 'legal' && (
-                <div className="fixed top-16 left-0 right-0 z-50 border-b border-[#EAEAEA] bg-white shadow-[0_12px_40px_-8px_rgba(0,0,0,0.08)]">
+                <div
+                  className="fixed top-16 left-0 right-0 z-50 border-b border-[#EAEAEA] bg-white shadow-[0_12px_40px_-8px_rgba(0,0,0,0.08)]"
+                  onMouseEnter={() => openMega('legal')}
+                  onMouseLeave={closeMega}>
                   <div className="max-w-[1400px] mx-auto px-8 py-6 grid grid-cols-3 gap-8">
                     <div>
                       <p className="text-[11px] font-bold text-[#787774]/70 uppercase tracking-widest mb-3">{t('nav.help')}</p>

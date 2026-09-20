@@ -32,7 +32,7 @@ export const OrderDetails = ({ order, onClose }: OrderDetailsProps) => {
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle className="flex items-center justify-between">
-            <span>Détails de la commande</span>
+            <span>Order details</span>
             <Badge className={statusColors[order.status]} variant="secondary">
               {order.status}
             </Badge>
@@ -43,21 +43,21 @@ export const OrderDetails = ({ order, onClose }: OrderDetailsProps) => {
           {/* Order Info */}
           <div className="grid grid-cols-2 gap-4 p-4 bg-muted/50 rounded-lg">
             <div>
-              <p className="text-sm text-muted-foreground">ID de commande</p>
+              <p className="text-sm text-muted-foreground">Order ID</p>
               <p className="font-mono text-sm">{order.id}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">E-mail du client</p>
+              <p className="text-sm text-muted-foreground">Customer email</p>
               <p className="text-sm">{order.user_email}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Créée le</p>
+              <p className="text-sm text-muted-foreground">Created</p>
               <p className="text-sm">
                 {format(new Date(order.created_at), "MMM d, yyyy 'at' h:mm a")}
               </p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">Dernière mise à jour</p>
+              <p className="text-sm text-muted-foreground">Last updated</p>
               <p className="text-sm">
                 {format(new Date(order.updated_at), "MMM d, yyyy 'at' h:mm a")}
               </p>
@@ -66,14 +66,14 @@ export const OrderDetails = ({ order, onClose }: OrderDetailsProps) => {
 
           {/* Order Items */}
           <div>
-            <h4 className="font-medium mb-3">Articles commandés</h4>
+            <h4 className="font-medium mb-3">Ordered items</h4>
             {order.items && order.items.length > 0 ? (
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Modèle</TableHead>
-                    <TableHead>Licence</TableHead>
-                    <TableHead className="text-right">Prix</TableHead>
+                    <TableHead>Template</TableHead>
+                    <TableHead>License</TableHead>
+                    <TableHead className="text-right">Price</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -91,13 +91,13 @@ export const OrderDetails = ({ order, onClose }: OrderDetailsProps) => {
                 </TableBody>
               </Table>
             ) : (
-              <p className="text-sm text-muted-foreground">Aucun article dans cette commande</p>
+              <p className="text-sm text-muted-foreground">No items in this order</p>
             )}
           </div>
 
           {/* Total */}
           <div className="flex items-center justify-between pt-4 border-t">
-            <span className="font-medium">Montant total</span>
+            <span className="font-medium">Total amount</span>
             <span className="text-xl font-bold">${order.total_amount.toFixed(2)}</span>
           </div>
         </div>

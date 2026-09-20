@@ -19,6 +19,7 @@ interface AuthContextType {
   loading: boolean
   signUp: (email: string, password: string, displayName?: string) => Promise<{ error: Error | null }>
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>
+  signInWithGoogle: () => Promise<{ error: Error | null }>
   signOut: () => Promise<void>
   resetPassword: (email: string) => Promise<{ error: Error | null }>
   updatePassword: (newPassword: string) => Promise<{ error: Error | null }>
@@ -67,6 +68,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return { error: error ? new Error(error.message ?? 'Sign in failed') : null }
   }
 
+  const signInWithGoogle = async () => {
+    const { error } = await authClient.signIn.social({
+      provider: 'google',
+      callbackURL: '/',
+    })
+    return { error: error ? new Error(error.message ?? 'Google sign in failed') : null }
+  }
+
   const signOut = async () => {
     await authClient.signOut()
     setUser(null)
@@ -88,7 +97,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, signUp, signIn, signOut, resetPassword, updatePassword }}>
+    <AuthContext.Provider value={{ user, session, loading, signUp, signIn, signInWithGoogle, signOut, resetPassword, updatePassword }}>
       {children}
     </AuthContext.Provider>
   )

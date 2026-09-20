@@ -29,12 +29,12 @@ export const TemplateList = ({ templates, onEdit, onDelete, isDeleting }: Templa
         <TableHeader>
           <TableRow className="bg-muted/50">
             <TableHead className="w-16">Image</TableHead>
-            <TableHead>Titre</TableHead>
-            <TableHead>Catégorie</TableHead>
-            <TableHead className="text-right">Prix</TableHead>
-            <TableHead className="text-center">Ventes</TableHead>
-            <TableHead className="text-center">Note</TableHead>
-            <TableHead className="text-center">En vedette</TableHead>
+            <TableHead>Title</TableHead>
+            <TableHead>Category</TableHead>
+            <TableHead className="text-right">Price</TableHead>
+            <TableHead className="text-center">Sales</TableHead>
+            <TableHead className="text-center">Rating</TableHead>
+            <TableHead className="text-center">Featured</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -61,7 +61,7 @@ export const TemplateList = ({ templates, onEdit, onDelete, isDeleting }: Templa
                     className="text-xs text-muted-foreground hover:text-primary inline-flex items-center gap-1"
                   >
                     <ExternalLink className="w-3 h-3" />
-                    Démo
+                    Demo
                   </a>
                 )}
               </TableCell>
@@ -72,7 +72,7 @@ export const TemplateList = ({ templates, onEdit, onDelete, isDeleting }: Templa
                 ${template.price}
                 {template.extended_price && (
                   <span className="block text-xs text-muted-foreground">
-                    Étendu : ${template.extended_price}
+                    Extended: ${template.extended_price}
                   </span>
                 )}
               </TableCell>
@@ -86,7 +86,7 @@ export const TemplateList = ({ templates, onEdit, onDelete, isDeleting }: Templa
               <TableCell className="text-center">
                 {template.featured && (
                   <Badge className="bg-gradient-to-r from-primary to-accent text-primary-foreground">
-                    En vedette
+                    Featured
                   </Badge>
                 )}
               </TableCell>
@@ -113,18 +113,18 @@ export const TemplateList = ({ templates, onEdit, onDelete, isDeleting }: Templa
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
-                        <AlertDialogTitle>Supprimer le modèle</AlertDialogTitle>
+                        <AlertDialogTitle>Delete template</AlertDialogTitle>
                         <AlertDialogDescription>
-                          Êtes-vous sûr de vouloir supprimer « {template.title} » ? Cette action est irréversible.
+                          Are you sure you want to delete "{template.title}"? This action is irreversible.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogCancel>Annuler</AlertDialogCancel>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <AlertDialogAction
                           onClick={() => onDelete(template.id)}
                           className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                         >
-                          Supprimer
+                          Delete
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
@@ -136,7 +136,7 @@ export const TemplateList = ({ templates, onEdit, onDelete, isDeleting }: Templa
           {templates.length === 0 && (
             <TableRow>
               <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
-                Aucun modèle trouvé. Créez votre premier modèle !
+                No templates found. Create your first template!
               </TableCell>
             </TableRow>
           )}

@@ -73,12 +73,12 @@ const Admin = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['templates'] })
-      toast({ title: 'Template cr�� avec succ�s !' })
+      toast({ title: 'Template created successfully!' })
       setShowForm(false)
     },
     onError: (error: Error) => {
       toast({
-        title: 'Erreur lors de la cr�ation',
+        title: 'Failed to create template',
         description: error.message,
         variant: 'destructive',
       })
@@ -91,13 +91,13 @@ const Admin = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['templates'] })
-      toast({ title: 'Template mis � jour avec succ�s !' })
+      toast({ title: 'Template updated successfully!' })
       setEditingTemplate(null)
       setShowForm(false)
     },
     onError: (error: Error) => {
       toast({
-        title: 'Erreur lors de la mise � jour',
+        title: 'Failed to update template',
         description: error.message,
         variant: 'destructive',
       })
@@ -111,12 +111,12 @@ const Admin = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['templates'] })
-      toast({ title: 'Template supprim� avec succ�s !' })
+      toast({ title: 'Template deleted successfully!' })
       setDeletingId(null)
     },
     onError: (error: Error) => {
       toast({
-        title: 'Erreur lors de la suppression',
+        title: 'Failed to delete template',
         description: error.message,
         variant: 'destructive',
       })
@@ -146,10 +146,10 @@ const Admin = () => {
     updateOrderStatus.mutate(
       { orderId, status },
       {
-        onSuccess: () => toast({ title: 'Statut de la commande mis � jour !' }),
+        onSuccess: () => toast({ title: 'Order status updated!' }),
         onError: (error) =>
           toast({
-            title: 'Erreur lors de la mise � jour',
+            title: 'Failed to update order',
             description: error.message,
             variant: 'destructive',
           }),
@@ -161,11 +161,11 @@ const Admin = () => {
     setDeletingOrderId(orderId)
     deleteOrder.mutate(orderId, {
       onSuccess: () => {
-        toast({ title: 'Commande supprim�e avec succ�s !' })
+        toast({ title: 'Order deleted successfully!' })
         setDeletingOrderId(null)
       },
       onError: (error) => {
-        toast({ title: 'Erreur lors de la suppression', description: error.message, variant: 'destructive' })
+        toast({ title: 'Failed to delete order', description: error.message, variant: 'destructive' })
         setDeletingOrderId(null)
       },
     })
@@ -214,12 +214,12 @@ const Admin = () => {
               <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
                 <MonitorSmartphone className="w-10 h-10 text-primary" />
               </div>
-              <h1 className="text-2xl font-bold text-foreground mb-2">Non disponible sur mobile</h1>
+              <h1 className="text-2xl font-bold text-foreground mb-2">Not available on mobile</h1>
               <p className="text-muted-foreground mb-6">
-                Le panneau d'administration est accessible uniquement sur tablette et ordinateur
-                (�cran de 768px et plus).
+                The admin panel is only accessible on tablet and desktop
+                (768px and above).
               </p>
-              <Button onClick={() => navigate('/')}>Retour � l'accueil</Button>
+              <Button onClick={() => navigate('/')}>Back to home</Button>
             </div>
           </div>
         </div>
@@ -238,11 +238,11 @@ const Admin = () => {
               <div className="w-20 h-20 bg-destructive/10 rounded-full flex items-center justify-center mx-auto mb-6">
                 <ShieldAlert className="w-10 h-10 text-destructive" />
               </div>
-              <h1 className="text-2xl font-bold text-foreground mb-2">Acc�s refus�</h1>
+              <h1 className="text-2xl font-bold text-foreground mb-2">Access denied</h1>
               <p className="text-muted-foreground mb-6">
-                Vous n'avez pas les permissions n�cessaires pour acc�der au tableau de bord.
+                You don't have the required permissions to access the dashboard.
               </p>
-              <Button onClick={() => navigate('/')}>Retour � l'accueil</Button>
+              <Button onClick={() => navigate('/')}>Back to home</Button>
             </div>
           </div>
         </div>
@@ -253,11 +253,11 @@ const Admin = () => {
 
   const sectionTitle: Record<string, string> = {
     templates: 'Templates',
-    orders: 'Commandes',
-    coupons: 'Codes promo',
-    reviews: 'Avis',
+    orders: 'Orders',
+    coupons: 'Coupons',
+    reviews: 'Reviews',
     contacts: 'Messages',
-    refunds: 'Remboursements',
+    refunds: 'Refunds',
   }
 
   return (
@@ -281,12 +281,12 @@ const Admin = () => {
                       </BreadcrumbItem>
                       <BreadcrumbSeparator />
                       <BreadcrumbItem>
-                        <span className="text-muted-foreground text-sm">Gestion</span>
+                        <span className="text-muted-foreground text-sm">Management</span>
                       </BreadcrumbItem>
                       <BreadcrumbSeparator />
                       <BreadcrumbItem>
                         <BreadcrumbPage className="font-semibold">
-                          {sectionTitle[activeTab] || 'Tableau de bord'}
+                          {sectionTitle[activeTab] || 'Dashboard'}
                         </BreadcrumbPage>
                       </BreadcrumbItem>
                     </BreadcrumbList>
@@ -295,7 +295,7 @@ const Admin = () => {
                 {activeTab === 'templates' && !showForm && (
                   <Button onClick={() => setShowForm(true)} size="sm" className="gap-2 shrink-0">
                     <Plus className="w-4 h-4" />
-                    Ajouter
+                    Add
                   </Button>
                 )}
               </div>
@@ -304,16 +304,16 @@ const Admin = () => {
               <div className="px-4 md:px-6 py-4 border-b border-border/30">
                 <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
                   <StatCard label="Templates" value={templates.length} />
-                  <StatCard label="En vedette" value={templates.filter((t) => t.featured).length} />
-                  <StatCard label="Ventes" value={templates.reduce((a, t) => a + t.sales, 0)} />
+                  <StatCard label="Featured" value={templates.filter((t) => t.featured).length} />
+                  <StatCard label="Sales" value={templates.reduce((a, t) => a + t.sales, 0)} />
                   <StatCard
-                    label="Commandes"
+                    label="Orders"
                     value={orders.length}
                     icon={<Package className="w-4 h-4" />}
                   />
-                  <StatCard label="En attente" value={pendingOrders} className="text-accent" />
+                  <StatCard label="Pending" value={pendingOrders} className="text-accent" />
                   <StatCard
-                    label="Revenus"
+                    label="Revenue"
                     value={`$${totalRevenue.toFixed(0)}`}
                     icon={<DollarSign className="w-4 h-4" />}
                     className="text-primary"
@@ -327,7 +327,7 @@ const Admin = () => {
                   (showForm ? (
                     <div className="glass-card p-6 rounded-2xl border border-border/50">
                       <h2 className="text-xl font-semibold mb-6">
-                        {editingTemplate ? 'Modifier le template' : 'Cr�er un template'}
+                        {editingTemplate ? 'Edit template' : 'Create a template'}
                       </h2>
                       <TemplateForm
                         template={editingTemplate}
@@ -341,7 +341,7 @@ const Admin = () => {
                       <SearchBar
                         value={searchQuery}
                         onChange={setSearchQuery}
-                        placeholder="Rechercher..."
+                        placeholder="Search..."
                       />
                       {templatesLoading ? (
                         <LoadingState />
@@ -361,7 +361,7 @@ const Admin = () => {
                     <SearchBar
                       value={searchQuery}
                       onChange={setSearchQuery}
-                      placeholder="Rechercher..."
+                      placeholder="Search..."
                     />
                     {ordersLoading ? (
                       <LoadingState />

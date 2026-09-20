@@ -21,12 +21,12 @@ import {
 import { cn } from "@/lib/utils";
 
 const managementItems = [
-  { title: "Modèles", value: "templates", icon: LayoutTemplate },
-  { title: "Commandes", value: "orders", icon: ShoppingCart },
-  { title: "Codes promo", value: "coupons", icon: Tag },
-  { title: "Avis", value: "reviews", icon: Star },
+  { title: "Templates", value: "templates", icon: LayoutTemplate },
+  { title: "Orders", value: "orders", icon: ShoppingCart },
+  { title: "Coupons", value: "coupons", icon: Tag },
+  { title: "Reviews", value: "reviews", icon: Star },
   { title: "Messages", value: "contacts", icon: MessageCircle },
-  { title: "Remboursements", value: "refunds", icon: RotateCcw },
+  { title: "Refunds", value: "refunds", icon: RotateCcw },
 ];
 
 interface AdminSidebarProps {
@@ -83,7 +83,7 @@ export const AdminSidebar = ({ activeTab, onTabChange }: AdminSidebarProps) => {
             <span className="font-display font-bold text-foreground">Admin</span>
           </div>
         )}
-        {renderGroup("Gestion", managementItems)}
+        {renderGroup("Management", managementItems)}
       </SidebarContent>
     </Sidebar>
   );

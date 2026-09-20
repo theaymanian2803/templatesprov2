@@ -42,8 +42,8 @@ export function R2FileUpload({ value, onChange }: R2FileUploadProps) {
 
     if (file.size > MAX_SIZE_MB * 1024 * 1024) {
       toast({
-        title: `Fichier trop volumineux`,
-        description: `Maximum ${MAX_SIZE_MB} Mo.`,
+        title: `File is too large`,
+        description: `Maximum ${MAX_SIZE_MB} MB.`,
         variant: 'destructive',
       })
       return
@@ -72,15 +72,15 @@ export function R2FileUpload({ value, onChange }: R2FileUploadProps) {
       })
 
       if (!uploadResponse.ok) {
-        throw new Error(`Cloudflare a rejeté l'envoi. Statut: ${uploadResponse.status}`)
+        throw new Error(`Cloudflare rejected the upload. Status: ${uploadResponse.status}`)
       }
 
       onChange(publicUrl)
-      toast({ title: 'Fichier source envoyé !', description: file.name })
+      toast({ title: 'Source file uploaded!', description: file.name })
     } catch (error: any) {
       console.error('Upload error:', error)
       toast({
-        title: 'Échec de l\'envoi du fichier',
+        title: 'File upload failed',
         description: error.message,
         variant: 'destructive',
       })
@@ -116,7 +116,7 @@ export function R2FileUpload({ value, onChange }: R2FileUploadProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-xs text-blue-600 hover:underline flex items-center gap-1">
-                <ExternalLink className="w-3 h-3" /> Vérifier le lien
+                <ExternalLink className="w-3 h-3" /> Check link
               </a>
             </div>
           </div>
@@ -127,7 +127,7 @@ export function R2FileUpload({ value, onChange }: R2FileUploadProps) {
               size="sm"
               onClick={() => fileInputRef.current?.click()}
               disabled={isUploading}>
-              {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Remplacer'}
+              {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Replace'}
             </Button>
             <Button
               type="button"
@@ -146,7 +146,7 @@ export function R2FileUpload({ value, onChange }: R2FileUploadProps) {
           {isUploading ? (
             <div className="flex flex-col items-center gap-2">
               <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              <span className="text-sm font-medium">Envoi vers R2…</span>
+              <span className="text-sm font-medium">Uploading to R2…</span>
               {progress && (
                 <span className="text-xs text-muted-foreground">
                   {progress.name} ({formatBytes(progress.size)})
@@ -157,10 +157,10 @@ export function R2FileUpload({ value, onChange }: R2FileUploadProps) {
             <div className="flex flex-col items-center gap-2 text-center">
               <UploadCloud className="w-8 h-8 mb-1" />
               <span className="font-medium text-foreground">
-                Cliquez pour télécharger le fichier source
+                Click to upload the source file
               </span>
               <span className="text-xs">
-                ZIP, RAR, 7Z, TAR, GZ, PDF — jusqu'à {MAX_SIZE_MB} Mo
+                ZIP, RAR, 7Z, TAR, GZ, PDF — up to {MAX_SIZE_MB} MB
               </span>
             </div>
           )}

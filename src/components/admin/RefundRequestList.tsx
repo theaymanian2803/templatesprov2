@@ -69,11 +69,11 @@ const RefundRequestList = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-refund-requests"] });
-      toast({ title: "Demande de remboursement mise à jour !" });
+      toast({ title: "Refund request updated!" });
       setSelectedRequest(null);
     },
     onError: (error: any) => {
-      toast({ title: "Erreur", description: error.message, variant: "destructive" });
+      toast({ title: "Error", description: error.message, variant: "destructive" });
     },
   });
 
@@ -83,10 +83,10 @@ const RefundRequestList = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-refund-requests"] });
-      toast({ title: "Demande de remboursement supprimée !" });
+      toast({ title: "Refund request deleted!" });
     },
     onError: (error: any) => {
-      toast({ title: "Erreur", description: error.message, variant: "destructive" });
+      toast({ title: "Error", description: error.message, variant: "destructive" });
     },
   });
 
@@ -105,7 +105,7 @@ const RefundRequestList = () => {
       <div className="relative max-w-md">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
         <Input
-          placeholder="Rechercher par e-mail, motif ou ID de commande..."
+          placeholder="Search by email, reason, or order ID..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="pl-10"
@@ -114,18 +114,18 @@ const RefundRequestList = () => {
 
       {!filtered.length ? (
         <div className="text-center py-12 text-muted-foreground">
-          <p>Aucune demande de remboursement trouvée.</p>
+          <p>No refund requests found.</p>
         </div>
       ) : (
         <div className="rounded-lg border overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Utilisateur</TableHead>
-                <TableHead>Commande</TableHead>
-                <TableHead>Montant</TableHead>
-                <TableHead>Motif</TableHead>
-                <TableHead>Statut</TableHead>
+                <TableHead>User</TableHead>
+                <TableHead>Order</TableHead>
+                <TableHead>Amount</TableHead>
+                <TableHead>Reason</TableHead>
+                <TableHead>Status</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
@@ -170,12 +170,12 @@ const RefundRequestList = () => {
                           </AlertDialogTrigger>
                           <AlertDialogContent>
                             <AlertDialogHeader>
-                              <AlertDialogTitle>Supprimer la demande de remboursement ?</AlertDialogTitle>
-                              <AlertDialogDescription>Cette action est irréversible.</AlertDialogDescription>
+                              <AlertDialogTitle>Delete refund request?</AlertDialogTitle>
+                              <AlertDialogDescription>This action is irreversible.</AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
-                              <AlertDialogCancel>Annuler</AlertDialogCancel>
-                              <AlertDialogAction onClick={() => deleteMutation.mutate(r.id)}>Supprimer</AlertDialogAction>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => deleteMutation.mutate(r.id)}>Delete</AlertDialogAction>
                             </AlertDialogFooter>
                           </AlertDialogContent>
                         </AlertDialog>
@@ -193,14 +193,14 @@ const RefundRequestList = () => {
       <Dialog open={!!selectedRequest} onOpenChange={(open) => !open && setSelectedRequest(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Examiner la demande de remboursement</DialogTitle>
+            <DialogTitle>Review refund request</DialogTitle>
             <DialogDescription>
-              De {selectedRequest?.user_email} · Commande #{selectedRequest?.order_id.slice(0, 8)} · ${Number(selectedRequest?.order_total || 0).toFixed(2)}
+              From {selectedRequest?.user_email} · Order #{selectedRequest?.order_id.slice(0, 8)} · ${Number(selectedRequest?.order_total || 0).toFixed(2)}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div>
-              <p className="text-sm font-medium mb-1">Motif du client</p>
+              <p className="text-sm font-medium mb-1">Customer reason</p>
               <p className="text-sm text-muted-foreground bg-muted p-3 rounded-lg">{selectedRequest?.reason}</p>
             </div>
             <div>
@@ -208,30 +208,30 @@ const RefundRequestList = () => {
               <Select value={newStatus} onValueChange={setNewStatus}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="pending">En attente</SelectItem>
-                  <SelectItem value="approved">Approuvée</SelectItem>
-                  <SelectItem value="rejected">Rejetée</SelectItem>
+                  <SelectItem value="pending">Pending</SelectItem>
+                  <SelectItem value="approved">Approved</SelectItem>
+                  <SelectItem value="rejected">Rejected</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div>
-              <p className="text-sm font-medium mb-1">Notes d'administration (visibles par l'utilisateur)</p>
+              <p className="text-sm font-medium mb-1">Admin notes (visible to the user)</p>
               <Textarea
                 value={adminNotes}
                 onChange={(e) => setAdminNotes(e.target.value)}
-                placeholder="Ajoutez une note concernant cette décision de remboursement..."
+                placeholder="Add a note about this refund decision..."
                 rows={3}
               />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setSelectedRequest(null)}>Annuler</Button>
+            <Button variant="outline" onClick={() => setSelectedRequest(null)}>Cancel</Button>
             <Button
               onClick={() => updateMutation.mutate({ id: selectedRequest.id, status: newStatus, admin_notes: adminNotes })}
               disabled={updateMutation.isPending}
             >
               {updateMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-              Mettre à jour
+              Update
             </Button>
           </DialogFooter>
         </DialogContent>

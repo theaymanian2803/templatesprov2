@@ -83,7 +83,7 @@ const CategoryCard = ({ category, index }: { category: typeof categoriesData[0];
 const CategoriesSection = () => {
   const { t } = useTranslation()
   return (
-    <section className="relative overflow-hidden bg-[#FBFBFA] py-20 md:py-24 text-[#111111]">
+    <section id="catalog" className="relative overflow-hidden bg-[#FBFBFA] py-20 md:py-24 text-[#111111]">
 
       <div className="relative container mx-auto">
         <div className="max-w-2xl mb-12">

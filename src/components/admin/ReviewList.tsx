@@ -64,10 +64,10 @@ export const ReviewList = () => {
       queryClient.invalidateQueries({ queryKey: ["templates"] });
       queryClient.invalidateQueries({ queryKey: ["templates-paginated"] });
       queryClient.invalidateQueries({ queryKey: ["template"] });
-      toast({ title: "Statut de l'avis mis à jour" });
+      toast({ title: "Review status updated" });
     },
     onError: (error: Error) => {
-      toast({ title: "Erreur lors de la mise à jour de l'avis", description: error.message, variant: "destructive" });
+      toast({ title: "Failed to update review", description: error.message, variant: "destructive" });
     },
   });
 
@@ -82,11 +82,11 @@ export const ReviewList = () => {
       queryClient.invalidateQueries({ queryKey: ["templates"] });
       queryClient.invalidateQueries({ queryKey: ["templates-paginated"] });
       queryClient.invalidateQueries({ queryKey: ["template"] });
-      toast({ title: "Avis supprimé avec succès" });
+      toast({ title: "Review deleted successfully" });
       setDeletingId(null);
     },
     onError: (error: Error) => {
-      toast({ title: "Erreur lors de la suppression de l'avis", description: error.message, variant: "destructive" });
+      toast({ title: "Failed to delete review", description: error.message, variant: "destructive" });
       setDeletingId(null);
     },
   });
@@ -98,10 +98,10 @@ export const ReviewList = () => {
       const ids = Array.from(selectedIds);
       if (action === "delete") {
         await adminDeleteReviews({ data: ids })
-        toast({ title: `${ids.length} avis${ids.length > 1 ? "" : ""} supprimé${ids.length > 1 ? "s" : ""}` });
+        toast({ title: `${ids.length} review${ids.length > 1 ? "s" : ""} deleted` });
       } else {
         await adminUpdateReviewsStatus({ data: { ids, status: action } })
-        toast({ title: `${ids.length} avis ${action === "approved" ? "approuvé" : "rejeté"}${ids.length > 1 ? "s" : ""}` });
+        toast({ title: `${ids.length} review${ids.length > 1 ? "s" : ""} ${action === "approved" ? "approved" : "rejected"}` });
       }
       setSelectedIds(new Set());
       queryClient.invalidateQueries({ queryKey: ["admin-reviews"] });
@@ -110,7 +110,7 @@ export const ReviewList = () => {
       queryClient.invalidateQueries({ queryKey: ["templates-paginated"] });
       queryClient.invalidateQueries({ queryKey: ["template"] });
     } catch (error: any) {
-      toast({ title: "Action groupée échouée", description: error.message, variant: "destructive" });
+      toast({ title: "Bulk action failed", description: error.message, variant: "destructive" });
     } finally {
       setBulkLoading(false);
     }
@@ -161,7 +161,7 @@ export const ReviewList = () => {
         <div className="flex items-center gap-2 p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/30 text-sm">
           <Clock className="w-4 h-4 text-yellow-500" />
           <span className="font-medium text-yellow-600">
-            {pendingCount} avis en attente d'approbation
+            {pendingCount} review{pendingCount > 1 ? "s" : ""} pending approval
           </span>
         </div>
       )}
@@ -170,7 +170,7 @@ export const ReviewList = () => {
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
           <Input
-            placeholder="Rechercher des avis..."
+            placeholder="Search reviews..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10"
@@ -178,13 +178,13 @@ export const ReviewList = () => {
         </div>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
           <SelectTrigger className="w-[150px]">
-            <SelectValue placeholder="Filtrer par statut" />
+            <SelectValue placeholder="Filter by status" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Tous les statuts</SelectItem>
-            <SelectItem value="pending">En attente</SelectItem>
-            <SelectItem value="approved">Approuvé</SelectItem>
-            <SelectItem value="rejected">Rejeté</SelectItem>
+            <SelectItem value="all">All statuses</SelectItem>
+            <SelectItem value="pending">Pending</SelectItem>
+            <SelectItem value="approved">Approved</SelectItem>
+            <SelectItem value="rejected">Rejected</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -193,7 +193,7 @@ export const ReviewList = () => {
       {someSelected && (
         <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50 border border-border/50">
           <span className="text-sm font-medium text-foreground">
-            {selectedIds.size} sélectionné{selectedIds.size > 1 ? "s" : ""}
+            {selectedIds.size} selected
           </span>
           <div className="flex gap-2 ml-auto">
             <Button
@@ -204,7 +204,7 @@ export const ReviewList = () => {
               disabled={bulkLoading}
             >
               {bulkLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <CheckCircle className="w-3.5 h-3.5" />}
-              Tout approuver
+              Approve all
             </Button>
             <Button
               size="sm"
@@ -214,7 +214,7 @@ export const ReviewList = () => {
               disabled={bulkLoading}
             >
               {bulkLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <XCircle className="w-3.5 h-3.5" />}
-              Tout rejeter
+              Reject all
             </Button>
             <AlertDialog>
               <AlertDialogTrigger asChild>
@@ -225,26 +225,26 @@ export const ReviewList = () => {
                   disabled={bulkLoading}
                 >
                   <Trash2 className="w-3.5 h-3.5" />
-                  Tout supprimer
+                  Delete all
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>Supprimer {selectedIds.size} avis</AlertDialogTitle>
+                  <AlertDialogTitle>Delete {selectedIds.size} reviews</AlertDialogTitle>
                   <AlertDialogDescription>
-                    Cela supprimera définitivement {selectedIds.size} avis sélectionné{selectedIds.size > 1 ? "s" : ""}. Cette action est irréversible.
+                    This will permanently delete {selectedIds.size} selected review{selectedIds.size > 1 ? "s" : ""}. This action is irreversible.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Annuler</AlertDialogCancel>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
                   <AlertDialogAction onClick={() => handleBulkAction("delete")} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                    Supprimer {selectedIds.size} avis
+                    Delete {selectedIds.size} reviews
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
             <Button size="sm" variant="ghost" onClick={() => setSelectedIds(new Set())} disabled={bulkLoading}>
-              Effacer
+              Clear
             </Button>
           </div>
         </div>
@@ -252,7 +252,7 @@ export const ReviewList = () => {
 
       {filtered.length === 0 ? (
         <div className="text-center py-12 text-muted-foreground">
-          {searchQuery || statusFilter !== "all" ? "Aucun avis ne correspond à vos filtres." : "Aucun avis pour l'instant."}
+          {searchQuery || statusFilter !== "all" ? "No reviews match your filters." : "No reviews yet."}
         </div>
       ) : (
         <div className="glass-card rounded-xl border border-border/50 overflow-hidden">
@@ -263,14 +263,14 @@ export const ReviewList = () => {
                   <Checkbox
                     checked={allSelected}
                     onCheckedChange={toggleSelectAll}
-                    aria-label="Tout sélectionner"
+                    aria-label="Select all"
                   />
                 </TableHead>
-                <TableHead>Utilisateur</TableHead>
-                <TableHead>Modèle</TableHead>
-                <TableHead>Note</TableHead>
-                <TableHead>Statut</TableHead>
-                <TableHead className="hidden md:table-cell">Commentaire</TableHead>
+                <TableHead>User</TableHead>
+                <TableHead>Template</TableHead>
+                <TableHead>Rating</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="hidden md:table-cell">Comment</TableHead>
                 <TableHead className="hidden sm:table-cell">Date</TableHead>
                 <TableHead className="w-[120px]">Actions</TableHead>
               </TableRow>
@@ -284,7 +284,7 @@ export const ReviewList = () => {
                       <Checkbox
                         checked={selectedIds.has(review.id)}
                         onCheckedChange={() => toggleSelect(review.id)}
-                        aria-label={`Sélectionner l'avis de ${review.display_name}`}
+                        aria-label={`Select review by ${review.display_name}`}
                       />
                     </TableCell>
                     <TableCell className="font-medium">{review.display_name}</TableCell>
@@ -315,7 +315,7 @@ export const ReviewList = () => {
                             variant="ghost"
                             className="text-green-600 hover:text-green-700"
                             onClick={() => updateStatusMutation.mutate({ id: review.id, status: "approved" })}
-                            title="Approuver"
+                            title="Approve"
                           >
                             <CheckCircle className="w-4 h-4" />
                           </Button>
@@ -326,7 +326,7 @@ export const ReviewList = () => {
                             variant="ghost"
                             className="text-orange-500 hover:text-orange-600"
                             onClick={() => updateStatusMutation.mutate({ id: review.id, status: "rejected" })}
-                            title="Rejeter"
+                            title="Reject"
                           >
                             <XCircle className="w-4 h-4" />
                           </Button>
@@ -339,15 +339,15 @@ export const ReviewList = () => {
                           </AlertDialogTrigger>
                           <AlertDialogContent>
                             <AlertDialogHeader>
-                              <AlertDialogTitle>Supprimer l'avis</AlertDialogTitle>
+                              <AlertDialogTitle>Delete review</AlertDialogTitle>
                               <AlertDialogDescription>
-                                Cela supprimera définitivement l'avis de {review.display_name} sur « {review.template_title} ».
+                                This will permanently delete the review by {review.display_name} on "{review.template_title}".
                               </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
-                              <AlertDialogCancel>Annuler</AlertDialogCancel>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
                               <AlertDialogAction onClick={() => deleteMutation.mutate(review.id)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                                  Supprimer
+                                  Delete
                                 </AlertDialogAction>
                             </AlertDialogFooter>
                           </AlertDialogContent>

@@ -52,7 +52,7 @@ export const CouponList = () => {
 
   const handleCreate = async () => {
     if (!code.trim() || !discountValue) {
-      toast({ title: "Veuillez remplir le code et la valeur de la réduction", variant: "destructive" });
+      toast({ title: "Please fill in the code and discount value", variant: "destructive" });
       return;
     }
     try {
@@ -64,7 +64,7 @@ export const CouponList = () => {
         max_uses: maxUses ? Number(maxUses) : null,
         expires_at: expiresAt || null,
       });
-      toast({ title: "Code promo créé !" });
+      toast({ title: "Coupon created!" });
       setShowForm(false);
       setCode("");
       setDiscountValue("");
@@ -72,16 +72,16 @@ export const CouponList = () => {
       setMaxUses("");
       setExpiresAt("");
     } catch (error: any) {
-      toast({ title: "Erreur lors de la création du code promo", description: error.message, variant: "destructive" });
+      toast({ title: "Failed to create coupon", description: error.message, variant: "destructive" });
     }
   };
 
   const handleDelete = async (id: string) => {
     try {
       await deleteCoupon.mutateAsync(id);
-      toast({ title: "Code promo supprimé !" });
+      toast({ title: "Coupon deleted!" });
     } catch (error: any) {
-      toast({ title: "Erreur lors de la suppression du code promo", description: error.message, variant: "destructive" });
+      toast({ title: "Failed to delete coupon", description: error.message, variant: "destructive" });
     }
   };
 
@@ -89,7 +89,7 @@ export const CouponList = () => {
     try {
       await toggleCoupon.mutateAsync({ id, is_active });
     } catch (error: any) {
-      toast({ title: "Erreur lors de la mise à jour du code promo", description: error.message, variant: "destructive" });
+      toast({ title: "Failed to update coupon", description: error.message, variant: "destructive" });
     }
   };
 
@@ -104,11 +104,11 @@ export const CouponList = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold text-foreground">Codes promo</h3>
+        <h3 className="text-lg font-semibold text-foreground">Coupons</h3>
         {!showForm && (
           <Button onClick={() => setShowForm(true)} size="sm" className="gap-2">
             <Plus className="w-4 h-4" />
-            Ajouter un code promo
+            Add a coupon
           </Button>
         )}
       </div>
@@ -117,38 +117,38 @@ export const CouponList = () => {
         <div className="glass-card p-6 rounded-2xl border border-border/50 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label>Code promo</Label>
+              <Label>Coupon code</Label>
               <Input
-                placeholder="ex. SAVE20"
+                placeholder="e.g. SAVE20"
                 value={code}
                 onChange={(e) => setCode(e.target.value.toUpperCase())}
                 className="mt-1"
               />
             </div>
             <div>
-              <Label>Type de réduction</Label>
+              <Label>Discount type</Label>
               <Select value={discountType} onValueChange={(v: "percentage" | "fixed") => setDiscountType(v)}>
                 <SelectTrigger className="mt-1">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="percentage">Pourcentage (%)</SelectItem>
-                  <SelectItem value="fixed">Montant fixe ($)</SelectItem>
+                  <SelectItem value="percentage">Percentage (%)</SelectItem>
+                  <SelectItem value="fixed">Fixed amount ($)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div>
-              <Label>Valeur de la réduction</Label>
+              <Label>Discount value</Label>
               <Input
                 type="number"
-                placeholder={discountType === "percentage" ? "ex. 20" : "ex. 10"}
+                placeholder={discountType === "percentage" ? "e.g. 20" : "e.g. 10"}
                 value={discountValue}
                 onChange={(e) => setDiscountValue(e.target.value)}
                 className="mt-1"
               />
             </div>
             <div>
-              <Label>Montant minimum de commande ($)</Label>
+              <Label>Minimum order amount ($)</Label>
               <Input
                 type="number"
                 placeholder="0"
@@ -158,17 +158,17 @@ export const CouponList = () => {
               />
             </div>
             <div>
-              <Label>Utilisations max (laisser vide pour illimité)</Label>
+              <Label>Max uses (leave empty for unlimited)</Label>
               <Input
                 type="number"
-                placeholder="Illimité"
+                placeholder="Unlimited"
                 value={maxUses}
                 onChange={(e) => setMaxUses(e.target.value)}
                 className="mt-1"
               />
             </div>
             <div>
-              <Label>Expire le (optionnel)</Label>
+              <Label>Expires on (optional)</Label>
               <Input
                 type="datetime-local"
                 value={expiresAt}
@@ -180,9 +180,9 @@ export const CouponList = () => {
           <div className="flex gap-2">
             <Button onClick={handleCreate} disabled={createCoupon.isPending} className="gap-2">
               {createCoupon.isPending && <Loader2 className="w-4 h-4 animate-spin" />}
-              Créer le code promo
+              Create coupon
             </Button>
-            <Button variant="outline" onClick={() => setShowForm(false)}>Annuler</Button>
+            <Button variant="outline" onClick={() => setShowForm(false)}>Cancel</Button>
           </div>
         </div>
       )}
@@ -190,7 +190,7 @@ export const CouponList = () => {
       {coupons.length === 0 ? (
         <div className="text-center py-12">
           <Tag className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
-          <p className="text-muted-foreground">Aucun code promo pour l'instant</p>
+          <p className="text-muted-foreground">No coupons yet</p>
         </div>
       ) : (
         <div className="glass-card rounded-2xl border border-border/50 overflow-hidden">
@@ -198,11 +198,11 @@ export const CouponList = () => {
             <TableHeader>
               <TableRow>
                 <TableHead>Code</TableHead>
-                <TableHead>Réduction</TableHead>
-                <TableHead>Mini. commande</TableHead>
-                <TableHead>Utilisation</TableHead>
+                <TableHead>Discount</TableHead>
+                <TableHead>Min. order</TableHead>
+                <TableHead>Usage</TableHead>
                 <TableHead>Expiration</TableHead>
-                <TableHead>Actif</TableHead>
+                <TableHead>Active</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -224,7 +224,7 @@ export const CouponList = () => {
                   <TableCell>
                     {coupon.expires_at
                       ? format(new Date(coupon.expires_at), "MMM d, yyyy")
-                      : "Jamais"}
+                      : "Never"}
                   </TableCell>
                   <TableCell>
                     <Switch
@@ -241,18 +241,18 @@ export const CouponList = () => {
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>
-                          <AlertDialogTitle>Supprimer le code promo</AlertDialogTitle>
+                          <AlertDialogTitle>Delete coupon</AlertDialogTitle>
                           <AlertDialogDescription>
-                            Êtes-vous sûr de vouloir supprimer le code promo « {coupon.code} » ?
+                            Are you sure you want to delete the coupon "{coupon.code}"?
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                          <AlertDialogCancel>Annuler</AlertDialogCancel>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
                           <AlertDialogAction
                             onClick={() => handleDelete(coupon.id)}
                             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                           >
-                            Supprimer
+                            Delete
                           </AlertDialogAction>
                         </AlertDialogFooter>
                       </AlertDialogContent>
