@@ -33,6 +33,7 @@ export const adminSaveTemplate = createServerFn({ method: 'POST' })
           features: data.features ?? [],
           demo_url: data.demo_url ?? null,
           youtube_id: data.youtube_id ?? null,
+          license_product: data.license_product?.trim() || null,
           updated_at: new Date(),
         })
         .where(eq(templates.id, data.id))
@@ -61,6 +62,7 @@ export const adminSaveTemplate = createServerFn({ method: 'POST' })
         features: data.features ?? [],
         demo_url: data.demo_url ?? null,
         youtube_id: data.youtube_id ?? null,
+        license_product: data.license_product?.trim() || null,
       })
       .returning()
     if (data.source_file_url) {

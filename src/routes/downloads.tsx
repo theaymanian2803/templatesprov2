@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+import BuyerLicenses from '@/components/BuyerLicenses'
 import Footer from '@/components/Footer'
 import HostingWizard from '@/components/HostingWizard'
 import Navbar from '@/components/Navbar'
@@ -95,6 +96,8 @@ const Downloads = () => {
               Accédez à tous vos templates achetés à tout moment
             </p>
           </div>
+
+          <BuyerLicenses />
 
           {/* All-Access Pass banner */}
           {allAccessPass && (

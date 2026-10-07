@@ -48,6 +48,7 @@ export const TemplateForm = ({ template, onSubmit, onCancel, isLoading }: Templa
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [youtubeId, setYoutubeId] = useState('')
   const [sourceFileUrl, setSourceFileUrl] = useState('')
+  const [licenseProduct, setLicenseProduct] = useState('')
 
   useEffect(() => {
     if (template) {
@@ -62,6 +63,7 @@ export const TemplateForm = ({ template, onSubmit, onCancel, isLoading }: Templa
       setFeatures(template.features || [])
       setGalleryImages(template.gallery_images || [])
       setYoutubeId(template.youtube_id || '')
+      setLicenseProduct(template.license_product || '')
 
       // Fetch source_file_url from template_downloads
       adminGetTemplateDownloadUrl({ data: template.id }).then((url) => {
@@ -104,6 +106,7 @@ export const TemplateForm = ({ template, onSubmit, onCancel, isLoading }: Templa
       gallery_images: galleryImages,
       source_file_url: sourceFileUrl.trim(),
       youtube_id: youtubeId.trim() || null,
+      license_product: licenseProduct.trim() || null,
     })
   }
 
@@ -210,6 +213,20 @@ export const TemplateForm = ({ template, onSubmit, onCancel, isLoading }: Templa
           />
           <p className="text-xs text-muted-foreground">
             The ID from the YouTube URL (e.g. youtube.com/watch?v=<strong>dQw4w9WgXcQ</strong>)
+          </p>
+        </div>
+
+        {/* License product */}
+        <div className="space-y-2 md:col-span-2">
+          <Label htmlFor="licenseProduct">License product</Label>
+          <Input
+            id="licenseProduct"
+            value={licenseProduct}
+            onChange={(e) => setLicenseProduct(e.target.value)}
+            placeholder="e.g. petpaw (leave blank if this template ships no key)"
+          />
+          <p className="text-xs text-muted-foreground">
+            When set, buyers of this template automatically get a matching license key.
           </p>
         </div>
 

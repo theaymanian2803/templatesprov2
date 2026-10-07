@@ -38,6 +38,7 @@ export const templates = sqliteTable('templates', {
   features: text('features', { mode: 'json' }).$type<string[]>().notNull().default([]),
   demo_url: text('demo_url'),
   youtube_id: text('youtube_id'),
+  license_product: text('license_product'),
   review_count: integer('review_count').notNull().default(0),
   created_at: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
   updated_at: integer('updated_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
@@ -115,6 +116,16 @@ export const template_downloads = sqliteTable('template_downloads', {
   template_id: text('template_id').notNull().unique().references(() => templates.id, { onDelete: 'cascade' }),
   source_file_url: text('source_file_url').notNull(),
 })
+
+export const license_keys = sqliteTable('license_keys', {
+  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
+  user_id: text('user_id').notNull(),
+  template_id: text('template_id').notNull(),
+  product: text('product').notNull(),
+  key: text('key').notNull(),
+  order_id: text('order_id'),
+  created_at: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
+}, (t) => [uniqueIndex('license_keys_user_template_idx').on(t.user_id, t.template_id)])
 
 export const refund_requests = sqliteTable('refund_requests', {
   id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),

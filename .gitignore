@@ -18,6 +18,9 @@ src/routeTree.gen.ts
 # Local design screenshots
 /*.png
 
+# SDD scratch (ledger, briefs, review packages)
+.superpowers/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

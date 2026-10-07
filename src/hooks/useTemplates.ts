@@ -6,7 +6,7 @@ export interface Template {
   price: number; extended_price: number | null; image_url: string
   gallery_images: string[]; rating: number; sales: number; review_count?: number
   featured: boolean; tech_stack: string[]; features: string[]; demo_url: string | null
-  source_file_url?: string | null; youtube_id: string | null; created_at: string; updated_at: string
+  source_file_url?: string | null; youtube_id: string | null; license_product?: string | null; created_at: string; updated_at: string
 }
 
 interface UseTemplatesOptions { featured?: boolean; category?: string; limit?: number; page?: number; pageSize?: number }

@@ -13,6 +13,7 @@ import {
 import { eq, desc, inArray } from 'drizzle-orm'
 import { requireUser } from '../admin'
 import { paypalAccessToken, PAYPAL_API } from './paypal'
+import { issueKeysForOrder } from './licenses'
 
 const ALL_ACCESS_PRICE = 300
 
@@ -220,6 +221,7 @@ export const capturePayPalOrder = createServerFn({ method: 'POST' })
         })),
       )
       for (const v of verified) await incrementSales(v.id)
+      await issueKeysForOrder(order.id)
     }
     return { success: true, orderId: order.id, paypalOrderId: captureData.id }
   })
@@ -258,6 +260,7 @@ export const claimFreeOrder = createServerFn({ method: 'POST' })
       })),
     )
     for (const v of verified) await incrementSales(v.id)
+    await issueKeysForOrder(order.id)
     return { success: true, orderId: order.id, free: true }
   })
 
