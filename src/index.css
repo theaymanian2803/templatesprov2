@@ -696,6 +696,8 @@ html[lang='ar'] .hero-copy p span:last-child {
 
 .phone-fallback { position: absolute; inset: 0; background: linear-gradient(140deg, #454b70, #171a33 52%, #e6774d); }
 
+.phone-screen-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+
 /* Hover — the phone straightens and lifts, the web card settles */
 .device-stage:hover .phone { transform: rotate(0deg) translateY(-8px); }
 .device-stage:hover .web-card { transform: rotate(-4deg) translateY(-4px); }

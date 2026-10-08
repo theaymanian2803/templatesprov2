@@ -4,9 +4,15 @@ import { getRequest } from '@tanstack/react-start/server'
 import { db } from './db/client'
 import * as schema from './db/schema'
 
+const trustedOrigins = [
+  process.env.BETTER_AUTH_URL,
+  process.env.VERCEL_URL && `https://${process.env.VERCEL_URL}`,
+  process.env.VERCEL_BRANCH_URL && `https://${process.env.VERCEL_BRANCH_URL}`,
+].filter(Boolean) as string[]
+
 export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL ?? 'http://localhost:8080',
-  trustedOrigins: [process.env.BETTER_AUTH_URL ?? 'http://localhost:8080'],
+  trustedOrigins,
   database: drizzleAdapter(db, {
     provider: 'sqlite',
     schema: {

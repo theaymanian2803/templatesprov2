@@ -1,13 +1,6 @@
 import { topTemplates } from '@/data/topTemplates'
 import { useTemplates } from '@/hooks/useTemplates'
-import {
-  ArrowRight,
-  Home,
-  Search,
-  ShoppingBag,
-  Sparkles,
-  User,
-} from 'lucide-react'
+import { ArrowRight, Search, Sparkles } from 'lucide-react'
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from '@/lib/router'
@@ -58,7 +51,7 @@ const HeroSection = () => {
     .slice(0, 5)
 
   const webImage = cards[1]?.image_url ?? topTemplates[1]?.image_url
-  const phoneImage = cards[2]?.image_url ?? topTemplates[2]?.image_url
+  const phoneImage = '/android.png'
 
   useEffect(() => {
     let raf = 0
@@ -193,80 +186,19 @@ const HeroSection = () => {
               <div className="phone">
                 <div className="phone-notch" aria-hidden="true" />
                 <div className="phone-screen">
-                  <div className="phone-app">
-                    <div className="phone-statusbar" aria-hidden="true">
-                      <span className="phone-time">9:41</span>
-                      <span className="phone-statusicons">
-                        <i />
-                        <i />
-                        <i />
-                      </span>
-                    </div>
-                    <div className="phone-appheader">
-                      <div className="phone-apptitle">
-                        <strong>{t('hero.appLabel')}</strong>
-                        <span>Unccodestore</span>
-                      </div>
-                      <span className="phone-avatar">U</span>
-                    </div>
-                    <div className="phone-appbody">
-                      <div className="phone-heroimg">
-                        {failedImgs['phone'] ? (
-                          <span className="phone-fallback" />
-                        ) : (
-                          <img
-                            src={phoneImage}
-                            alt=""
-                            loading="lazy"
-                            decoding="async"
-                            draggable={false}
-                            onError={() => setFailedImgs((prev) => ({ ...prev, phone: true }))}
-                          />
-                        )}
-                        <span className="phone-heroimg-badge">{t('hero.appLabel')}</span>
-                      </div>
-                      <div className="phone-cardrow">
-                        <div className="phone-minicard">
-                          <span className="phone-minicard-icon" />
-                          <span className="phone-minicard-line" />
-                          <span className="phone-minicard-line short" />
-                        </div>
-                        <div className="phone-minicard">
-                          <span className="phone-minicard-icon accent" />
-                          <span className="phone-minicard-line" />
-                          <span className="phone-minicard-line short" />
-                        </div>
-                      </div>
-                      <div className="phone-list">
-                        <div className="phone-listrow">
-                          <span className="phone-dot" />
-                          <span className="phone-listline" />
-                        </div>
-                        <div className="phone-listrow">
-                          <span className="phone-dot accent" />
-                          <span className="phone-listline" />
-                        </div>
-                        <div className="phone-listrow">
-                          <span className="phone-dot" />
-                          <span className="phone-listline short" />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="phone-tabbar">
-                      <span className="is-active">
-                        <Home size={15} />
-                      </span>
-                      <span>
-                        <Search size={15} />
-                      </span>
-                      <span>
-                        <ShoppingBag size={15} />
-                      </span>
-                      <span>
-                        <User size={15} />
-                      </span>
-                    </div>
-                  </div>
+                  {failedImgs['phone'] ? (
+                    <span className="phone-fallback" />
+                  ) : (
+                    <img
+                      className="phone-screen-img"
+                      src={phoneImage}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                      draggable={false}
+                      onError={() => setFailedImgs((prev) => ({ ...prev, phone: true }))}
+                    />
+                  )}
                 </div>
               </div>
             </div>
