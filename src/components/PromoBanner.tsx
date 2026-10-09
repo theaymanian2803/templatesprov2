@@ -28,7 +28,7 @@ const PromoBanner = () => {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(90% 70% at 100% 50%, rgba(239,122,82,0.04) 0%, rgba(239,122,82,0) 55%), radial-gradient(60% 50% at 0% 100%, rgba(232,90,45,0.03) 0%, rgba(251,251,250,0) 60%)',
+            'radial-gradient(90% 70% at 100% 50%, rgba(59,130,246,0.04) 0%, rgba(59,130,246,0) 55%), radial-gradient(60% 50% at 0% 100%, rgba(37,99,235,0.03) 0%, rgba(251,251,250,0) 60%)',
         }}
       />
 
@@ -40,7 +40,7 @@ const PromoBanner = () => {
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 rounded-full border border-[#ef7a52]/20 bg-[#ef7a52]/5 px-3 py-1.5 mb-6 text-[11px] font-medium tracking-wide text-[#e85a2d]">
+              className="inline-flex items-center gap-2 rounded-full border border-[#3b82f6]/20 bg-[#3b82f6]/5 px-3 py-1.5 mb-6 text-[11px] font-medium tracking-wide text-[#2563eb]">
               {t('promo.badge')}
             </motion.span>
             <motion.h2
@@ -50,7 +50,7 @@ const PromoBanner = () => {
               className="font-slab font-bold text-3xl md:text-5xl text-[#111111] leading-[1.05] tracking-tight mb-5">
               {t('promo.title1')}
               <br />
-              <span className="text-[#e85a2d]">{t('promo.title2')}</span>
+              <span className="text-[#2563eb]">{t('promo.title2')}</span>
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, x: -18 }}
@@ -69,7 +69,7 @@ const PromoBanner = () => {
               className="grid grid-cols-2 gap-x-6 gap-y-2.5 mb-9 max-w-md">
               {inclusions.map((inc) => (
                 <li key={inc} className="flex items-center gap-2 text-sm text-[#2F3437]">
-                  <Check className="w-4 h-4 text-[#e85a2d] shrink-0" />
+                  <Check className="w-4 h-4 text-[#2563eb] shrink-0" />
                   {inc}
                 </li>
               ))}
@@ -83,7 +83,7 @@ const PromoBanner = () => {
               className="flex items-center gap-5">
               <button
                 onClick={handleGetPass}
-                className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#e85a2d] text-white font-semibold text-sm rounded-lg hover:bg-[#d94523] transition-colors shadow-[0_0_30px_-8px_rgba(232,90,45,0.3)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e85a2d]/50 cursor-pointer">
+                className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#2563eb] text-white font-semibold text-sm rounded-lg hover:bg-[#1d4ed8] transition-colors shadow-[0_0_30px_-8px_rgba(37,99,235,0.3)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]/50 cursor-pointer">
                 {t('promo.startNow')}
                 <ArrowRight className="w-4 h-4" />
               </button>
@@ -106,10 +106,10 @@ const PromoBanner = () => {
               className="absolute -inset-8 rounded-[2rem] blur-2xl opacity-50"
               style={{
                 background:
-                  'radial-gradient(55% 55% at 70% 30%, rgba(239,122,82,0.08) 0%, rgba(239,122,82,0) 70%)',
+                  'radial-gradient(55% 55% at 70% 30%, rgba(59,130,246,0.08) 0%, rgba(59,130,246,0) 70%)',
               }}
             />
-            <div className="relative rounded-2xl border border-[#EAEAEA] bg-white backdrop-blur-sm p-7 shadow-[0_40px_90px_-30px_rgba(0,0,0,0.06),0_0_0_1px_rgba(239,122,82,0.04)]">
+            <div className="relative rounded-2xl border border-[#EAEAEA] bg-white backdrop-blur-sm p-7 shadow-[0_40px_90px_-30px_rgba(0,0,0,0.06),0_0_0_1px_rgba(59,130,246,0.04)]">
               <div className="flex items-center justify-between mb-5">
                 {t('promo.allAccess')}
                 <span className="text-[11px] text-[#787774] font-mono">{t('promo.lifetime')}</span>
@@ -120,8 +120,8 @@ const PromoBanner = () => {
               <ul className="flex flex-col gap-3 mb-7">
                 {inclusions.map((inc) => (
                   <li key={inc} className="flex items-center gap-3 text-sm text-[#2F3437]">
-                    <span className="w-5 h-5 rounded-full bg-[#ef7a52]/10 flex items-center justify-center shrink-0">
-                      <Check className="w-3 h-3 text-[#e85a2d]" />
+                    <span className="w-5 h-5 rounded-full bg-[#3b82f6]/10 flex items-center justify-center shrink-0">
+                      <Check className="w-3 h-3 text-[#2563eb]" />
                     </span>
                     {inc}
                   </li>
@@ -129,7 +129,7 @@ const PromoBanner = () => {
               </ul>
               <button
                 onClick={handleGetPass}
-                className="flex w-full items-center justify-center gap-2 py-3.5 bg-[#e85a2d] text-white font-semibold text-sm rounded-lg hover:bg-[#d94523] transition-colors shadow-[0_0_30px_-8px_rgba(232,90,45,0.3)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e85a2d]/50 cursor-pointer">
+                className="flex w-full items-center justify-center gap-2 py-3.5 bg-[#2563eb] text-white font-semibold text-sm rounded-lg hover:bg-[#1d4ed8] transition-colors shadow-[0_0_30px_-8px_rgba(37,99,235,0.3)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]/50 cursor-pointer">
                 {t('promo.getAccess')}
                 <ArrowRight className="w-4 h-4" />
               </button>

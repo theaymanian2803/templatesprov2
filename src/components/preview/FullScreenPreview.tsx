@@ -16,7 +16,7 @@ interface FullScreenPreviewProps {
   vertical dock running parallel to the viewport height on the left edge,
   holding the "open in new tab" and close actions stacked together, plus a hide
   control that collapses the dock to a small restore pill so the embedded site
-  can be viewed unobstructed. Closes via ×, Escape, or a backdrop click; body
+  can be viewed unobstructed. Closes via �-, Escape, or a backdrop click; body
   scroll is locked while open. The iframe stays sandboxed (no top-navigation)
   so the embedded site can never take the parent page away.
 */
@@ -69,7 +69,7 @@ const FullScreenPreview = ({ url, title, open, onClose }: FullScreenPreviewProps
           <div className="absolute inset-0" onClick={(e) => e.stopPropagation()}>
             {!loaded && (
               <div className="absolute inset-0 z-10 flex items-center justify-center bg-white">
-                <Loader2 className="h-8 w-8 animate-spin text-[#e85a2d]" />
+                <Loader2 className="h-8 w-8 animate-spin text-[#2563eb]" />
               </div>
             )}
             <motion.iframe
@@ -77,26 +77,26 @@ const FullScreenPreview = ({ url, title, open, onClose }: FullScreenPreviewProps
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
               src={url}
-              title={`${title} — Aperçu en plein écran`}
+              title={`${title} �?" Aperçu en plein écran`}
               className="h-full w-full border-none bg-white"
               sandbox="allow-scripts allow-same-origin allow-forms"
               onLoad={() => setLoaded(true)}
             />
           </div>
 
-          {/* control dock — vertical capsule, running parallel to the viewport height */}
+          {/* control dock �?" vertical capsule, running parallel to the viewport height */}
           <motion.div
             className="absolute top-1/2 z-20"
             style={{ left: 'calc(env(safe-area-inset-left, 0px) + 1rem)' }}
             initial={{ opacity: 0, x: -12, y: '-50%' }}
             animate={{ opacity: 1, x: 0, y: '-50%' }}
             transition={{ delay: 0.15, duration: 0.25, ease: [0.16, 1, 0.3, 1] }}>
-            {/* discovery indicator — breathing orange glow that draws the eye to the controls */}
+            {/* discovery indicator �?" breathing orange glow that draws the eye to the controls */}
             {controlsVisible && (
               <motion.span
                 data-testid="dock-ping"
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 rounded-full border-2 border-[#e85a2d]/60 shadow-[0_0_22px_6px_rgba(232,90,45,0.25)]"
+                className="pointer-events-none absolute inset-0 rounded-full border-2 border-[#2563eb]/60 shadow-[0_0_22px_6px_rgba(37,99,235,0.25)]"
                 initial={reduceMotion ? { opacity: 0.4, scale: 1 } : { opacity: 0.65, scale: 1 }}
                 animate={
                   reduceMotion
@@ -126,7 +126,7 @@ const FullScreenPreview = ({ url, title, open, onClose }: FullScreenPreviewProps
                   ? 'translate-y-0 opacity-100'
                   : 'pointer-events-none invisible -translate-x-1.5 opacity-0',
               )}>
-              {/* open in new tab — stacked with close */}
+              {/* open in new tab �?" stacked with close */}
               <a
                 href={url}
                 target="_blank"
@@ -134,7 +134,7 @@ const FullScreenPreview = ({ url, title, open, onClose }: FullScreenPreviewProps
                 aria-label="Ouvrir dans un nouvel onglet"
                 title="Ouvrir dans un nouvel onglet"
                 onClick={(e) => e.stopPropagation()}
-                className="inline-flex h-8 w-8 items-center justify-center rounded-full text-[#111111] transition-colors hover:bg-black/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e85a2d]/50">
+                className="inline-flex h-8 w-8 items-center justify-center rounded-full text-[#111111] transition-colors hover:bg-black/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]/50">
                 <ExternalLink className="h-4 w-4" />
               </a>
 
@@ -149,7 +149,7 @@ const FullScreenPreview = ({ url, title, open, onClose }: FullScreenPreviewProps
                   onClose()
                 }}
                 aria-label="Fermer l'aperçu"
-                className="inline-flex h-8 w-8 items-center justify-center rounded-full text-[#111111] transition-colors hover:bg-black/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e85a2d]/50">
+                className="inline-flex h-8 w-8 items-center justify-center rounded-full text-[#111111] transition-colors hover:bg-black/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]/50">
                 <X className="h-4 w-4" />
               </button>
 
@@ -164,12 +164,12 @@ const FullScreenPreview = ({ url, title, open, onClose }: FullScreenPreviewProps
                 }}
                 aria-label="Masquer les contrôles"
                 title="Masquer les contrôles"
-                className="inline-flex h-8 w-8 items-center justify-center rounded-full text-[#787774] transition-colors hover:bg-black/5 hover:text-[#111111] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e85a2d]/50">
+                className="inline-flex h-8 w-8 items-center justify-center rounded-full text-[#787774] transition-colors hover:bg-black/5 hover:text-[#111111] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]/50">
                 <ChevronDown className="h-4 w-4" />
               </button>
             </div>
 
-            {/* restore pill — overlays the dock's spot when the dock is hidden */}
+            {/* restore pill �?" overlays the dock's spot when the dock is hidden */}
             <button
               type="button"
               onClick={(e) => {
@@ -180,7 +180,7 @@ const FullScreenPreview = ({ url, title, open, onClose }: FullScreenPreviewProps
               title="Afficher les contrôles"
               aria-hidden={controlsVisible}
               className={cn(
-                'absolute left-1/2 top-1/2 inline-flex h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[#EAEAEA] bg-white/85 text-[#787774] shadow-[0_2px_10px_-4px_rgba(0,0,0,0.12)] backdrop-blur-md transition-all duration-200 ease-out hover:bg-white hover:text-[#111111] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e85a2d]/50',
+                'absolute left-1/2 top-1/2 inline-flex h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[#EAEAEA] bg-white/85 text-[#787774] shadow-[0_2px_10px_-4px_rgba(0,0,0,0.12)] backdrop-blur-md transition-all duration-200 ease-out hover:bg-white hover:text-[#111111] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]/50',
                 controlsVisible
                   ? 'pointer-events-none invisible scale-75 opacity-0'
                   : 'scale-100 opacity-100',

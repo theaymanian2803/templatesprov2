@@ -19,8 +19,8 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['Inter', 'system-ui', 'sans-serif'],
-        slab: ['"Zilla Slab"', 'Georgia', 'serif'],
+        display: ['"Playfair Display"', 'Georgia', 'serif'],
+        slab: ['"Playfair Display"', 'Georgia', 'serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -67,16 +67,16 @@ export default {
           ring: "hsl(var(--sidebar-ring))",
         },
         brand: {
-          50: '#fef4f0',
-          100: '#fde5db',
-          200: '#fac8b5',
-          300: '#f5a385',
-          400: '#ef7a52',
-          500: '#e85a2d',
-          600: '#d94523',
-          700: '#b5351c',
-          800: '#912e1c',
-          900: '#76291c',
+          50: '#eff6ff',
+          100: '#dbeafe',
+          200: '#bfdbfe',
+          300: '#93c5fd',
+          400: '#60a5fa',
+          500: '#3b82f6',
+          600: '#2563eb',
+          700: '#1d4ed8',
+          800: '#1e40af',
+          900: '#1e3a8a',
         },
       },
       borderRadius: {

@@ -8,27 +8,30 @@ The developer's clean workshop — a bright, open marketplace where curated temp
 
 ## Color strategy
 
-Restrained. A warm off-white ground carries the page. The cold orange accent appears sparingly — in brand marks, active states, and one directional glow per section. No section owns color; color punctuates.
+Restrained. A warm off-white ground carries the page. The sapphire accent appears sparingly — in brand marks, active states, and one directional glow per section. No section owns color; color punctuates.
 
 ## Palette
 
 - Ground: warm off-white — `#FBFBFA` base, with `#F5F4F0` for subtle section differentiation.
 - Surface (cards): pure white `#FFFFFF` with `1px solid #EAEAEA` borders.
-- Accent: cold orange — `#e85a2d` (brand-500), `#ef7a52` (brand-400).
+- Accent: sapphire blue — `#2563eb` (brand-600), `#3b82f6` (brand-500), hover `#1d4ed8`.
+- Secondary: muted violet `#7c69b7` (hero motifs only).
 - Ink (text): charcoal `#111111`, secondary `#2F3437`, muted `#787774`.
 - Borders: ultra-light `#EAEAEA`.
 
 ## Typography
 
-- Display (hero headline): **Zilla Slab**, slab serif — evokes permanence, ownership, title-deed. Used only where the form's voice carries.
-- Body / UI: Inter (incumbent system).
+- Display (h1–h2, hero, section titles): **Playfair Display**, serif — editorial and refined. Headings are balanced (`text-wrap: balance`).
+- Body / UI: Inter (incumbent system), with `text-wrap: pretty` on paragraphs.
+- h3–h6 stay in Inter for a clean interface voice.
+- Arabic uses Amiri (display) and Cairo (body).
 - Never use mono for display in this world; the tech-neon default is the rut.
 
 ## Layout devices
 
 - Warm off-white ground with generous breathing room between sections.
 - White cards with ultra-light `#EAEAEA` borders — clean, flat, no heavy shadows.
-- Cold orange accent used sparingly for brand marks, active states, and subtle directional glows.
+- Sapphire blue accent used sparingly for brand marks, active states, and subtle directional glows.
 - Macro-whitespace: sections separated by `py-24` to `py-32`.
 
 ## Motion

@@ -33,11 +33,11 @@ const TemplatesSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="text-center max-w-3xl mx-auto mb-12">
-          <span className="inline-flex items-center gap-2 rounded-full border border-[#e85a2d]/25 bg-[#e85a2d]/5 px-3 py-1.5 mb-5 text-[11px] font-medium tracking-wide text-[#e85a2d]/90">
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#2563eb]/25 bg-[#2563eb]/5 px-3 py-1.5 mb-5 text-[11px] font-medium tracking-wide text-[#2563eb]/90">
             {t('templatesSection.badge')}
           </span>
           <h2 className="font-slab font-bold text-3xl md:text-5xl text-[#111111] tracking-tight mb-4 leading-[1.1]">
-            {t('templatesSection.title1')} <span className="text-[#e85a2d]">{t('templatesSection.title2')}</span>
+            {t('templatesSection.title1')} <span className="text-[#2563eb]">{t('templatesSection.title2')}</span>
           </h2>
           <p className="text-base text-[#787774] leading-[1.7]">
             {t('templatesSection.subtitle')}
@@ -56,10 +56,10 @@ const TemplatesSection = () => {
               <button
                 key={tab}
                 onClick={() => setActiveCategory(tab === allCategories ? null : tab)}
-                className={`px-5 py-2.5 rounded-full text-xs font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e85a2d]/40 ${
+                className={`px-5 py-2.5 rounded-full text-xs font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]/40 ${
                   active
-                    ? 'bg-[#e85a2d] text-white'
-                    : 'bg-white text-[#111111] border border-[#EAEAEA] hover:border-[#e85a2d]/40 hover:text-[#e85a2d]'
+                    ? 'bg-[#2563eb] text-white'
+                    : 'bg-white text-[#111111] border border-[#EAEAEA] hover:border-[#2563eb]/40 hover:text-[#2563eb]'
                 }`}>
                 {tab}
               </button>
@@ -84,7 +84,7 @@ const TemplatesSection = () => {
           className="text-center mt-10">
           <Link
             to="/templates"
-            className="inline-flex items-center gap-2 px-8 py-3.5 border border-[#EAEAEA] text-[#111111] font-semibold text-sm rounded-lg hover:bg-[#F5F4F0] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e85a2d]/40">
+            className="inline-flex items-center gap-2 px-8 py-3.5 border border-[#EAEAEA] text-[#111111] font-semibold text-sm rounded-lg hover:bg-[#F5F4F0] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]/40">
             {t('templatesSection.viewMore')}
             <ArrowUpRight className="w-4 h-4" />
           </Link>

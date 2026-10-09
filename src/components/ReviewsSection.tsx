@@ -163,7 +163,7 @@ const ReviewsSection = () => {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(90% 60% at 50% 0%, rgba(239,122,82,0.04) 0%, rgba(239,122,82,0) 55%)',
+            'radial-gradient(90% 60% at 50% 0%, rgba(59,130,246,0.04) 0%, rgba(59,130,246,0) 55%)',
         }}
       />
 
@@ -175,7 +175,7 @@ const ReviewsSection = () => {
               initial={{ opacity: 0, y: 14 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 rounded-full border border-[#e85a2d]/25 bg-[#e85a2d]/5 px-3 py-1.5 mb-6 text-[11px] font-medium tracking-wide text-[#e85a2d]/90">
+              className="inline-flex items-center gap-2 rounded-full border border-[#2563eb]/25 bg-[#2563eb]/5 px-3 py-1.5 mb-6 text-[11px] font-medium tracking-wide text-[#2563eb]/90">
               <Quote className="w-3.5 h-3.5" />
               {t('reviews.badge')}
             </motion.div>
@@ -186,7 +186,7 @@ const ReviewsSection = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.06 }}
               className="font-slab font-bold text-3xl md:text-5xl text-[#111111] leading-[1.08] tracking-tight mb-4">
-              {t('reviews.title1')} <span className="text-[#e85a2d]">{t('reviews.title2')}</span>
+              {t('reviews.title1')} <span className="text-[#2563eb]">{t('reviews.title2')}</span>
             </motion.h2>
 
             <motion.p
@@ -222,19 +222,19 @@ const ReviewsSection = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.06, duration: 0.4 }}
-                    className="group relative rounded-xl bg-white border border-[#EAEAEA] p-6 hover:border-[#e85a2d]/40 transition-colors duration-300">
+                    className="group relative rounded-xl bg-white border border-[#EAEAEA] p-6 hover:border-[#2563eb]/40 transition-colors duration-300">
                     {/* hover glow */}
                     <div
                       aria-hidden
                       className="pointer-events-none absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                       style={{
                         background:
-                          'radial-gradient(70% 60% at 100% 0%, rgba(239,122,82,0.04) 0%, rgba(239,122,82,0) 60%)',
+                          'radial-gradient(70% 60% at 100% 0%, rgba(59,130,246,0.04) 0%, rgba(59,130,246,0) 60%)',
                       }}
                     />
                     {/* Reviewer info */}
                     <div className="relative flex items-center gap-3 mb-4">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#ef7a52] to-[#d94523] flex items-center justify-center text-white font-bold text-sm shrink-0">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#3b82f6] to-[#1d4ed8] flex items-center justify-center text-white font-bold text-sm shrink-0">
                         {review.name.charAt(0)}
                       </div>
                       <div className="min-w-0">
@@ -253,9 +253,9 @@ const ReviewsSection = () => {
                           key={s}
                           className={`w-4 h-4 ${
                             s < Math.floor(review.rating)
-                              ? 'fill-[#e85a2d] text-[#e85a2d]'
+                              ? 'fill-[#2563eb] text-[#2563eb]'
                               : review.rating % 1 !== 0 && s === Math.floor(review.rating)
-                              ? 'fill-[#e85a2d]/50 text-[#e85a2d]'
+                              ? 'fill-[#2563eb]/50 text-[#2563eb]'
                               : 'text-[#EAEAEA]'
                           }`}
                         />
@@ -285,7 +285,7 @@ const ReviewsSection = () => {
                                 key={s}
                                 className={`w-2.5 h-2.5 ${
                                   s < Math.floor(review.rating)
-                                    ? 'fill-[#e85a2d] text-[#e85a2d]'
+                                    ? 'fill-[#2563eb] text-[#2563eb]'
                                     : 'text-[#EAEAEA]'
                                 }`}
                               />

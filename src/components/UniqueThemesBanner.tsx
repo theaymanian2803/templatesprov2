@@ -16,13 +16,13 @@ const UniqueThemesBanner = () => {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'linear-gradient(180deg, #FBFBFA 0%, #F6F5F2 100%), radial-gradient(80% 60% at 0% 50%, rgba(239,122,82,0.04) 0%, rgba(239,122,82,0) 55%)',
+            'linear-gradient(180deg, #FBFBFA 0%, #F6F5F2 100%), radial-gradient(80% 60% at 0% 50%, rgba(59,130,246,0.04) 0%, rgba(59,130,246,0) 55%)',
         }}
       />
 
       <div className="relative container mx-auto">
         <div className="flex flex-col lg:flex-row items-center gap-16 max-w-7xl mx-auto">
-          {/* Left: Thumbnail grid — lit artifact wall */}
+          {/* Left: Thumbnail grid �?" lit artifact wall */}
           <div className="flex-1 w-full">
             <motion.div
               initial={{ opacity: 0, x: -18 }}
@@ -36,7 +36,7 @@ const UniqueThemesBanner = () => {
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
-                  className="group relative aspect-[4/3] rounded-lg overflow-hidden bg-white border border-[#EAEAEA] hover:border-[#e85a2d]/40 transition-colors">
+                  className="group relative aspect-[4/3] rounded-lg overflow-hidden bg-white border border-[#EAEAEA] hover:border-[#2563eb]/40 transition-colors">
                   <img
                     src={t.image_url || '/placeholder.svg'}
                     alt={t.title}
@@ -48,7 +48,7 @@ const UniqueThemesBanner = () => {
                     className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                     style={{
                       background:
-                        'radial-gradient(70% 60% at 50% 0%, rgba(239,122,82,0.06) 0%, rgba(239,122,82,0) 60%)',
+                        'radial-gradient(70% 60% at 50% 0%, rgba(59,130,246,0.06) 0%, rgba(59,130,246,0) 60%)',
                     }}
                   />
                 </motion.div>
@@ -66,7 +66,7 @@ const UniqueThemesBanner = () => {
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 rounded-full border border-[#ef7a52]/20 bg-[#ef7a52]/5 px-3 py-1.5 mb-6 text-[11px] font-medium tracking-wide text-[#e85a2d]">
+              className="inline-flex items-center gap-2 rounded-full border border-[#3b82f6]/20 bg-[#3b82f6]/5 px-3 py-1.5 mb-6 text-[11px] font-medium tracking-wide text-[#2563eb]">
               {t('unique.badge')}
             </motion.span>
             <motion.h2
@@ -74,7 +74,7 @@ const UniqueThemesBanner = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               className="font-slab font-bold text-3xl md:text-5xl text-[#111111] leading-[1.05] tracking-tight mb-6">
-              {t('unique.title1')} <span className="text-[#e85a2d]">{t('unique.title2')}</span> {t('unique.title3')}
+              {t('unique.title1')} <span className="text-[#2563eb]">{t('unique.title2')}</span> {t('unique.title3')}
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, x: 20 }}
@@ -91,7 +91,7 @@ const UniqueThemesBanner = () => {
               transition={{ delay: 0.16 }}>
               <Link
                 to="/templates"
-                className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#e85a2d] text-white font-semibold text-sm rounded-lg hover:bg-[#d94523] transition-colors shadow-[0_0_30px_-8px_rgba(232,90,45,0.2)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e85a2d]/50">
+                className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#2563eb] text-white font-semibold text-sm rounded-lg hover:bg-[#1d4ed8] transition-colors shadow-[0_0_30px_-8px_rgba(37,99,235,0.2)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]/50">
                 {t('unique.viewAll')}
                 <ArrowRight className="w-4 h-4" />
               </Link>

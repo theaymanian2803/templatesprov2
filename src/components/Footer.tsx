@@ -40,7 +40,7 @@ const Footer = () => {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(80% 30% at 50% 0%, rgba(239,122,82,0.06) 0%, rgba(245,244,240,0) 50%)',
+            'radial-gradient(80% 30% at 50% 0%, rgba(59,130,246,0.06) 0%, rgba(245,244,240,0) 50%)',
         }}
       />
 
@@ -49,7 +49,7 @@ const Footer = () => {
           {/* Brand Column */}
           <div className="lg:col-span-2">
             <Link to="/" className="flex items-center gap-2.5 mb-4">
-              <div className="w-9 h-9 rounded-lg bg-[#e85a2d] flex items-center justify-center shadow-[0_0_24px_-4px_rgba(232,90,45,0.6)]">
+              <div className="w-9 h-9 rounded-lg bg-[#2563eb] flex items-center justify-center shadow-[0_0_24px_-4px_rgba(37,99,235,0.6)]">
                 <span className="text-white font-extrabold text-lg">U</span>
               </div>
               <span className="font-slab font-bold text-xl text-[#111111] tracking-tight">Unccodestore</span>
@@ -69,7 +69,7 @@ const Footer = () => {
                   key={label}
                   href="#"
                   aria-label={label}
-                  className="w-9 h-9 rounded-full bg-[#F5F4F0] border border-[#EAEAEA] flex items-center justify-center text-[#787774] hover:bg-[#ef7a52]/10 hover:border-[#ef7a52]/40 hover:text-[#e85a2d] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e85a2d]/40">
+                  className="w-9 h-9 rounded-full bg-[#F5F4F0] border border-[#EAEAEA] flex items-center justify-center text-[#787774] hover:bg-[#3b82f6]/10 hover:border-[#3b82f6]/40 hover:text-[#2563eb] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]/40">
                   <Icon className="w-4 h-4" />
                 </a>
               ))}
@@ -87,7 +87,7 @@ const Footer = () => {
                   <li key={link.key}>
                     <Link
                       to={link.to}
-                      className="text-sm text-[#787774] hover:text-[#e85a2d] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e85a2d]/40">
+                      className="text-sm text-[#787774] hover:text-[#2563eb] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]/40">
                       {t(link.key)}
                     </Link>
                   </li>
@@ -114,12 +114,12 @@ const Footer = () => {
                 <input
                   type="email"
                   placeholder={t('footer.emailPlaceholder')}
-                  className="w-full h-11 pl-11 pr-4 rounded-lg bg-white border border-[#EAEAEA] text-sm text-[#111111] placeholder:text-[#787774]/50 focus:outline-none focus:border-[#e85a2d]/50 focus:ring-2 focus:ring-[#e85a2d]/15 transition-colors"
+                  className="w-full h-11 pl-11 pr-4 rounded-lg bg-white border border-[#EAEAEA] text-sm text-[#111111] placeholder:text-[#787774]/50 focus:outline-none focus:border-[#2563eb]/50 focus:ring-2 focus:ring-[#2563eb]/15 transition-colors"
                 />
               </div>
               <button
                 type="submit"
-                className="h-11 px-6 rounded-lg bg-[#e85a2d] text-white font-semibold text-sm hover:bg-[#ef7a52] transition-colors whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e85a2d]/50">
+                className="h-11 px-6 rounded-lg bg-[#2563eb] text-white font-semibold text-sm hover:bg-[#3b82f6] transition-colors whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]/50">
                 {t('footer.subscribe')}
               </button>
             </form>
@@ -132,10 +132,10 @@ const Footer = () => {
         <div className="container mx-auto py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[#787774]/60 text-sm">
           <p>{t('footer.rights', { year })}</p>
           <div className="flex items-center gap-6">
-            <Link to="/privacy" className="hover:text-[#e85a2d] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e85a2d]/40">{t('footer.privacy')}</Link>
-            <Link to="/terms" className="hover:text-[#e85a2d] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e85a2d]/40">{t('footer.terms')}</Link>
-            <Link to="/cookies" className="hover:text-[#e85a2d] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e85a2d]/40">{t('footer.cookies')}</Link>
-            <Link to="/license" className="hover:text-[#e85a2d] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e85a2d]/40">{t('footer.license')}</Link>
+            <Link to="/privacy" className="hover:text-[#2563eb] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]/40">{t('footer.privacy')}</Link>
+            <Link to="/terms" className="hover:text-[#2563eb] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]/40">{t('footer.terms')}</Link>
+            <Link to="/cookies" className="hover:text-[#2563eb] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]/40">{t('footer.cookies')}</Link>
+            <Link to="/license" className="hover:text-[#2563eb] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]/40">{t('footer.license')}</Link>
           </div>
         </div>
       </div>

@@ -56,7 +56,7 @@ const Downloads = () => {
       setDownloadingId(null)
     } catch (error: unknown) {
       toast({
-        title: 'Échec du téléchargement',
+        title: '�?chec du téléchargement',
         description: error instanceof Error ? error.message : 'Impossible de générer le lien de téléchargement',
         variant: 'destructive',
       })
@@ -75,7 +75,7 @@ const Downloads = () => {
       queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] })
       toast({ title: 'Template supprimé', description: `"${title}" a été retiré de vos téléchargements.` })
     } catch (error: unknown) {
-      toast({ title: 'Erreur', description: error instanceof Error ? error.message : 'Échec de la suppression', variant: 'destructive' })
+      toast({ title: 'Erreur', description: error instanceof Error ? error.message : '�?chec de la suppression', variant: 'destructive' })
     } finally {
       setDeletingId(null)
     }
@@ -104,18 +104,18 @@ const Downloads = () => {
 
           {/* All-Access Pass banner */}
           {allAccessPass && (
-            <div className="mb-6 rounded-xl bg-[#e85a2d] text-white p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+            <div className="mb-6 rounded-xl bg-[#2563eb] text-white p-5 flex flex-col sm:flex-row sm:items-center gap-4">
               <div className="w-11 h-11 rounded-lg bg-white/15 flex items-center justify-center shrink-0">
                 <Crown className="w-6 h-6" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-bold font-slab">Pass Tout Accès actif</p>
                 <p className="text-sm text-white/85">
-                  Tous les templates du catalogue sont inclus — y compris les futurs ajouts.
+                  Tous les templates du catalogue sont inclus �?" y compris les futurs ajouts.
                 </p>
               </div>
               <Link to="/templates">
-                <Button size="sm" className="bg-white text-[#e85a2d] hover:bg-[#FFF4EF] font-semibold shrink-0">
+                <Button size="sm" className="bg-white text-[#2563eb] hover:bg-[#eff6ff] font-semibold shrink-0">
                   Parcourir le catalogue
                 </Button>
               </Link>
@@ -174,12 +174,12 @@ const Downloads = () => {
                           {item.template_title}
                         </Link>
                         <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                          <Badge variant="outline" className={`text-[10px] capitalize ${item.license_type === 'pass' ? 'border-[#e85a2d]/40 bg-[#e85a2d]/5 text-[#e85a2d]' : ''}`}>
+                          <Badge variant="outline" className={`text-[10px] capitalize ${item.license_type === 'pass' ? 'border-[#2563eb]/40 bg-[#2563eb]/5 text-[#2563eb]' : ''}`}>
                             {item.license_type === 'pass' ? 'Pass Tout Accès' : item.license_type}
                           </Badge>
                           <span>·</span>
                           {item.license_type === 'pass' ? (
-                            <span className="text-[#e85a2d] font-semibold">Inclus</span>
+                            <span className="text-[#2563eb] font-semibold">Inclus</span>
                           ) : (
                             <>
                               <span>{new Date(item.purchased_at).toLocaleDateString()}</span>

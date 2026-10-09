@@ -27,7 +27,7 @@ const LanguageSwitcher = () => {
         <button
           type="button"
           aria-label="Language / Langue / اللغة"
-          className="group inline-flex items-center gap-1 rounded-lg border border-[#EAEAEA] bg-white px-2.5 py-2 text-xs font-bold text-[#2F3437] transition-colors hover:border-[#e85a2d] hover:bg-[#e85a2d] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e85a2d]/40 data-[state=open]:border-[#e85a2d] data-[state=open]:bg-[#e85a2d] data-[state=open]:text-white">
+          className="group inline-flex items-center gap-1 rounded-lg border border-[#EAEAEA] bg-white px-2.5 py-2 text-xs font-bold text-[#2F3437] transition-colors hover:border-[#2563eb] hover:bg-[#2563eb] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]/40 data-[state=open]:border-[#2563eb] data-[state=open]:bg-[#2563eb] data-[state=open]:text-white">
           <Globe className="w-3.5 h-3.5 text-[#787774] transition-colors group-hover:text-white group-data-[state=open]:text-white" />
           <span>{active.short}</span>
           <ChevronDown className="w-3 h-3 text-[#787774] transition-colors group-hover:text-white group-data-[state=open]:text-white" />
@@ -38,7 +38,7 @@ const LanguageSwitcher = () => {
           <DropdownMenuItem
             key={lang.code}
             onSelect={() => setLanguage(lang.code)}
-            className="group flex items-center justify-between gap-2 text-sm font-medium cursor-pointer focus:bg-[#e85a2d] focus:text-white">
+            className="group flex items-center justify-between gap-2 text-sm font-medium cursor-pointer focus:bg-[#2563eb] focus:text-white">
             <span className="flex items-center gap-2">
               <span className="w-7 text-[10px] font-bold text-[#787774] group-focus:text-white/80">
                 {lang.short}
@@ -46,7 +46,7 @@ const LanguageSwitcher = () => {
               <span>{lang.label}</span>
             </span>
             {current === lang.code && (
-              <Check className="w-4 h-4 text-[#e85a2d] group-focus:text-white" />
+              <Check className="w-4 h-4 text-[#2563eb] group-focus:text-white" />
             )}
           </DropdownMenuItem>
         ))}

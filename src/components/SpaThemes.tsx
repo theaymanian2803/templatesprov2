@@ -37,7 +37,7 @@ const SpaThemes = () => {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(80% 50% at 50% 100%, rgba(239,122,82,0.04) 0%, rgba(239,122,82,0) 55%)',
+            'radial-gradient(80% 50% at 50% 100%, rgba(59,130,246,0.04) 0%, rgba(59,130,246,0) 55%)',
         }}
       />
 
@@ -49,7 +49,7 @@ const SpaThemes = () => {
               initial={{ opacity: 0, y: 14 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 rounded-full border border-[#e85a2d]/25 bg-[#e85a2d]/5 px-3 py-1.5 mb-6 text-[11px] font-medium tracking-wide text-[#e85a2d]/90">
+              className="inline-flex items-center gap-2 rounded-full border border-[#2563eb]/25 bg-[#2563eb]/5 px-3 py-1.5 mb-6 text-[11px] font-medium tracking-wide text-[#2563eb]/90">
               <Sparkles className="w-3.5 h-3.5" />
               {t('spa.badge')}
             </motion.div>
@@ -60,7 +60,7 @@ const SpaThemes = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.06 }}
               className="font-slab font-bold text-3xl md:text-5xl text-[#111111] leading-[1.08] tracking-tight mb-4">
-              {t('spa.title1')} <span className="text-[#e85a2d]">{t('spa.title2')}</span>
+              {t('spa.title1')} <span className="text-[#2563eb]">{t('spa.title2')}</span>
             </motion.h2>
 
             <motion.p
@@ -73,7 +73,7 @@ const SpaThemes = () => {
             </motion.p>
           </div>
 
-          {/* Cards Grid — reuse ThemeCard */}
+          {/* Cards Grid �?" reuse ThemeCard */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {isLoading
               ? Array.from({ length: 4 }).map((_, i) => <ThemeCardSkeleton key={i} />)
@@ -91,7 +91,7 @@ const SpaThemes = () => {
             className="text-center mt-10">
             <Link
               to="/templates?category=E-commerce&q=spa"
-              className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#e85a2d] text-white font-semibold text-sm rounded-lg hover:bg-[#d94523] transition-colors shadow-[0_0_30px_-8px_rgba(232,90,45,0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e85a2d]/50">
+              className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#2563eb] text-white font-semibold text-sm rounded-lg hover:bg-[#1d4ed8] transition-colors shadow-[0_0_30px_-8px_rgba(37,99,235,0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]/50">
               {t('spa.viewAll')}
               <ArrowRight className="w-4 h-4" />
             </Link>
