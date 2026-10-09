@@ -23,33 +23,33 @@ const CategoryCard = ({ category, index }: { category: typeof categoriesData[0];
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.45, delay: index * 0.06 }}
-      className="group relative bg-white border border-[#EAEAEA] rounded-xl overflow-hidden hover:border-[#1d4ed8]/40 transition-colors">
+      className="group relative bg-white border border-[#EAEAEA] rounded-xl overflow-hidden hover:border-[#e85a2d]/40 transition-colors">
       {/* brand corner glow on hover */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
         style={{
           background:
-            'radial-gradient(70% 60% at 100% 0%, rgba(37,99,235,0.06) 0%, rgba(37,99,235,0) 60%)',
+            'radial-gradient(70% 60% at 100% 0%, rgba(239,122,82,0.06) 0%, rgba(239,122,82,0) 60%)',
         }}
       />
       {/* Header */}
       <div className="relative px-6 pt-6 pb-4">
         <div className="flex items-start justify-between gap-3 mb-2">
           <h3 className="font-slab text-lg font-bold text-[#111111] leading-snug">{category.title}</h3>
-          <ArrowUpRight className="w-4 h-4 text-[#787774]/50 group-hover:text-[#1d4ed8] transition-colors shrink-0" />
+          <ArrowUpRight className="w-4 h-4 text-[#787774]/50 group-hover:text-[#e85a2d] transition-colors shrink-0" />
         </div>
         <p className="text-sm text-[#787774] leading-relaxed mb-4">{t(category.descKey)}</p>
         <div className="flex items-center gap-3 text-xs">
           <Link
             to={`/templates?category=${encodeURIComponent(category.title)}&sort=newest`}
-            className="text-[#1d4ed8] hover:text-[#1e40af] font-medium transition-colors">
+            className="text-[#e85a2d] hover:text-[#d94523] font-medium transition-colors">
             {t('categories.newest')}
           </Link>
           <span className="h-3 w-px bg-[#EAEAEA]" />
           <Link
             to={`/templates?category=${encodeURIComponent(category.title)}&sort=bestsellers`}
-            className="text-[#1d4ed8] hover:text-[#1e40af] font-medium transition-colors">
+            className="text-[#e85a2d] hover:text-[#d94523] font-medium transition-colors">
             {t('categories.bestsellers')}
           </Link>
         </div>
@@ -91,7 +91,7 @@ const CategoriesSection = () => {
             initial={false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 rounded-full border border-[#2563eb]/20 bg-[#2563eb]/5 px-3 py-1.5 mb-5 text-[11px] font-medium tracking-wide text-[#1d4ed8]">
+            className="inline-flex items-center gap-2 rounded-full border border-[#ef7a52]/20 bg-[#ef7a52]/5 px-3 py-1.5 mb-5 text-[11px] font-medium tracking-wide text-[#e85a2d]">
             {t('categories.badge')}
           </motion.span>
           <motion.h2
@@ -100,7 +100,7 @@ const CategoriesSection = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.05 }}
             className="font-slab font-bold text-3xl md:text-5xl text-[#111111] leading-[1.05] tracking-tight">
-            {t('categories.title1')} <span className="text-[#1d4ed8]">{t('categories.title2')}</span> {t('categories.title3')}
+            {t('categories.title1')} <span className="text-[#e85a2d]">{t('categories.title2')}</span> {t('categories.title3')}
           </motion.h2>
         </div>
 
@@ -117,7 +117,7 @@ const CategoriesSection = () => {
           className="text-center mt-10">
           <Link
             to="/templates"
-            className="inline-flex items-center gap-2 px-8 py-3.5 border border-[#EAEAEA] text-[#111111] font-semibold text-sm rounded-lg hover:bg-[#f5f5f3] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1d4ed8]/40">
+            className="inline-flex items-center gap-2 px-8 py-3.5 border border-[#EAEAEA] text-[#111111] font-semibold text-sm rounded-lg hover:bg-[#f5f5f3] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e85a2d]/40">
             {t('categories.viewAll')}
             <ArrowUpRight className="w-4 h-4" />
           </Link>

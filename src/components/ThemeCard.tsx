@@ -70,14 +70,14 @@ const ThemeCard = ({ template, index = 0 }: { template: Template; index?: number
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.05 }}
-      className="group relative rounded-xl overflow-hidden bg-white border border-[#EAEAEA] hover:border-[#1d4ed8]/40 transition-colors">
+      className="group relative rounded-xl overflow-hidden bg-white border border-[#EAEAEA] hover:border-[#e85a2d]/40 transition-colors">
       {/* brand hover halo */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
         style={{
           background:
-            'radial-gradient(70% 60% at 100% 0%, rgba(29,78,216,0.08) 0%, rgba(29,78,216,0) 60%)',
+            'radial-gradient(70% 60% at 100% 0%, rgba(232,90,45,0.08) 0%, rgba(232,90,45,0) 60%)',
         }}
       />
       <Link to={`/template/${template.id}`} className="block">
@@ -96,13 +96,13 @@ const ThemeCard = ({ template, index = 0 }: { template: Template; index?: number
               className="w-full h-full"
               style={{
                 background:
-                  'linear-gradient(135deg, rgba(29,78,216,0.10) 0%, rgba(245,244,240,1) 70%)',
+                  'linear-gradient(135deg, rgba(232,90,45,0.10) 0%, rgba(245,244,240,1) 70%)',
               }}
             />
           )}
         </div>
         <div className="relative p-5">
-          <h3 className="font-slab font-bold text-[#111111] text-sm leading-snug line-clamp-2 mb-1.5 group-hover:text-[#1d4ed8] transition-colors">
+          <h3 className="font-slab font-bold text-[#111111] text-sm leading-snug line-clamp-2 mb-1.5 group-hover:text-[#e85a2d] transition-colors">
             {template.title}
           </h3>
           <p className="text-xs text-[#787774] mb-4">{t('themeCard.by')} Unccodestore</p>
@@ -119,9 +119,9 @@ const ThemeCard = ({ template, index = 0 }: { template: Template; index?: number
                       key={s}
                       className={`w-3 h-3 ${
                         s < Math.floor(r)
-                          ? 'fill-[#1d4ed8] text-[#1d4ed8]'
+                          ? 'fill-[#e85a2d] text-[#e85a2d]'
                           : r % 1 !== 0 && s === Math.floor(r)
-                          ? 'fill-[#1d4ed8]/50 text-[#1d4ed8]'
+                          ? 'fill-[#e85a2d]/50 text-[#e85a2d]'
                           : 'text-[#EAEAEA]'
                       }`}
                     />
@@ -135,14 +135,14 @@ const ThemeCard = ({ template, index = 0 }: { template: Template; index?: number
             <div className="flex items-center gap-2">
               <button
                 onClick={handleReadMore}
-                className="text-[11px] font-semibold text-[#2F3437] border border-[#EAEAEA] rounded px-2.5 py-1.5 hover:border-[#1d4ed8] hover:text-[#1d4ed8] transition-colors flex items-center gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1d4ed8]/40">
+                className="text-[11px] font-semibold text-[#2F3437] border border-[#EAEAEA] rounded px-2.5 py-1.5 hover:border-[#e85a2d] hover:text-[#e85a2d] transition-colors flex items-center gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e85a2d]/40">
                 {t('themeCard.readMore')}
                 <ArrowRight className="w-3 h-3" />
               </button>
               <button
                 onClick={handleAddToCart}
                 aria-label={isInCart(template.id) ? t('themeCard.inCart') : t('themeCard.addToCart')}
-                className="w-8 h-8 flex items-center justify-center rounded border border-[#EAEAEA] text-[#2F3437] hover:border-[#1d4ed8] hover:text-[#1d4ed8] hover:bg-[#2563eb]/5 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1d4ed8]/40">
+                className="w-8 h-8 flex items-center justify-center rounded border border-[#EAEAEA] text-[#2F3437] hover:border-[#e85a2d] hover:text-[#e85a2d] hover:bg-[#ef7a52]/5 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e85a2d]/40">
                 <ShoppingCart className="w-3.5 h-3.5" />
               </button>
             </div>

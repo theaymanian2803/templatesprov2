@@ -33,7 +33,7 @@ const FeaturedThemes = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="font-slab font-bold text-3xl md:text-5xl text-[#111111] leading-[1.05] tracking-tight mb-4">
-              {t('featured.title1')} <span className="text-[#1d4ed8]">{t('featured.title2')}</span>
+              {t('featured.title1')} <span className="text-[#e85a2d]">{t('featured.title2')}</span>
             </motion.h2>
             <motion.p
               initial={false}
@@ -50,7 +50,7 @@ const FeaturedThemes = () => {
               transition={{ delay: 0.16 }}>
               <Link
                 to="/templates?category=sass"
-                className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#1d4ed8] text-white font-semibold text-sm rounded-lg hover:bg-[#1e40af] transition-colors shadow-[0_0_30px_-8px_rgba(29,78,216,0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1d4ed8]/50">
+                className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#e85a2d] text-white font-semibold text-sm rounded-lg hover:bg-[#d94523] transition-colors shadow-[0_0_30px_-8px_rgba(232,90,45,0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e85a2d]/50">
                 {t('featured.viewAll')}
                 <ArrowRight className="w-4 h-4" />
               </Link>

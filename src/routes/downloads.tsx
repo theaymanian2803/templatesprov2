@@ -104,7 +104,7 @@ const Downloads = () => {
 
           {/* All-Access Pass banner */}
           {allAccessPass && (
-            <div className="mb-6 rounded-xl bg-[#1d4ed8] text-white p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+            <div className="mb-6 rounded-xl bg-[#e85a2d] text-white p-5 flex flex-col sm:flex-row sm:items-center gap-4">
               <div className="w-11 h-11 rounded-lg bg-white/15 flex items-center justify-center shrink-0">
                 <Crown className="w-6 h-6" />
               </div>
@@ -115,7 +115,7 @@ const Downloads = () => {
                 </p>
               </div>
               <Link to="/templates">
-                <Button size="sm" className="bg-white text-[#1d4ed8] hover:bg-[#eff6ff] font-semibold shrink-0">
+                <Button size="sm" className="bg-white text-[#e85a2d] hover:bg-[#FFF4EF] font-semibold shrink-0">
                   Parcourir le catalogue
                 </Button>
               </Link>
@@ -174,12 +174,12 @@ const Downloads = () => {
                           {item.template_title}
                         </Link>
                         <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                          <Badge variant="outline" className={`text-[10px] capitalize ${item.license_type === 'pass' ? 'border-[#1d4ed8]/40 bg-[#1d4ed8]/5 text-[#1d4ed8]' : ''}`}>
+                          <Badge variant="outline" className={`text-[10px] capitalize ${item.license_type === 'pass' ? 'border-[#e85a2d]/40 bg-[#e85a2d]/5 text-[#e85a2d]' : ''}`}>
                             {item.license_type === 'pass' ? 'Pass Tout Accès' : item.license_type}
                           </Badge>
                           <span>·</span>
                           {item.license_type === 'pass' ? (
-                            <span className="text-[#1d4ed8] font-semibold">Inclus</span>
+                            <span className="text-[#e85a2d] font-semibold">Inclus</span>
                           ) : (
                             <>
                               <span>{new Date(item.purchased_at).toLocaleDateString()}</span>
