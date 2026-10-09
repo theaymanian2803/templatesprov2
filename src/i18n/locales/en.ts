@@ -122,6 +122,7 @@ export default {
     websiteLabel: 'Website',
     mobileLabel: 'Mobile app',
     livePreview: 'Live preview',
+    cta: 'Browse templates',
   },
   promo: {
     badge: 'All-Access Pass',

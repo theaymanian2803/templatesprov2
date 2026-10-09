@@ -121,7 +121,8 @@ export default {
       "Chaque achat inclut un site web responsive et une application native iOS & Android - lancez-vous partout, depuis une base de code unique.",
     websiteLabel: 'Site web',
     mobileLabel: 'Application mobile',
-    livePreview: 'Aper\u00e7u en direct',
+    livePreview: 'Aperçu en direct',
+    cta: 'Parcourir les templates',
   },
   promo: {
     badge: 'Pass All-Access',

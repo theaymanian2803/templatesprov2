@@ -122,6 +122,7 @@ export default {
     websiteLabel: 'الموقع',
     mobileLabel: 'تطبيق الجوال',
     livePreview: 'معاينة مباشرة',
+    cta: 'تصفّح القوالب',
   },
   promo: {
     badge: 'بطاقة الوصول الشامل',

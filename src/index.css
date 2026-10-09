@@ -758,18 +758,164 @@ html[lang='ar'] .hero-copy p span:last-child {
    SHOWCASE — website preview + 3D mobile app
    ============================================================ */
 
-.showcase-stage {
-  perspective: 1500px;
-  perspective-origin: 48% 42%;
+.showcase-composition { position: relative; }
+
+.showcase-browser {
+  position: relative;
+  border-radius: 18px;
+  border: 1px solid #EAEAEA;
+  background: #fff;
+  box-shadow: 0 50px 110px -55px rgba(20, 18, 16, 0.42);
+  overflow: hidden;
+}
+
+.showcase-browser-bar {
+  height: 44px;
+  background: #F5F4F0;
+  border-bottom: 1px solid #EAEAEA;
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 26px 0;
+  gap: 14px;
+  padding: 0 18px;
+}
+
+.showcase-dots { display: flex; gap: 6px; }
+.showcase-dot { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+.showcase-dot--r { background: #f0a09a; }
+.showcase-dot--a { background: #f0d59a; }
+.showcase-dot--g { background: #a7d8a7; }
+
+.showcase-url {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  color: #98938c;
+  background: #fff;
+  border: 1px solid #EAEAEA;
+  border-radius: 999px;
+  padding: 5px 14px;
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.showcase-live {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #16a34a;
+}
+
+.showcase-live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+}
+
+.showcase-viewport {
+  position: relative;
+  height: clamp(340px, 48vw, 560px);
+  overflow: hidden;
+  background: #fff;
+}
+
+.showcase-iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  pointer-events: none;
+}
+
+.showcase-scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    #ffffff 0%,
+    rgba(255, 255, 255, 0.95) 24%,
+    rgba(255, 255, 255, 0.55) 44%,
+    rgba(255, 255, 255, 0) 66%
+  );
+}
+
+.showcase-copy {
+  position: absolute;
+  left: clamp(22px, 4vw, 60px);
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: 440px;
+  z-index: 2;
+}
+
+.showcase-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #e85a2d;
+  background: rgba(239, 122, 82, 0.08);
+  border: 1px solid rgba(239, 122, 82, 0.22);
+  border-radius: 999px;
+  padding: 6px 12px;
+  margin-bottom: 16px;
+}
+
+.showcase-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.7rem, 3vw, 2.7rem);
+  line-height: 1.08;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: #111;
+}
+
+.showcase-subtitle {
+  color: #3f3d3a;
+  font-size: clamp(0.95rem, 1.2vw, 1.08rem);
+  line-height: 1.55;
+  margin-top: 14px;
+}
+
+.showcase-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 22px;
+  background: #e85a2d;
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 12px 20px;
+  border-radius: 10px;
+  text-decoration: none;
+  box-shadow: 0 14px 30px -14px rgba(232, 90, 45, 0.6);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.showcase-cta:hover { background: #ef7a52; transform: translateY(-1px); }
+
+.showcase-phone {
+  position: absolute;
+  top: 50%;
+  right: clamp(16px, 5%, 76px);
+  transform: translateY(-44%);
+  z-index: 5;
 }
 
 .app-phone {
   position: relative;
-  width: clamp(210px, 26vw, 290px);
+  width: clamp(180px, 20vw, 244px);
   aspect-ratio: 300 / 612;
   border-radius: 46px;
   padding: 9px;
@@ -838,10 +984,30 @@ html[lang='ar'] .hero-copy p span:last-child {
 }
 
 @media (max-width: 1024px) {
-  .showcase-stage { perspective: 1200px; padding: 10px 0; }
-  .app-phone { width: clamp(200px, 44vw, 260px); transform: rotateY(-13deg) rotateX(5deg) rotateZ(1.5deg); }
+  .showcase-viewport { height: auto; }
+  .showcase-iframe,
+  .showcase-scrim { display: none; }
+  .showcase-copy {
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none;
+    max-width: none;
+    padding: 30px 26px 34px;
+  }
+  .showcase-phone {
+    position: relative;
+    top: auto;
+    right: auto;
+    transform: none;
+    display: flex;
+    justify-content: center;
+    margin: 28px auto 0;
+  }
+  .app-phone { width: clamp(190px, 40vw, 250px); transform: rotateY(-12deg) rotateX(5deg) rotateZ(1.5deg); }
 }
 
 @media (max-width: 640px) {
-  .app-phone { width: min(74vw, 240px); }
+  .showcase-copy { padding: 26px 22px 30px; }
+  .app-phone { width: min(66vw, 230px); }
 }
