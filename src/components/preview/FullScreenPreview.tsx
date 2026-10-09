@@ -16,7 +16,7 @@ interface FullScreenPreviewProps {
   vertical dock running parallel to the viewport height on the left edge,
   holding the "open in new tab" and close actions stacked together, plus a hide
   control that collapses the dock to a small restore pill so the embedded site
-  can be viewed unobstructed. Closes via �-, Escape, or a backdrop click; body
+  can be viewed unobstructed. Closes via —, Escape, or a backdrop click; body
   scroll is locked while open. The iframe stays sandboxed (no top-navigation)
   so the embedded site can never take the parent page away.
 */
@@ -77,21 +77,21 @@ const FullScreenPreview = ({ url, title, open, onClose }: FullScreenPreviewProps
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
               src={url}
-              title={`${title} �?" Aperçu en plein écran`}
+              title={`${title} – Aperçu en plein écran`}
               className="h-full w-full border-none bg-white"
               sandbox="allow-scripts allow-same-origin allow-forms"
               onLoad={() => setLoaded(true)}
             />
           </div>
 
-          {/* control dock �?" vertical capsule, running parallel to the viewport height */}
+          {/* control dock – vertical capsule, running parallel to the viewport height */}
           <motion.div
             className="absolute top-1/2 z-20"
             style={{ left: 'calc(env(safe-area-inset-left, 0px) + 1rem)' }}
             initial={false}
             animate={{ opacity: 1, x: 0, y: '-50%' }}
             transition={{ delay: 0.15, duration: 0.25, ease: [0.16, 1, 0.3, 1] }}>
-            {/* discovery indicator �?" breathing orange glow that draws the eye to the controls */}
+            {/* discovery indicator – breathing orange glow that draws the eye to the controls */}
             {controlsVisible && (
               <motion.span
                 data-testid="dock-ping"
@@ -126,7 +126,7 @@ const FullScreenPreview = ({ url, title, open, onClose }: FullScreenPreviewProps
                   ? 'translate-y-0 opacity-100'
                   : 'pointer-events-none invisible -translate-x-1.5 opacity-0',
               )}>
-              {/* open in new tab �?" stacked with close */}
+              {/* open in new tab – stacked with close */}
               <a
                 href={url}
                 target="_blank"
@@ -169,7 +169,7 @@ const FullScreenPreview = ({ url, title, open, onClose }: FullScreenPreviewProps
               </button>
             </div>
 
-            {/* restore pill �?" overlays the dock's spot when the dock is hidden */}
+            {/* restore pill – overlays the dock's spot when the dock is hidden */}
             <button
               type="button"
               onClick={(e) => {

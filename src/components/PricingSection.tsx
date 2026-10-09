@@ -6,6 +6,7 @@ import { ALL_ACCESS_PRICE } from "@/hooks/useAllAccessPass";
 import { getCatalogPriceRange } from "@/server/functions/templates";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 const useCatalogPriceRange = () => {
   return useQuery({
@@ -18,6 +19,7 @@ const useCatalogPriceRange = () => {
 const PricingSection = () => {
   const { setAllAccess } = useCart();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { data: priceRange } = useCatalogPriceRange();
 
   const indFeatures = ["Achat à l'unité", "Licences standard et étendue", "6 mois de support", "Mises à jour à vie", "Fichiers sources inclus"];
@@ -27,6 +29,7 @@ const PricingSection = () => {
 
   const minPrice = priceRange?.min != null ? Math.floor(priceRange.min) : 29;
   const maxPrice = priceRange?.max != null ? Math.floor(priceRange.max) : 79;
+  const hasFree = (priceRange?.min ?? 1) <= 0;
 
   const handleBuyAllAccess = () => {
     setAllAccess(true);
@@ -67,9 +70,17 @@ const PricingSection = () => {
               <h3 className="font-slab text-2xl font-bold text-[#111111] mb-2">Templates individuels</h3>
               <p className="text-[#787774] text-sm mb-4">Achetez seulement ce dont vous avez besoin</p>
               <div className="flex items-baseline justify-center gap-1">
-                <span className="font-slab text-4xl font-bold text-[#111111]">${minPrice} �?" ${maxPrice}</span>
+                {hasFree ? (
+                  <span className="font-slab text-4xl font-bold text-[#111111]">
+                    <span className="text-[#e85a2d]">{t('pricing.free')}</span> {t('pricing.andUp')}
+                  </span>
+                ) : (
+                  <span className="font-slab text-4xl font-bold text-[#111111]">${minPrice} – ${maxPrice}</span>
+                )}
               </div>
-              <p className="text-sm text-[#787774] mt-2">par template, selon la licence</p>
+              <p className="text-sm text-[#787774] mt-2">
+                {hasFree ? t('pricing.upTo', { max: `$${maxPrice}` }) : 'par template, selon la licence'}
+              </p>
             </div>
             <ul className="space-y-3.5 mb-6">
               {indFeatures.map((f, i) => (
@@ -116,7 +127,7 @@ const PricingSection = () => {
               ))}
             </ul>
             <Button size="lg" className="w-full bg-[#e85a2d] hover:bg-[#d94523]" onClick={handleBuyAllAccess}>
-              Obtenir le Pass �?" ${aaPrice}
+              Obtenir le Pass – ${aaPrice}
             </Button>
           </motion.div>
         </div>

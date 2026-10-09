@@ -240,6 +240,11 @@ export default {
     text29: 'My website looks ten times more professional now.',
     text30: 'Updates are frequent and the project is well maintained.',
   },
+  pricing: {
+    free: 'Free',
+    andUp: 'and up',
+    upTo: 'Up to {{max}} per template, by license',
+  },
   card: {
     readMore: 'Read more',
     hot: 'Hot',

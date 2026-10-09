@@ -176,7 +176,7 @@ const Navbar = () => {
 
           {/* Desktop Nav with Mega Menus */}
           <div className="hidden lg:flex items-center gap-1 shrink-0">
-            {/* Browse Templates Mega Menu �?" full-viewport panel */}
+            {/* Browse Templates Mega Menu – full-viewport panel */}
             <div
               className="relative"
               onMouseEnter={() => openMega('browse')}
@@ -247,7 +247,7 @@ const Navbar = () => {
               )}
             </div>
 
-            {/* Company Mega Menu �?" centered small panel */}
+            {/* Company Mega Menu – centered small panel */}
             <div
               className="relative"
               onMouseEnter={() => openMega('company')}
@@ -279,7 +279,7 @@ const Navbar = () => {
               {t('nav.pricing')}
             </Link>
 
-            {/* Help & Legal Mega Menu �?" centered small panel */}
+            {/* Help & Legal Mega Menu – centered small panel */}
             <div
               className="relative"
               onMouseEnter={() => openMega('legal')}
@@ -470,7 +470,7 @@ const Navbar = () => {
                 className="mt-3 mx-3 p-4 rounded-lg bg-[#e85a2d] text-white text-left cursor-pointer">
                 <p className="text-sm font-bold font-slab flex items-center gap-1.5">
                   <Crown className="w-4 h-4" />
-                  {t('nav.allAccessPass')} �?" ${ALL_ACCESS_PRICE}
+                  {t('nav.allAccessPass')} – ${ALL_ACCESS_PRICE}
                 </p>
                 <p className="text-xs text-white/80 mt-1">{t('nav.unlimitedDownloads300')}</p>
                 <span className="mt-2 inline-flex items-center gap-1 rounded-lg bg-white px-3 py-1.5 text-xs font-bold text-[#e85a2d]">
@@ -551,7 +551,7 @@ const Navbar = () => {
       </div>
       </nav>
 
-      {/* Utility Bar �?" search + language; scrolls away with the page */}
+      {/* Utility Bar – search + language; scrolls away with the page */}
       <div className="mt-16 border-b border-[#EAEAEA] bg-[#FBFBFA]">
         <div className="container mx-auto relative flex items-center justify-center gap-2 h-11">
           <form onSubmit={onSearch} role="search" className="flex-1 min-w-0 sm:flex-none sm:w-[22rem]">

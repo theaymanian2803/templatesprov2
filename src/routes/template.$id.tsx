@@ -148,11 +148,11 @@ const TemplatePreview = () => {
                 <Link to="/" className="hover:text-foreground flex items-center gap-1">
                   <Home className="w-3 h-3" />
                 </Link>
-                <span>�?�</span>
+                <span>›</span>
                 <Link to="/templates" className="hover:text-foreground">
                   {t('preview.templates')}
                 </Link>
-                <span>�?�</span>
+                <span>›</span>
                 <span className="text-foreground font-medium truncate max-w-[200px]">
                   {template.title}
                 </span>

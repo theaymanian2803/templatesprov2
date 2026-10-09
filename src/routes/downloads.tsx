@@ -56,7 +56,7 @@ const Downloads = () => {
       setDownloadingId(null)
     } catch (error: unknown) {
       toast({
-        title: '�?chec du téléchargement',
+        title: 'Échec du téléchargement',
         description: error instanceof Error ? error.message : 'Impossible de générer le lien de téléchargement',
         variant: 'destructive',
       })
@@ -75,7 +75,7 @@ const Downloads = () => {
       queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] })
       toast({ title: 'Template supprimé', description: `"${title}" a été retiré de vos téléchargements.` })
     } catch (error: unknown) {
-      toast({ title: 'Erreur', description: error instanceof Error ? error.message : '�?chec de la suppression', variant: 'destructive' })
+      toast({ title: 'Erreur', description: error instanceof Error ? error.message : 'Échec de la suppression', variant: 'destructive' })
     } finally {
       setDeletingId(null)
     }
@@ -111,7 +111,7 @@ const Downloads = () => {
               <div className="flex-1 min-w-0">
                 <p className="font-bold font-slab">Pass Tout Accès actif</p>
                 <p className="text-sm text-white/85">
-                  Tous les templates du catalogue sont inclus �?" y compris les futurs ajouts.
+                  Tous les templates du catalogue sont inclus – y compris les futurs ajouts.
                 </p>
               </div>
               <Link to="/templates">
