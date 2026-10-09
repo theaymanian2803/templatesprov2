@@ -254,7 +254,7 @@ const TemplatePreview = () => {
                 <h2 className="text-2xl font-bold mb-4">
                   {t('preview.webTemplateTitle', { title: template.title })}
                 </h2>
-                <p className="text-muted-foreground leading-relaxed mb-6">
+                <p className="text-muted-foreground leading-relaxed mb-6 whitespace-pre-line">
                   {template.description || t('preview.fallbackDescription')}
                 </p>
                 <h3 className="text-lg font-bold mb-3">{t('preview.keyFeatures')}</h3>
@@ -267,6 +267,18 @@ const TemplatePreview = () => {
 
               <TemplateGallery template={template} />
               <TemplateFeatures features={template.features || []} />
+
+              {template.admin_description && (
+                <div className="prose prose-sm md:prose-base max-w-none">
+                  <h2 className="text-2xl font-bold mb-4">
+                    {t('preview.adminFeaturesTitle', { defaultValue: 'Admin features' })}
+                  </h2>
+                  <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
+                    {template.admin_description}
+                  </p>
+                </div>
+              )}
+
               <TemplateTechStack techStack={template.tech_stack || []} />
               <ReviewSection templateId={id || ''} />
             </div>

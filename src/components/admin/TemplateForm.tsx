@@ -15,7 +15,8 @@ import { R2FileUpload } from './R2FileUpload'
 
 const templateSchema = z.object({
   title: z.string().min(1, 'Title is required').max(100),
-  description: z.string().max(500).nullable(),
+  description: z.string().nullable(),
+  admin_description: z.string().nullable(),
   category: z.string().min(1, 'Category is required').max(50),
   price: z.number().min(0, 'Price must be positive'),
   image_url: z.string().url('Must be a valid URL'),
@@ -34,6 +35,7 @@ interface TemplateFormProps {
 export const TemplateForm = ({ template, onSubmit, onCancel, isLoading }: TemplateFormProps) => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
+  const [adminDescription, setAdminDescription] = useState('')
   const [category, setCategory] = useState('')
   const [price, setPrice] = useState('')
   const [imageUrl, setImageUrl] = useState('')
@@ -54,6 +56,7 @@ export const TemplateForm = ({ template, onSubmit, onCancel, isLoading }: Templa
     if (template) {
       setTitle(template.title)
       setDescription(template.description || '')
+      setAdminDescription(template.admin_description || '')
       setCategory(template.category)
       setPrice(template.price.toString())
       setImageUrl(template.image_url)
@@ -79,6 +82,7 @@ export const TemplateForm = ({ template, onSubmit, onCancel, isLoading }: Templa
     const formData = {
       title: title.trim(),
       description: description.trim() || null,
+      admin_description: adminDescription.trim() || null,
       category: category.trim(),
       price: parseFloat(price) || 0,
       image_url: imageUrl.trim(),
@@ -250,16 +254,38 @@ export const TemplateForm = ({ template, onSubmit, onCancel, isLoading }: Templa
         </div>
       </div>
 
-      {/* Description */}
+      {/* Front-end description */}
       <div className="space-y-2">
-        <Label htmlFor="description">Description</Label>
+        <Label htmlFor="description">Front-end description</Label>
+        <p className="text-xs text-muted-foreground">
+          The storefront / landing page copy shown on the template page and across the site. No character limit.
+        </p>
         <Textarea
           id="description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="Template description..."
-          rows={3}
+          placeholder="Describe the front-end — landing page, sections, look and feel..."
+          rows={5}
         />
+        {errors.description && <p className="text-sm text-destructive">{errors.description}</p>}
+      </div>
+
+      {/* Admin features description */}
+      <div className="space-y-2">
+        <Label htmlFor="admin_description">Admin features description</Label>
+        <p className="text-xs text-muted-foreground">
+          Describe the admin panel and backend features included with this template. No character limit.
+        </p>
+        <Textarea
+          id="admin_description"
+          value={adminDescription}
+          onChange={(e) => setAdminDescription(e.target.value)}
+          placeholder="Describe the admin / backend features — dashboard, CRUD, roles, analytics..."
+          rows={5}
+        />
+        {errors.admin_description && (
+          <p className="text-sm text-destructive">{errors.admin_description}</p>
+        )}
       </div>
 
       {/* Featured Toggle */}

@@ -26,6 +26,7 @@ export const templates = sqliteTable('templates', {
   id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
   title: text('title').notNull(),
   description: text('description'),
+  admin_description: text('admin_description'),
   category: text('category').notNull(),
   price: real('price').notNull().default(0),
   extended_price: real('extended_price'),

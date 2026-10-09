@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import { listTemplates, listTemplatesPaginated, getTemplate, getCategories } from "@/server/functions/templates"
 
 export interface Template {
-  id: string; title: string; description: string | null; category: string
+  id: string; title: string; description: string | null; admin_description?: string | null; category: string
   price: number; extended_price: number | null; image_url: string
   gallery_images: string[]; rating: number; sales: number; review_count?: number
   featured: boolean; tech_stack: string[]; features: string[]; demo_url: string | null

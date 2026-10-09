@@ -1,0 +1,1 @@
+ALTER TABLE `templates` ADD `admin_description` text;

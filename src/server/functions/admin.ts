@@ -24,6 +24,7 @@ export const adminSaveTemplate = createServerFn({ method: 'POST' })
         .set({
           title: data.title,
           description: data.description,
+          admin_description: data.admin_description ?? null,
           category: data.category,
           price: data.price,
           extended_price: data.extended_price ?? null,
@@ -53,6 +54,7 @@ export const adminSaveTemplate = createServerFn({ method: 'POST' })
       .values({
         title: data.title,
         description: data.description,
+        admin_description: data.admin_description ?? null,
         category: data.category,
         price: data.price,
         extended_price: data.extended_price ?? null,
