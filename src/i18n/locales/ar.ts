@@ -113,6 +113,16 @@ export default {
     discoverMore: 'اكتشف المزيد',
     allCollections: 'كل المجموعات',
   },
+  showcase: {
+    badge: 'مواقع وتطبيقات الجوال',
+    title1: 'قالب واحد.',
+    title2: 'موقع وتطبيقه.',
+    subtitle:
+      'كل عملية شراء تتضمن موقعاً متجاوباً وتطبيقاً أصلياً لنظامي iOS وAndroid - لتطلق مشروعك في كل مكان من قاعدة كود واحدة.',
+    websiteLabel: 'الموقع',
+    mobileLabel: 'تطبيق الجوال',
+    livePreview: 'معاينة مباشرة',
+  },
   promo: {
     badge: 'بطاقة الوصول الشامل',
     title1: 'بطاقة واحدة.',

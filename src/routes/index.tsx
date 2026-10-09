@@ -10,6 +10,7 @@ import ReviewsSection from '@/components/ReviewsSection'
 import SpaThemes from '@/components/SpaThemes'
 import TemplatesSection from '@/components/TemplatesSection'
 import UniqueThemesBanner from '@/components/UniqueThemesBanner'
+import WebsiteAppShowcase from '@/components/WebsiteAppShowcase'
 
 const Index = () => {
   return (
@@ -20,6 +21,7 @@ const Index = () => {
       <CategoriesSection />
       <UniqueThemesBanner />
       <FeaturedThemes />
+      <WebsiteAppShowcase />
       <TemplatesSection />
       <PricingSection />
       <ReviewsSection />

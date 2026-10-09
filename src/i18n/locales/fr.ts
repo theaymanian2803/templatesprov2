@@ -113,6 +113,16 @@ export default {
     discoverMore: 'En découvrir plus',
     allCollections: 'Toutes les collections',
   },
+  showcase: {
+    badge: 'Sites web + applications mobiles',
+    title1: 'Un template.',
+    title2: 'Un site et son application.',
+    subtitle:
+      "Chaque achat inclut un site web responsive et une application native iOS & Android - lancez-vous partout, depuis une base de code unique.",
+    websiteLabel: 'Site web',
+    mobileLabel: 'Application mobile',
+    livePreview: 'Aper\u00e7u en direct',
+  },
   promo: {
     badge: 'Pass All-Access',
     title1: 'Un seul pass.',

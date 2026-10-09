@@ -753,3 +753,95 @@ html[lang='ar'] .hero-copy p span:last-child {
 @media (max-width: 360px) {
   .device-stage { --ds-scale: 0.7; }
 }
+
+/* ============================================================
+   SHOWCASE — website preview + 3D mobile app
+   ============================================================ */
+
+.showcase-stage {
+  perspective: 1500px;
+  perspective-origin: 48% 42%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 26px 0;
+}
+
+.app-phone {
+  position: relative;
+  width: clamp(210px, 26vw, 290px);
+  aspect-ratio: 300 / 612;
+  border-radius: 46px;
+  padding: 9px;
+  background: linear-gradient(150deg, #36332f 0%, #141312 52%, #24211e 100%);
+  box-shadow:
+    0 60px 110px -40px rgba(20, 18, 16, 0.62),
+    0 16px 40px -22px rgba(20, 18, 16, 0.55),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 0 0 3px rgba(0, 0, 0, 0.45);
+  transform: rotateY(-17deg) rotateX(6deg) rotateZ(2deg);
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.app-phone:hover {
+  transform: rotateY(-6deg) rotateX(2deg) rotateZ(0deg);
+}
+
+.app-phone::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 46px;
+  pointer-events: none;
+  box-shadow: inset -14px 0 26px -12px rgba(0, 0, 0, 0.55);
+}
+
+.app-phone-notch {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 34%;
+  height: 22px;
+  border-radius: 999px;
+  background: #141312;
+  z-index: 3;
+}
+
+.app-phone-screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 38px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.app-phone-screen img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.app-phone-glow {
+  position: absolute;
+  inset: -28% -22%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(50% 46% at 62% 44%, rgba(232, 90, 45, 0.18), transparent 70%);
+  filter: blur(26px);
+}
+
+@media (max-width: 1024px) {
+  .showcase-stage { perspective: 1200px; padding: 10px 0; }
+  .app-phone { width: clamp(200px, 44vw, 260px); transform: rotateY(-13deg) rotateX(5deg) rotateZ(1.5deg); }
+}
+
+@media (max-width: 640px) {
+  .app-phone { width: min(74vw, 240px); }
+}

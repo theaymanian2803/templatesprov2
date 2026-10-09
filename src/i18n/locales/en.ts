@@ -113,6 +113,16 @@ export default {
     discoverMore: 'Discover more',
     allCollections: 'All collections',
   },
+  showcase: {
+    badge: 'Websites + mobile apps',
+    title1: 'One template.',
+    title2: 'A website and an app.',
+    subtitle:
+      'Every purchase ships as a responsive website and a native iOS & Android app - so you launch everywhere, from a single codebase.',
+    websiteLabel: 'Website',
+    mobileLabel: 'Mobile app',
+    livePreview: 'Live preview',
+  },
   promo: {
     badge: 'All-Access Pass',
     title1: 'One pass.',
