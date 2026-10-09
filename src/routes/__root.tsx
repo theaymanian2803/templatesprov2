@@ -1,4 +1,5 @@
 import { createRootRoute, HeadContent, Outlet, Scripts } from '@tanstack/react-router'
+import type { ReactNode } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { MotionConfig } from 'framer-motion'
 import { TooltipProvider } from '@/components/ui/tooltip'
@@ -16,7 +17,7 @@ import '@/i18n'
 
 const queryClient = new QueryClient()
 
-function RootComponent() {
+function RootDocument({ children }: { children: ReactNode }) {
   return (
     <html lang="fr">
       <head>
@@ -44,28 +45,37 @@ function RootComponent() {
         />
       </head>
       <body>
-        <MotionConfig reducedMotion="user">
-          <QueryClientProvider client={queryClient}>
-            <AuthProvider>
-              <FavoritesProvider>
-                <CartProvider>
-                  <TooltipProvider>
-                    <Toaster />
-                    <Sonner />
-                    <ScrollToTop />
-                    <CookieConsent />
-                    <ChatBubble />
-                    <Outlet />
-                  </TooltipProvider>
-                </CartProvider>
-              </FavoritesProvider>
-            </AuthProvider>
-          </QueryClientProvider>
-        </MotionConfig>
+        {children}
         <Scripts />
       </body>
     </html>
   )
 }
 
-export const Route = createRootRoute({ component: RootComponent })
+function RootComponent() {
+  return (
+    <MotionConfig reducedMotion="user">
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <FavoritesProvider>
+            <CartProvider>
+              <TooltipProvider>
+                <Toaster />
+                <Sonner />
+                <ScrollToTop />
+                <CookieConsent />
+                <ChatBubble />
+                <Outlet />
+              </TooltipProvider>
+            </CartProvider>
+          </FavoritesProvider>
+        </AuthProvider>
+      </QueryClientProvider>
+    </MotionConfig>
+  )
+}
+
+export const Route = createRootRoute({
+  shellComponent: RootDocument,
+  component: RootComponent,
+})
