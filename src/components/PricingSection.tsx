@@ -27,9 +27,7 @@ const PricingSection = () => {
   const indCtaLink = "/templates";
   const aaPrice = ALL_ACCESS_PRICE;
 
-  const minPrice = priceRange?.min != null ? Math.floor(priceRange.min) : 29;
   const maxPrice = priceRange?.max != null ? Math.floor(priceRange.max) : 79;
-  const hasFree = (priceRange?.min ?? 1) <= 0;
 
   const handleBuyAllAccess = () => {
     setAllAccess(true);
@@ -70,16 +68,12 @@ const PricingSection = () => {
               <h3 className="font-slab text-2xl font-bold text-[#111111] mb-2">Templates individuels</h3>
               <p className="text-[#787774] text-sm mb-4">Achetez seulement ce dont vous avez besoin</p>
               <div className="flex items-baseline justify-center gap-1">
-                {hasFree ? (
-                  <span className="font-slab text-4xl font-bold text-[#111111]">
-                    <span className="text-[#e85a2d]">{t('pricing.free')}</span> {t('pricing.andUp')}
-                  </span>
-                ) : (
-                  <span className="font-slab text-4xl font-bold text-[#111111]">${minPrice} – ${maxPrice}</span>
-                )}
+                <span className="font-slab text-4xl font-bold text-[#111111]">
+                  <span className="text-[#e85a2d]">{t('pricing.free')}</span> {t('pricing.andUp')}
+                </span>
               </div>
               <p className="text-sm text-[#787774] mt-2">
-                {hasFree ? t('pricing.upTo', { max: `$${maxPrice}` }) : 'par template, selon la licence'}
+                {t('pricing.upTo', { max: `$${maxPrice}` })}
               </p>
             </div>
             <ul className="space-y-3.5 mb-6">
