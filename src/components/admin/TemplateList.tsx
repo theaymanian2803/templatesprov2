@@ -33,6 +33,7 @@ export const TemplateList = ({ templates, onEdit, onDelete, isDeleting }: Templa
             <TableHead>Category</TableHead>
             <TableHead className="text-right">Price</TableHead>
             <TableHead className="text-center">Sales</TableHead>
+            <TableHead className="text-center">Downloads</TableHead>
             <TableHead className="text-center">Rating</TableHead>
             <TableHead className="text-center">Featured</TableHead>
             <TableHead className="text-right">Actions</TableHead>
@@ -77,6 +78,7 @@ export const TemplateList = ({ templates, onEdit, onDelete, isDeleting }: Templa
                 )}
               </TableCell>
               <TableCell className="text-center">{template.sales}</TableCell>
+              <TableCell className="text-center">{template.download_count ?? 0}</TableCell>
               <TableCell className="text-center">
                 <span className="inline-flex items-center gap-1">
                   <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
@@ -135,7 +137,7 @@ export const TemplateList = ({ templates, onEdit, onDelete, isDeleting }: Templa
           ))}
           {templates.length === 0 && (
             <TableRow>
-              <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
+              <TableCell colSpan={9} className="text-center py-8 text-muted-foreground">
                 No templates found. Create your first template!
               </TableCell>
             </TableRow>

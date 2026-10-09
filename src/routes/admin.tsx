@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { AdminSidebar } from '@/components/admin/AdminSidebar'
 import { ContactList } from '@/components/admin/ContactList'
 import { CouponList } from '@/components/admin/CouponList'
+import { DownloadList } from '@/components/admin/DownloadList'
 import { OrderDetails } from '@/components/admin/OrderDetails'
 import { OrderList } from '@/components/admin/OrderList'
 import RefundRequestList from '@/components/admin/RefundRequestList'
@@ -253,6 +254,7 @@ const Admin = () => {
 
   const sectionTitle: Record<string, string> = {
     templates: 'Templates',
+    downloads: 'Downloads',
     orders: 'Orders',
     coupons: 'Coupons',
     reviews: 'Reviews',
@@ -381,6 +383,7 @@ const Admin = () => {
                 {activeTab === 'coupons' && <CouponList />}
                 {activeTab === 'reviews' && <ReviewList />}
                 {activeTab === 'contacts' && <ContactList />}
+                {activeTab === 'downloads' && <DownloadList />}
                 {activeTab === 'refunds' && (
                   <div className="glass-card p-6 rounded-2xl border border-border/50">
                     <RefundRequestList />

@@ -16,6 +16,7 @@ import { useToast } from '@/hooks/use-toast'
 import { useAllAccessPass } from '@/hooks/useAllAccessPass'
 import { useTemplate } from '@/hooks/useTemplates'
 import { getTemplateDownloadUrl } from '@/server/functions/dashboard'
+import { recordDownload } from '@/server/functions/downloads'
 import { getDirectDownloadUrl } from '@/lib/utils'
 import { ArrowLeft, BadgeCheck, Download, Home, Loader2, Maximize2, ShoppingBag } from 'lucide-react'
 import { useState } from 'react'
@@ -38,14 +39,16 @@ const TemplatePreview = () => {
   const { data: downloadInfo } = useQuery({
     queryKey: ['template-download-url', id, user?.id],
     queryFn: async () => getTemplateDownloadUrl({ data: id! }),
-    enabled: !!id && !!allAccessPass,
+    enabled: !!id && !!user,
   })
 
   const handleDownload = async () => {
-    if (!downloadInfo?.source_file_url || downloading) return
+    if (downloading) return
     setDownloading(true)
     try {
-      const cleanUrl = downloadInfo.source_file_url.trim()
+      const result = await recordDownload({ data: id! })
+      if (!result.source_file_url) throw new Error(t('preview.fileUnavailable'))
+      const cleanUrl = result.source_file_url.trim()
       window.open(getDirectDownloadUrl(cleanUrl), '_blank', 'noopener,noreferrer')
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : t('preview.downloadFailedDesc')
@@ -163,6 +166,11 @@ const TemplatePreview = () => {
                   {template.title.charAt(0)}
                 </div>
                 <span>{t('preview.studioName')}</span>
+                <span className="text-border">·</span>
+                <span className="inline-flex items-center gap-1">
+                  <Download className="w-3.5 h-3.5" />
+                  {(template.download_count ?? 0).toLocaleString()} downloads
+                </span>
               </div>
             </div>
 
@@ -176,25 +184,25 @@ const TemplatePreview = () => {
                   {t('preview.fullscreenPreview')} <Maximize2 className="w-4 h-4" />
                 </Button>
               )}
-              {allAccessPass ? (
+              {downloadInfo?.source_file_url ? (
                 <>
                   <Button
                     className="bg-[#e85a2d] hover:bg-[#ef7a52] text-white border-none gap-2 w-full sm:w-auto text-xs sm:text-sm"
                     onClick={handleDownload}
-                    disabled={downloading || !downloadInfo?.source_file_url}>
+                    disabled={downloading}>
                     {downloading ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
                     ) : (
                       <Download className="w-4 h-4" />
                     )}
-                    {downloadInfo?.source_file_url
-                      ? t('preview.downloadNow')
-                      : t('preview.fileUnavailable')}
+                    {t('preview.downloadNow')}
                   </Button>
-                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#e85a2d] bg-[#e85a2d]/5 border border-[#e85a2d]/20 rounded-full px-3 py-1.5">
-                    <BadgeCheck className="w-4 h-4" />
-                    {t('preview.includedInPass')}
-                  </span>
+                  {allAccessPass && (
+                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#e85a2d] bg-[#e85a2d]/5 border border-[#e85a2d]/20 rounded-full px-3 py-1.5">
+                      <BadgeCheck className="w-4 h-4" />
+                      {t('preview.includedInPass')}
+                    </span>
+                  )}
                 </>
               ) : (
                 <Button

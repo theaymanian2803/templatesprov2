@@ -45,6 +45,7 @@ const RelatedTemplates = () => {
               reviewCount={template.review_count}
               featured={template.featured}
               youtubeId={template.youtube_id}
+              downloadCount={template.download_count}
             />
           ))
         )}

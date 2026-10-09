@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer, real, uniqueIndex } from 'drizzle-orm/sqlite-core'
+import { sqliteTable, text, integer, real, uniqueIndex, index } from 'drizzle-orm/sqlite-core'
 
 export const profiles = sqliteTable('profiles', {
   id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
@@ -40,6 +40,7 @@ export const templates = sqliteTable('templates', {
   youtube_id: text('youtube_id'),
   license_product: text('license_product'),
   review_count: integer('review_count').notNull().default(0),
+  download_count: integer('download_count').notNull().default(0),
   created_at: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
   updated_at: integer('updated_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
 })
@@ -116,6 +117,16 @@ export const template_downloads = sqliteTable('template_downloads', {
   template_id: text('template_id').notNull().unique().references(() => templates.id, { onDelete: 'cascade' }),
   source_file_url: text('source_file_url').notNull(),
 })
+
+export const downloads = sqliteTable('downloads', {
+  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
+  user_id: text('user_id').notNull(),
+  template_id: text('template_id').notNull().references(() => templates.id, { onDelete: 'cascade' }),
+  created_at: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
+}, (t) => [
+  index('downloads_template_idx').on(t.template_id),
+  index('downloads_user_idx').on(t.user_id),
+])
 
 export const license_keys = sqliteTable('license_keys', {
   id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),

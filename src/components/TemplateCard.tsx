@@ -1,5 +1,5 @@
 import { useCart } from '@/contexts/CartContext'
-import { ArrowRight, ShoppingCart, Star } from 'lucide-react'
+import { ArrowRight, Download, ShoppingCart, Star } from 'lucide-react'
 import { toast } from 'sonner'
 import { Link, useNavigate } from '@/lib/router'
 import { useTranslation } from 'react-i18next'
@@ -22,6 +22,7 @@ interface TemplateCardProps {
   youtubeId?: string | null
   authorName?: string
   authorAvatar?: string
+  downloadCount?: number
 }
 
 const initials = (name: string) =>
@@ -52,10 +53,12 @@ const TemplateCard = ({
   reviewCount,
   authorName,
   authorAvatar,
+  downloadCount = 0,
 }: TemplateCardProps) => {
   const { addToCart, isInCart } = useCart()
   const navigate = useNavigate()
   const { t } = useTranslation()
+  const isFree = Number(price) <= 0
   const displaySales = getDisplaySales(id, sales)
   const displayReviewCount = getDisplayReviewCount(id, reviewCount)
   const displayRating = getDisplayRating(id, rating)
@@ -94,6 +97,11 @@ const TemplateCard = ({
 
           {/* Category tag */}
           <div className="absolute top-3 left-3 flex items-center gap-2">
+            {isFree && (
+              <span className="px-2 py-1 rounded-md bg-emerald-500 text-white text-[10px] font-bold uppercase tracking-wide shadow-sm">
+                {t('card.free', { defaultValue: 'Free' })}
+              </span>
+            )}
             <span className="px-2.5 py-1 rounded-md bg-background/90 backdrop-blur-sm text-xs font-semibold text-foreground border border-border/50 shadow-sm">
               {category || 'Template'}
             </span>
@@ -102,6 +110,12 @@ const TemplateCard = ({
                 {t('card.hot')}
               </span>
             )}
+          </div>
+
+          {/* Downloads */}
+          <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-1 rounded-md bg-background/90 backdrop-blur-sm text-[11px] font-semibold text-foreground border border-border/50 shadow-sm">
+            <Download className="w-3 h-3" />
+            {downloadCount.toLocaleString()}
           </div>
 
           {/* Hover overlay: Read more + cart icon */}
@@ -157,8 +171,8 @@ const TemplateCard = ({
               <span className="text-border">·</span>
               <span>{t('card.sales', { count: displaySales })}</span>
             </div>
-            <div className="font-extrabold text-foreground text-lg tracking-tight">
-              ${Number(price).toFixed(0)}
+            <div className={`font-extrabold text-lg tracking-tight ${isFree ? 'text-emerald-600' : 'text-foreground'}`}>
+              {isFree ? t('card.free', { defaultValue: 'Free' }) : `$${Number(price).toFixed(0)}`}
             </div>
           </div>
         </div>

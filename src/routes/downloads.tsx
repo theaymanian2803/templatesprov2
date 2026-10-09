@@ -13,6 +13,7 @@ import { useToast } from '@/hooks/use-toast'
 import { useAllAccessPass } from '@/hooks/useAllAccessPass'
 import { usePurchasedTemplates } from '@/hooks/useDashboard'
 import { removePurchasedTemplate } from '@/server/functions/orders'
+import { recordDownload } from '@/server/functions/downloads'
 import { getDirectDownloadUrl } from '@/lib/utils'
 import { Crown, Download, FileArchive, Loader2, Package, Rocket, Search, Star, Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -36,11 +37,13 @@ const Downloads = () => {
     if (!authLoading && !user) navigate('/auth')
   }, [user, authLoading, navigate])
 
-  const handleDownload = async (sourceFileUrl: string, title: string) => {
-    setDownloadingId(sourceFileUrl)
+  const handleDownload = async (templateId: string, sourceFileUrl: string, title: string) => {
+    setDownloadingId(templateId)
 
     try {
-      const cleanUrl = sourceFileUrl.trim()
+      const result = await recordDownload({ data: templateId })
+      const cleanUrl = (result.source_file_url || sourceFileUrl).trim()
+      queryClient.invalidateQueries({ queryKey: ['admin-download-stats'] })
 
       if (cleanUrl.startsWith('http://') || cleanUrl.startsWith('https://')) {
         const directUrl = getDirectDownloadUrl(cleanUrl)
@@ -201,11 +204,11 @@ const Downloads = () => {
                           <Button
                             size="sm"
                             onClick={() =>
-                              handleDownload(item.source_file_url!, item.template_title)
+                              handleDownload(item.template_id, item.source_file_url!, item.template_title)
                             }
-                            disabled={downloadingId === item.source_file_url}
+                            disabled={downloadingId === item.template_id}
                             className="gap-1">
-                            {downloadingId === item.source_file_url ? (
+                            {downloadingId === item.template_id ? (
                               <Loader2 className="w-3 h-3 animate-spin" />
                             ) : (
                               <Download className="w-3 h-3" />

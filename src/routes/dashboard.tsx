@@ -220,6 +220,7 @@ const Dashboard = () => {
                     rating={t.rating ?? 0}
                     sales={t.sales ?? 0}
                     reviewCount={t.review_count}
+                    downloadCount={t.download_count ?? 0}
                   />
                 ))}
               </div>

@@ -1,6 +1,6 @@
 import { useCart } from '@/contexts/CartContext'
 import { useFavorites } from '@/contexts/FavoritesContext'
-import { ArrowRight, Heart, ShoppingCart, Star } from 'lucide-react'
+import { ArrowRight, Download, Heart, ShoppingCart, Star } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { Link, useNavigate } from '@/lib/router'
@@ -69,6 +69,7 @@ const ShopProductCard = ({ template, query, cardView }: ShopProductCardProps) =>
   const author = resolveAuthor(template.id)
   const inCart = isInCart(template.id)
   const isFav = isFavorite(template.id)
+  const isFree = Number(template.price) <= 0
   const displaySales = getDisplaySales(template.id, template.sales)
 
   const features = (template.features && template.features.length > 0
@@ -119,8 +120,19 @@ const ShopProductCard = ({ template, query, cardView }: ShopProductCardProps) =>
               loading="lazy"
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
-            <span className="absolute top-3 left-3 px-2 py-1 rounded bg-white/90 backdrop-blur-sm text-[11px] font-semibold text-gray-900 border border-gray-200">
-              {template.category || t('shopCard.template')}
+            <span className="absolute top-3 left-3 flex items-center gap-2">
+              {isFree && (
+                <span className="px-2 py-1 rounded bg-emerald-500 text-white text-[10px] font-bold uppercase tracking-wide">
+                  {t('shopCard.free', { defaultValue: 'Free' })}
+                </span>
+              )}
+              <span className="px-2 py-1 rounded bg-white/90 backdrop-blur-sm text-[11px] font-semibold text-gray-900 border border-gray-200">
+                {template.category || t('shopCard.template')}
+              </span>
+            </span>
+            <span className="absolute top-3 right-3 flex items-center gap-1 px-2 py-1 rounded bg-white/90 backdrop-blur-sm text-[11px] font-semibold text-gray-900 border border-gray-200">
+              <Download className="w-3 h-3" />
+              {(template.download_count ?? 0).toLocaleString()}
             </span>
           </div>
           <div className="flex flex-col p-4 flex-1">
@@ -129,7 +141,9 @@ const ShopProductCard = ({ template, query, cardView }: ShopProductCardProps) =>
             </h3>
             <p className="text-xs text-gray-500 mb-2">{t('shopCard.byAuthor', { author })}</p>
             <div className="flex items-center gap-1.5 mb-3">
-              <span className="font-bold text-gray-900 text-sm">${Number(template.price).toFixed(0)}</span>
+              <span className={`font-bold text-sm ${isFree ? 'text-emerald-600' : 'text-gray-900'}`}>
+                {isFree ? t('shopCard.free', { defaultValue: 'Free' }) : `$${Number(template.price).toFixed(0)}`}
+              </span>
               <div className="flex items-center gap-0.5">
                 {Array.from({ length: 5 }).map((_, s) => (
                   <Star
@@ -216,8 +230,15 @@ const ShopProductCard = ({ template, query, cardView }: ShopProductCardProps) =>
         </div>
 
         <div className="text-right mb-3">
-          <div className="text-2xl font-bold text-gray-900">${Number(template.price).toFixed(0)}</div>
-          <div className="text-xs text-gray-500 mt-1">{t('shopCard.salesStats', { count: displaySales, formatted: formatSales(displaySales), reviews: getDisplayReviewCount(template.id, template.review_count) })}</div>
+          <div className={`text-2xl font-bold ${isFree ? 'text-emerald-600' : 'text-gray-900'}`}>
+            {isFree ? t('shopCard.free', { defaultValue: 'Free' }) : `$${Number(template.price).toFixed(0)}`}
+          </div>
+          <div className="text-xs text-gray-500 mt-1 flex items-center justify-end gap-1">
+            <Download className="w-3 h-3" />
+            {(template.download_count ?? 0).toLocaleString()} {t('shopCard.downloads', { defaultValue: 'downloads' })}
+            <span className="text-gray-300">·</span>
+            {t('shopCard.salesStats', { count: displaySales, formatted: formatSales(displaySales), reviews: getDisplayReviewCount(template.id, template.review_count) })}
+          </div>
           {Number(template.rating) > 0 && (
             <div className="flex items-center justify-end gap-0.5 mt-1">
               {Array.from({ length: 5 }).map((_, s) => (
