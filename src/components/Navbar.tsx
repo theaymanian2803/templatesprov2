@@ -161,12 +161,12 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#FBFBFA]/92 backdrop-blur-md border-b border-[#EAEAEA] text-[#111111]">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#FBFBFA] border-b border-[#EAEAEA] text-[#111111]">
       <div className="container mx-auto">
         <div className="relative z-10 flex items-center justify-between h-16 gap-4">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5 shrink-0">
-            <div className="w-9 h-9 rounded-lg bg-[#2563eb] flex items-center justify-center shadow-[0_0_20px_-4px_rgba(37,99,235,0.6)]">
+            <div className="w-9 h-9 rounded-lg bg-[#1d4ed8] flex items-center justify-center shadow-[0_0_20px_-4px_rgba(29,78,216,0.6)]">
               <span className="text-white font-extrabold text-lg">U</span>
             </div>
             <span className="font-slab font-bold text-xl text-[#111111] tracking-tight hidden sm:block">
@@ -225,7 +225,7 @@ const Navbar = () => {
                       <MegaMenuItem icon={Download} title={t('nav.myDownloads')} desc={t('nav.myDownloadsDesc')} to="/downloads" onClick={() => setOpenMegaMenu(null)} />
                       <MegaMenuItem icon={Heart} title={t('nav.myFavorites')} desc={t('nav.myFavoritesDesc')} to="/favorites" onClick={() => setOpenMegaMenu(null)} />
                       <MegaMenuItem icon={ShoppingCart} title={t('nav.shoppingCart')} desc={t('nav.itemsInCart', { count: totalItems })} to="/cart" onClick={() => setOpenMegaMenu(null)} />
-                      <div className="mt-3 ml-3 mr-3 p-4 rounded-lg bg-[#2563eb] text-white">
+                      <div className="mt-3 ml-3 mr-3 p-4 rounded-lg bg-[#1d4ed8] text-white">
                         <button
                           type="button"
                           onClick={handlePassClick}
@@ -235,7 +235,7 @@ const Navbar = () => {
                             {t('nav.allAccessPass')}
                           </p>
                           <p className="text-xs text-white/80 mt-1">{t('nav.unlimitedDownloads300')}</p>
-                          <p className="mt-2 inline-flex items-center gap-1 rounded-lg bg-white px-3 py-1.5 text-xs font-bold text-[#2563eb] transition-colors group-hover:bg-[#eff6ff]">
+                          <p className="mt-2 inline-flex items-center gap-1 rounded-lg bg-white px-3 py-1.5 text-xs font-bold text-[#1d4ed8] transition-colors group-hover:bg-[#eff6ff]">
                             {allAccessPass ? t('nav.viewDownloads') : t('nav.getPass')}
                             <ArrowRight className="w-3 h-3 rtl:rotate-180" />
                           </p>
@@ -317,13 +317,13 @@ const Navbar = () => {
                       </div>
                     </div>
                     <div>
-                      <div className="mt-3 ml-3 mr-3 p-4 rounded-lg bg-[#2563eb] text-white">
+                      <div className="mt-3 ml-3 mr-3 p-4 rounded-lg bg-[#1d4ed8] text-white">
                         <p className="text-sm font-bold font-slab">{t('sidebar.contactSupport')}</p>
                         <p className="text-xs text-white/80 mt-1">{t('nav.contactSupportDesc')}</p>
                         <Link
                           to="/contact"
                           onClick={() => setOpenMegaMenu(null)}
-                          className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-xs font-bold text-[#2563eb] transition-colors hover:bg-[#eff6ff]">
+                          className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-xs font-bold text-[#1d4ed8] transition-colors hover:bg-[#eff6ff]">
                           {t('nav.contactUs')}
                           <ArrowRight className="w-3 h-3 rtl:rotate-180" />
                         </Link>
@@ -345,7 +345,7 @@ const Navbar = () => {
                   aria-label={t('nav.favorites')}>
                   <Heart className="w-[18px] h-[18px] text-[#2F3437]" />
                   {favorites.length > 0 && (
-                    <span className="absolute top-1 right-1 w-4 h-4 bg-[#2563eb] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                    <span className="absolute top-1 right-1 w-4 h-4 bg-[#1d4ed8] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
                       {favorites.length}
                     </span>
                   )}
@@ -356,7 +356,7 @@ const Navbar = () => {
                   aria-label={t('nav.cart')}>
                   <ShoppingCart className="w-[18px] h-[18px] text-[#2F3437]" />
                   {totalItems > 0 && (
-                    <span className="absolute top-1 right-1 w-4 h-4 bg-[#2563eb] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                    <span className="absolute top-1 right-1 w-4 h-4 bg-[#1d4ed8] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
                       {totalItems}
                     </span>
                   )}
@@ -412,7 +412,7 @@ const Navbar = () => {
                 <Link to="/cart" className="relative p-2.5 rounded-full hover:bg-[#F5F4F0] transition-colors" aria-label={t('nav.cart')}>
                   <ShoppingCart className="w-[18px] h-[18px] text-[#2F3437]" />
                   {totalItems > 0 && (
-                    <span className="absolute top-1 right-1 w-4 h-4 bg-[#2563eb] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                    <span className="absolute top-1 right-1 w-4 h-4 bg-[#1d4ed8] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
                       {totalItems}
                     </span>
                   )}
@@ -434,7 +434,7 @@ const Navbar = () => {
             <Link to="/cart" className="relative p-2" aria-label={t('nav.cart')}>
               <ShoppingCart className="w-5 h-5 text-[#2F3437]" />
               {totalItems > 0 && (
-                <span className="absolute top-0 right-0 w-4 h-4 bg-[#2563eb] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                <span className="absolute top-0 right-0 w-4 h-4 bg-[#1d4ed8] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
                   {totalItems}
                 </span>
               )}
@@ -467,13 +467,13 @@ const Navbar = () => {
                   setIsOpen(false)
                   handlePassClick()
                 }}
-                className="mt-3 mx-3 p-4 rounded-lg bg-[#2563eb] text-white text-left cursor-pointer">
+                className="mt-3 mx-3 p-4 rounded-lg bg-[#1d4ed8] text-white text-left cursor-pointer">
                 <p className="text-sm font-bold font-slab flex items-center gap-1.5">
                   <Crown className="w-4 h-4" />
                   {t('nav.allAccessPass')} �?" ${ALL_ACCESS_PRICE}
                 </p>
                 <p className="text-xs text-white/80 mt-1">{t('nav.unlimitedDownloads300')}</p>
-                <span className="mt-2 inline-flex items-center gap-1 rounded-lg bg-white px-3 py-1.5 text-xs font-bold text-[#2563eb]">
+                <span className="mt-2 inline-flex items-center gap-1 rounded-lg bg-white px-3 py-1.5 text-xs font-bold text-[#1d4ed8]">
                   {allAccessPass ? t('nav.viewDownloads') : t('nav.getPass')}
                   <ArrowRight className="w-3 h-3 rtl:rotate-180" />
                 </span>
@@ -538,7 +538,7 @@ const Navbar = () => {
                   </>
                 ) : (
                   <Link to="/auth" className="w-full" onClick={() => setIsOpen(false)}>
-                    <Button size="sm" className="w-full font-semibold bg-[#2563eb] text-white hover:bg-[#3b82f6]">
+                    <Button size="sm" className="w-full font-semibold bg-[#1d4ed8] text-white hover:bg-[#2563eb]">
                       {t('nav.signIn')}
                     </Button>
                   </Link>
@@ -594,7 +594,7 @@ const MobileNavLink = ({
   <Link
     to={to}
     onClick={onClick}
-    className="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-[#2F3437] hover:text-[#111111] hover:bg-[#dbeafe] hover:shadow-[inset_0_0_0_1px_rgba(37,99,235,0.15)] transition-all">
+    className="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-[#2F3437] hover:text-[#111111] hover:bg-[#dbeafe] hover:shadow-[inset_0_0_0_1px_rgba(29,78,216,0.15)] transition-all">
     {children}
     <ChevronRight className="w-4 h-4 text-[#787774]/60" />
   </Link>

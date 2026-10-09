@@ -187,7 +187,7 @@ const TemplatePreview = () => {
               {downloadInfo?.source_file_url ? (
                 <>
                   <Button
-                    className="bg-[#2563eb] hover:bg-[#3b82f6] text-white border-none gap-2 w-full sm:w-auto text-xs sm:text-sm"
+                    className="bg-[#1d4ed8] hover:bg-[#2563eb] text-white border-none gap-2 w-full sm:w-auto text-xs sm:text-sm"
                     onClick={handleDownload}
                     disabled={downloading}>
                     {downloading ? (
@@ -198,7 +198,7 @@ const TemplatePreview = () => {
                     {t('preview.downloadNow')}
                   </Button>
                   {allAccessPass && (
-                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563eb] bg-[#2563eb]/5 border border-[#2563eb]/20 rounded-full px-3 py-1.5">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1d4ed8] bg-[#1d4ed8]/5 border border-[#1d4ed8]/20 rounded-full px-3 py-1.5">
                       <BadgeCheck className="w-4 h-4" />
                       {t('preview.includedInPass')}
                     </span>

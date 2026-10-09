@@ -22,21 +22,21 @@ const FeaturedThemes = () => {
           {/* Left: Text */}
           <div className="lg:w-1/3 lg:sticky lg:top-24">
             <motion.span
-              initial={{ opacity: 0, y: 10 }}
+              initial={false}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="inline-flex items-center gap-2 rounded-full border border-brand-400/25 bg-brand-400/5 px-3 py-1.5 mb-6 text-[11px] font-medium tracking-wide text-brand-300/90">
               {t('featured.badge')}
             </motion.span>
             <motion.h2
-              initial={{ opacity: 0, y: 18 }}
+              initial={false}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="font-slab font-bold text-3xl md:text-5xl text-[#111111] leading-[1.05] tracking-tight mb-4">
-              {t('featured.title1')} <span className="text-[#2563eb]">{t('featured.title2')}</span>
+              {t('featured.title1')} <span className="text-[#1d4ed8]">{t('featured.title2')}</span>
             </motion.h2>
             <motion.p
-              initial={{ opacity: 0, y: 18 }}
+              initial={false}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.08 }}
@@ -44,13 +44,13 @@ const FeaturedThemes = () => {
               {t('featured.subtitle')}
             </motion.p>
             <motion.div
-              initial={{ opacity: 0, y: 18 }}
+              initial={false}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.16 }}>
               <Link
                 to="/templates?category=sass"
-                className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#2563eb] text-white font-semibold text-sm rounded-lg hover:bg-[#1d4ed8] transition-colors shadow-[0_0_30px_-8px_rgba(37,99,235,0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]/50">
+                className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#1d4ed8] text-white font-semibold text-sm rounded-lg hover:bg-[#1e40af] transition-colors shadow-[0_0_30px_-8px_rgba(29,78,216,0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1d4ed8]/50">
                 {t('featured.viewAll')}
                 <ArrowRight className="w-4 h-4" />
               </Link>

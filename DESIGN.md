@@ -14,7 +14,7 @@ Restrained. A warm off-white ground carries the page. The sapphire accent appear
 
 - Ground: warm off-white — `#FBFBFA` base, with `#F5F4F0` for subtle section differentiation.
 - Surface (cards): pure white `#FFFFFF` with `1px solid #EAEAEA` borders.
-- Accent: sapphire blue — `#2563eb` (brand-600), `#3b82f6` (brand-500), hover `#1d4ed8`.
+- Accent: sapphire blue — `#1d4ed8` (brand-600), `#2563eb` (brand-500), darkest `#1e40af`.
 - Secondary: muted violet `#7c69b7` (hero motifs only).
 - Ink (text): charcoal `#111111`, secondary `#2F3437`, muted `#787774`.
 - Borders: ultra-light `#EAEAEA`.

@@ -16,7 +16,7 @@ const UniqueThemesBanner = () => {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'linear-gradient(180deg, #FBFBFA 0%, #F6F5F2 100%), radial-gradient(80% 60% at 0% 50%, rgba(59,130,246,0.04) 0%, rgba(59,130,246,0) 55%)',
+            'linear-gradient(180deg, #FBFBFA 0%, #F6F5F2 100%), radial-gradient(80% 60% at 0% 50%, rgba(37,99,235,0.04) 0%, rgba(37,99,235,0) 55%)',
         }}
       />
 
@@ -25,18 +25,18 @@ const UniqueThemesBanner = () => {
           {/* Left: Thumbnail grid �?" lit artifact wall */}
           <div className="flex-1 w-full">
             <motion.div
-              initial={{ opacity: 0, x: -18 }}
+              initial={false}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               className="grid grid-cols-3 gap-4">
               {templates?.slice(0, 6).map((t, i) => (
                 <motion.div
                   key={t.id}
-                  initial={{ opacity: 0, scale: 0.92 }}
+                  initial={false}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
-                  className="group relative aspect-[4/3] rounded-lg overflow-hidden bg-white border border-[#EAEAEA] hover:border-[#2563eb]/40 transition-colors">
+                  className="group relative aspect-[4/3] rounded-lg overflow-hidden bg-white border border-[#EAEAEA] hover:border-[#1d4ed8]/40 transition-colors">
                   <img
                     src={t.image_url || '/placeholder.svg'}
                     alt={t.title}
@@ -48,7 +48,7 @@ const UniqueThemesBanner = () => {
                     className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                     style={{
                       background:
-                        'radial-gradient(70% 60% at 50% 0%, rgba(59,130,246,0.06) 0%, rgba(59,130,246,0) 60%)',
+                        'radial-gradient(70% 60% at 50% 0%, rgba(37,99,235,0.06) 0%, rgba(37,99,235,0) 60%)',
                     }}
                   />
                 </motion.div>
@@ -63,21 +63,21 @@ const UniqueThemesBanner = () => {
           {/* Right: Text + CTA */}
           <div className="flex-1">
             <motion.span
-              initial={{ opacity: 0, y: 10 }}
+              initial={false}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 rounded-full border border-[#3b82f6]/20 bg-[#3b82f6]/5 px-3 py-1.5 mb-6 text-[11px] font-medium tracking-wide text-[#2563eb]">
+              className="inline-flex items-center gap-2 rounded-full border border-[#2563eb]/20 bg-[#2563eb]/5 px-3 py-1.5 mb-6 text-[11px] font-medium tracking-wide text-[#1d4ed8]">
               {t('unique.badge')}
             </motion.span>
             <motion.h2
-              initial={{ opacity: 0, x: 20 }}
+              initial={false}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               className="font-slab font-bold text-3xl md:text-5xl text-[#111111] leading-[1.05] tracking-tight mb-6">
-              {t('unique.title1')} <span className="text-[#2563eb]">{t('unique.title2')}</span> {t('unique.title3')}
+              {t('unique.title1')} <span className="text-[#1d4ed8]">{t('unique.title2')}</span> {t('unique.title3')}
             </motion.h2>
             <motion.p
-              initial={{ opacity: 0, x: 20 }}
+              initial={false}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.08 }}
@@ -85,13 +85,13 @@ const UniqueThemesBanner = () => {
               {t('unique.subtitle')}
             </motion.p>
             <motion.div
-              initial={{ opacity: 0, x: 20 }}
+              initial={false}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.16 }}>
               <Link
                 to="/templates"
-                className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#2563eb] text-white font-semibold text-sm rounded-lg hover:bg-[#1d4ed8] transition-colors shadow-[0_0_30px_-8px_rgba(37,99,235,0.2)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]/50">
+                className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#1d4ed8] text-white font-semibold text-sm rounded-lg hover:bg-[#1e40af] transition-colors shadow-[0_0_30px_-8px_rgba(29,78,216,0.2)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1d4ed8]/50">
                 {t('unique.viewAll')}
                 <ArrowRight className="w-4 h-4" />
               </Link>

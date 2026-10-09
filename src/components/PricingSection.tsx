@@ -40,13 +40,13 @@ const PricingSection = () => {
 
       <div className="container mx-auto relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
           className="text-center max-w-2xl mx-auto mb-8"
         >
-          <span className="text-sm font-semibold text-[#2563eb] uppercase tracking-wider">Tarifs</span>
+          <span className="text-sm font-semibold text-[#1d4ed8] uppercase tracking-wider">Tarifs</span>
           <h2 className="font-slab text-3xl md:text-4xl font-bold text-[#111111] mt-3 mb-3">
             Tarifs simples et transparents
           </h2>
@@ -57,11 +57,11 @@ const PricingSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-4xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
+            initial={false}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="relative p-6 md:p-7 rounded-2xl bg-white border border-[#EAEAEA] hover:border-[#2563eb]/40 hover:shadow-lg transition-all duration-300"
+            className="relative p-6 md:p-7 rounded-2xl bg-white border border-[#EAEAEA] hover:border-[#1d4ed8]/40 hover:shadow-lg transition-all duration-300"
           >
             <div className="text-center mb-6">
               <h3 className="font-slab text-2xl font-bold text-[#111111] mb-2">Templates individuels</h3>
@@ -74,8 +74,8 @@ const PricingSection = () => {
             <ul className="space-y-3.5 mb-6">
               {indFeatures.map((f, i) => (
                 <li key={i} className="flex items-center gap-3">
-                  <div className="w-5 h-5 rounded-full bg-[#2563eb]/10 flex items-center justify-center flex-shrink-0">
-                    <Check className="w-3 h-3 text-[#2563eb]" />
+                  <div className="w-5 h-5 rounded-full bg-[#1d4ed8]/10 flex items-center justify-center flex-shrink-0">
+                    <Check className="w-3 h-3 text-[#1d4ed8]" />
                   </div>
                   <span className="text-[#111111]">{f}</span>
                 </li>
@@ -87,13 +87,13 @@ const PricingSection = () => {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
+            initial={false}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="relative p-6 md:p-7 rounded-2xl bg-white border-2 border-[#2563eb]/60 shadow-[0_24px_60px_-24px_rgba(37,99,235,0.35)] scale-105 transition-all duration-300"
+            className="relative p-6 md:p-7 rounded-2xl bg-white border-2 border-[#1d4ed8]/60 shadow-[0_24px_60px_-24px_rgba(29,78,216,0.35)] scale-105 transition-all duration-300"
           >
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-[#2563eb] text-white text-sm font-semibold flex items-center gap-1">
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-[#1d4ed8] text-white text-sm font-semibold flex items-center gap-1">
               <Crown className="w-3.5 h-3.5" />
               Meilleur rapport qualité-prix
             </div>
@@ -108,14 +108,14 @@ const PricingSection = () => {
             <ul className="space-y-3.5 mb-6">
               {aaFeatures.map((f, i) => (
                 <li key={i} className="flex items-center gap-3">
-                  <div className="w-5 h-5 rounded-full bg-[#2563eb]/10 flex items-center justify-center flex-shrink-0">
-                    <Check className="w-3 h-3 text-[#2563eb]" />
+                  <div className="w-5 h-5 rounded-full bg-[#1d4ed8]/10 flex items-center justify-center flex-shrink-0">
+                    <Check className="w-3 h-3 text-[#1d4ed8]" />
                   </div>
                   <span className="text-[#111111]">{f}</span>
                 </li>
               ))}
             </ul>
-            <Button size="lg" className="w-full bg-[#2563eb] hover:bg-[#1d4ed8]" onClick={handleBuyAllAccess}>
+            <Button size="lg" className="w-full bg-[#1d4ed8] hover:bg-[#1e40af]" onClick={handleBuyAllAccess}>
               Obtenir le Pass �?" ${aaPrice}
             </Button>
           </motion.div>
