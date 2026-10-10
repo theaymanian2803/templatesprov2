@@ -284,15 +284,16 @@ html[lang='ar'] [class*='font-slab'] {
 
 @media (max-width: 768px) {
   .hero-actions { gap: 8px; margin-bottom: 14px; }
+  .hero-button { min-height: 38px; padding: 0 14px; font-size: 12px; gap: 6px; }
 }
 
 @media (max-width: 480px) {
-  .hero-actions { flex-direction: column; align-items: stretch; max-width: 260px; margin-left: auto; margin-right: auto; }
-  .hero-button { justify-content: center; min-height: 42px; }
+  .hero-actions { flex-direction: column; align-items: stretch; max-width: 210px; margin-left: auto; margin-right: auto; }
+  .hero-button { justify-content: center; min-height: 36px; }
 }
 
 @media (max-width: 360px) {
-  .hero-actions { max-width: 100%; }
+  .hero-actions { max-width: 190px; }
 }
 
 .hero-button {
@@ -329,16 +330,15 @@ html[lang='ar'] [class*='font-slab'] {
 }
 
 @media (max-width: 768px) {
-  .hero-search { max-width: 480px; }
+  .hero-search { max-width: 480px; padding: 5px 15px; }
   .hero-search input { height: 40px; font-size: 13px; }
-  .hero-search button { height: 40px; padding: 0 16px; font-size: 12px; }
+  .hero-search button { display: none; }
 }
 
 @media (max-width: 480px) {
-  .hero-search { flex-wrap: wrap; align-items: stretch; padding: 8px; max-width: 100%; }
-  .hero-search > svg { margin: 0 4px 0 6px; align-self: center; }
-  .hero-search input { width: calc(100% - 38px); height: 38px; }
-  .hero-search button { width: 100%; height: 38px; justify-content: center; margin-top: 4px; }
+  .hero-search { padding: 6px 14px; max-width: 100%; }
+  .hero-search > svg { margin: 0 4px 0 2px; align-self: center; }
+  .hero-search input { height: 38px; }
 }
 
 @media (max-width: 360px) {
@@ -747,11 +747,11 @@ html[lang='ar'] .hero-copy p span:last-child {
 }
 
 @media (max-width: 480px) {
-  .device-stage { --ds-scale: 0.8; }
+  .device-stage { --ds-scale: 0.72; }
 }
 
 @media (max-width: 360px) {
-  .device-stage { --ds-scale: 0.7; }
+  .device-stage { --ds-scale: 0.64; }
 }
 
 /* ============================================================
@@ -1010,4 +1010,21 @@ html[lang='ar'] .hero-copy p span:last-child {
 @media (max-width: 640px) {
   .showcase-copy { padding: 26px 22px 30px; }
   .app-phone { width: min(66vw, 230px); }
+}
+
+/* ============================================================
+   NOTEBOOK PAPER — ruled-lines texture for alternating sections
+   ============================================================ */
+
+.paper-lines {
+  background-color: #FBFBFA;
+  background-image:
+    linear-gradient(90deg, transparent 24px, rgba(232, 90, 45, 0.09) 24px, rgba(232, 90, 45, 0.09) 25px, transparent 25px),
+    repeating-linear-gradient(0deg, transparent 0, transparent 28px, rgba(22, 22, 22, 0.05) 28px, rgba(22, 22, 22, 0.05) 29px);
+}
+
+[dir='rtl'] .paper-lines {
+  background-image:
+    linear-gradient(270deg, transparent 24px, rgba(232, 90, 45, 0.09) 24px, rgba(232, 90, 45, 0.09) 25px, transparent 25px),
+    repeating-linear-gradient(0deg, transparent 0, transparent 28px, rgba(22, 22, 22, 0.05) 28px, rgba(22, 22, 22, 0.05) 29px);
 }

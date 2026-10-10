@@ -9,7 +9,7 @@ const WebsiteAppShowcase = () => {
   const { t } = useTranslation()
 
   return (
-    <section id="showcase" className="relative bg-[#FBFBFA] py-20 md:py-28 text-[#111111]">
+    <section id="showcase" className="relative paper-lines py-20 md:py-28 text-[#111111]">
       <div className="container mx-auto max-w-6xl">
         <div className="showcase-composition">
           {/* Website — fills the space, static (no scrolling) */}

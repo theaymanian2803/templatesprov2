@@ -21,7 +21,7 @@ const PromoBanner = () => {
   }
 
   return (
-    <section className="relative overflow-hidden bg-[#FBFBFA] text-[#111111] py-20 md:py-24">
+    <section className="relative overflow-hidden paper-lines text-[#111111] py-20 md:py-24">
       {/* subtle warm atmospheric light from the right */}
       <div
         aria-hidden

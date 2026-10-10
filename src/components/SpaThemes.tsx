@@ -26,12 +26,7 @@ const SpaThemes = () => {
   if (!isLoading && (!templates || templates.length === 0)) return null
 
   return (
-    <section className="relative overflow-hidden py-20 md:py-24 text-[#111111]">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{ background: 'linear-gradient(180deg, #FBFBFA 0%, #FBFBFA 100%)' }}
-      />
+    <section className="relative overflow-hidden paper-lines py-20 md:py-24 text-[#111111]">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"

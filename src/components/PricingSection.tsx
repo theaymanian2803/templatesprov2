@@ -35,7 +35,7 @@ const PricingSection = () => {
   };
 
   return (
-    <section id="pricing" className="relative py-14 md:py-16 bg-[#FBFBFA] text-[#111111] overflow-hidden">
+    <section id="pricing" className="relative py-14 md:py-16 paper-lines text-[#111111] overflow-hidden">
       <div className="absolute top-20 left-1/4 w-72 h-72 rounded-full bg-primary/5 blur-[80px]" />
       <div className="absolute bottom-20 right-1/4 w-64 h-64 rounded-full bg-accent/5 blur-[60px]" />
 

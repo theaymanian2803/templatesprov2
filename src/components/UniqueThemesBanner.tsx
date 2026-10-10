@@ -9,14 +9,14 @@ const UniqueThemesBanner = () => {
   const { t } = useTranslation()
 
   return (
-    <section className="relative overflow-hidden py-20 md:py-24 text-[#111111]">
-      {/* subtle warm lit ground, light from the left */}
+    <section className="relative overflow-hidden paper-lines py-20 md:py-24 text-[#111111]">
+      {/* subtle warm radial light from the left */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'linear-gradient(180deg, #FBFBFA 0%, #F6F5F2 100%), radial-gradient(80% 60% at 0% 50%, rgba(239,122,82,0.04) 0%, rgba(239,122,82,0) 55%)',
+            'radial-gradient(80% 60% at 0% 50%, rgba(239,122,82,0.04) 0%, rgba(239,122,82,0) 55%)',
         }}
       />
 
