@@ -118,8 +118,8 @@ const TemplateCard = ({
             {downloadCount.toLocaleString()}
           </div>
 
-          {/* Hover overlay: Read more + cart icon */}
-          <div className="absolute inset-0 bg-foreground/55 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3 backdrop-blur-[2px]">
+          {/* Hover overlay: Read more + cart icon (desktop only — touch devices get the footer row below) */}
+          <div className="absolute inset-0 bg-foreground/55 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:flex items-center justify-center gap-3 backdrop-blur-[2px]">
             <button
               onClick={handleReadMore}
               className="inline-flex items-center gap-2 px-4 h-10 rounded-lg bg-background text-foreground text-sm font-semibold shadow-md hover:bg-primary hover:text-primary-foreground active:scale-95 transition-all">
@@ -174,6 +174,22 @@ const TemplateCard = ({
             <div className={`font-extrabold text-lg tracking-tight ${isFree ? 'text-emerald-600' : 'text-foreground'}`}>
               {isFree ? t('card.free', { defaultValue: 'Free' }) : `$${Number(price).toFixed(0)}`}
             </div>
+          </div>
+
+          {/* Mobile action row — always visible so actions are never hidden on touch */}
+          <div className="flex sm:hidden items-center gap-2 mt-3">
+            <button
+              onClick={handleReadMore}
+              className="inline-flex flex-1 items-center justify-center gap-2 h-10 rounded-lg border border-border/70 text-sm font-semibold text-foreground hover:bg-primary hover:text-primary-foreground active:scale-95 transition-all">
+              <ArrowRight className="w-4 h-4" />
+              {t('card.readMore')}
+            </button>
+            <button
+              onClick={handleAddToCart}
+              aria-label={isInCart(id) ? t('card.inCart') : t('card.addToCart')}
+              className="w-10 h-10 rounded-lg bg-primary text-primary-foreground flex items-center justify-center active:scale-95 transition-all">
+              <ShoppingCart className="w-4 h-4" />
+            </button>
           </div>
         </div>
       </div>

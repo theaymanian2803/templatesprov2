@@ -71,6 +71,7 @@ html[lang='ar'] [class*='font-slab'] {
     @apply bg-background text-foreground antialiased;
     font-family: 'Inter', system-ui, sans-serif;
     font-feature-settings: 'cv11', 'ss01';
+    overflow-x: hidden;
   }
 
   h1, h2 {

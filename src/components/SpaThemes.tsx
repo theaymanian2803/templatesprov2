@@ -69,7 +69,7 @@ const SpaThemes = () => {
           </div>
 
           {/* Cards Grid – reuse ThemeCard */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {isLoading
               ? Array.from({ length: 4 }).map((_, i) => <ThemeCardSkeleton key={i} />)
               : templates?.slice(0, 4).map((template, index) => (

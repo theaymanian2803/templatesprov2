@@ -59,7 +59,7 @@ const FeaturedThemes = () => {
 
           {/* Right: 2x2 Grid of theme cards */}
           <div className="flex-1 w-full">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 gap-4 sm:gap-6">
               {isLoading
                 ? Array.from({ length: 4 }).map((_, i) => <ThemeCardSkeleton key={i} />)
                 : templates?.slice(0, 4).map((template, index) => (
