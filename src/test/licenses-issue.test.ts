@@ -27,7 +27,7 @@ vi.mock('@/server/db/client', () => ({ db: h.db, client: {} }))
 vi.mock('@/server/admin', () => ({ requireUser: vi.fn() }))
 vi.mock('@tanstack/react-start', () => ({ createServerFn: () => ({ handler: (fn: unknown) => fn }) }))
 
-import { issueKeysForOrder } from '@/server/functions/licenses'
+import { issueKeysForOrder } from '@/server/functions/licenses-issue'
 
 const USER = 'user-1'
 const ORDER = 'order-1'

@@ -13,7 +13,7 @@ import {
 import { eq, desc, inArray } from 'drizzle-orm'
 import { requireUser } from '../admin'
 import { paypalAccessToken, PAYPAL_API } from './paypal'
-import { issueKeysForOrder } from './licenses'
+import { issueKeysForOrder } from './licenses-issue'
 
 const ALL_ACCESS_PRICE = 300
 
