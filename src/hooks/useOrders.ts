@@ -3,8 +3,8 @@ import { getMyOrders, getOrderWithItems } from "@/server/functions/orders"
 import { adminUpdateOrderStatus, adminDeleteOrder } from "@/server/functions/admin"
 
 export type OrderStatus = "pending" | "processing" | "completed" | "cancelled" | "refunded"
-export interface OrderItem { id: string; order_id: string; template_id: string; template_title: string; license_type: string; price: number; created_at: string }
-export interface Order { id: string; user_id: string; user_email: string; status: OrderStatus; total_amount: number; paypal_order_id: string | null; created_at: string; updated_at: string; items?: OrderItem[] }
+export interface OrderItem { id: string; order_id: string; template_id: string; template_title: string; license_type: string; price: number; created_at: Date }
+export interface Order { id: string; user_id: string; user_email: string; status: OrderStatus; total_amount: number; paypal_order_id: string | null; created_at: Date; updated_at: Date; items?: OrderItem[] }
 
 export const useOrders = () => {
   return useQuery({ queryKey: ["orders"], queryFn: async () => getMyOrders() as unknown as Order[] })

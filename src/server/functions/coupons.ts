@@ -3,6 +3,7 @@ import { db } from '../db/client'
 import { coupons } from '../db/schema'
 import { eq, desc } from 'drizzle-orm'
 import { requireAdmin } from '../admin'
+import { logAudit } from '../audit'
 
 export const listCoupons = createServerFn({ method: 'GET' }).handler(async () => {
   await requireAdmin()
@@ -12,7 +13,7 @@ export const listCoupons = createServerFn({ method: 'GET' }).handler(async () =>
 export const createCoupon = createServerFn({ method: 'POST' })
   .validator((c: { code: string; discount_type?: string; discount_value?: number; min_order_amount?: number; max_uses?: number | null; is_active?: boolean; expires_at?: string | null }) => c)
   .handler(async ({ data }) => {
-    await requireAdmin()
+    const admin = await requireAdmin()
     const [row] = await db
       .insert(coupons)
       .values({
@@ -25,22 +26,25 @@ export const createCoupon = createServerFn({ method: 'POST' })
         expires_at: data.expires_at ? new Date(data.expires_at) : null,
       })
       .returning()
+    await logAudit({ action: 'coupon.create', entityType: 'coupon', entityId: row.id, actor: admin, metadata: { code: row.code } })
     return row
   })
 
 export const deleteCoupon = createServerFn({ method: 'POST' })
   .validator((id: string) => id)
   .handler(async ({ data: id }) => {
-    await requireAdmin()
+    const admin = await requireAdmin()
     await db.delete(coupons).where(eq(coupons.id, id))
+    await logAudit({ action: 'coupon.delete', entityType: 'coupon', entityId: id, actor: admin })
     return { success: true }
   })
 
 export const toggleCoupon = createServerFn({ method: 'POST' })
   .validator((v: { id: string; is_active: boolean }) => v)
   .handler(async ({ data }) => {
-    await requireAdmin()
+    const admin = await requireAdmin()
     await db.update(coupons).set({ is_active: data.is_active }).where(eq(coupons.id, data.id))
+    await logAudit({ action: 'coupon.toggle', entityType: 'coupon', entityId: data.id, actor: admin, metadata: { is_active: data.is_active } })
     return { success: true }
   })
 

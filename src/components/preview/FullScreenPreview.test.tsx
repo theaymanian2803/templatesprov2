@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import "@/i18n";
 import FullScreenPreview from "./FullScreenPreview";
 
 const renderPreview = (onClose = vi.fn()) =>

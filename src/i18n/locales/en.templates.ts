@@ -20,6 +20,7 @@ export default {
     noItems: 'No items match your search',
     noItemsDesc: 'Try removing a filter or browsing all templates.',
     resetFilters: 'Reset filters',
+    uncategorized: 'Uncategorized',
     showResults_one: 'Show {{count}} result',
     showResults_other: 'Show {{count}} results',
   },

@@ -17,10 +17,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Heart, Search, ArrowUpDown, Filter, Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 type SortOption = "newest" | "price-low" | "price-high" | "rating" | "popular";
 
 const Favorites = () => {
+  const { t } = useTranslation();
   const { user, loading: authLoading } = useAuth();
   const { favorites, loading: favoritesLoading } = useFavorites();
   const { data: allTemplates, isLoading: templatesLoading } = useTemplates();
@@ -100,10 +102,10 @@ const Favorites = () => {
               <Heart className="w-8 h-8 text-primary" />
             </div>
             <h1 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-2">
-              Mes favoris
+              {t('favorites.title')}
             </h1>
             <p className="text-muted-foreground max-w-md mx-auto">
-              Votre collection de templates sauvegardés. Parcourez, filtrez et trouvez votre match parfait.
+              {t('favorites.subtitle')}
             </p>
           </div>
 
@@ -117,13 +119,13 @@ const Favorites = () => {
               <div className="glass-card max-w-md mx-auto p-8 rounded-2xl border border-border/50">
                 <Heart className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
                 <h2 className="text-xl font-display font-bold text-foreground mb-2">
-                  Aucun favori
+                  {t('favorites.emptyTitle')}
                 </h2>
                 <p className="text-muted-foreground mb-6">
-                  Explorez les templates et ajoutez vos favoris pour les retrouver ici.
+                  {t('favorites.emptyDesc')}
                 </p>
                 <Link to="/">
-                  <Button variant="hero">Parcourir</Button>
+                  <Button variant="hero">{t('favorites.browse')}</Button>
                 </Link>
               </div>
             </div>
@@ -136,7 +138,7 @@ const Favorites = () => {
                   <div className="relative flex-1 w-full">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <Input
-                      placeholder="Rechercher dans mes favoris..."
+                      placeholder={t('favorites.searchPlaceholder')}
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="pl-10"
@@ -148,12 +150,12 @@ const Favorites = () => {
                     <Filter className="w-5 h-5 text-muted-foreground hidden md:block" />
                     <Select value={categoryFilter} onValueChange={setCategoryFilter}>
                       <SelectTrigger className="w-full md:w-[160px]">
-                        <SelectValue placeholder="Catégorie" />
+                        <SelectValue placeholder={t('favorites.category')} />
                       </SelectTrigger>
                       <SelectContent>
                         {categories.map((cat) => (
                           <SelectItem key={cat} value={cat}>
-                            {cat === "all" ? "Toutes les catégories" : cat}
+                            {cat === "all" ? t('favorites.allCategories') : cat}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -165,14 +167,14 @@ const Favorites = () => {
                     <ArrowUpDown className="w-5 h-5 text-muted-foreground hidden md:block" />
                     <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
                       <SelectTrigger className="w-full md:w-[160px]">
-                        <SelectValue placeholder="Trier par" />
+                        <SelectValue placeholder={t('favorites.sortBy')} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="newest">Plus récents</SelectItem>
-                        <SelectItem value="popular">Les plus populaires</SelectItem>
-                        <SelectItem value="rating">Les mieux notés</SelectItem>
-                        <SelectItem value="price-low">Prix croissant</SelectItem>
-                        <SelectItem value="price-high">Prix décroissant</SelectItem>
+                        <SelectItem value="newest">{t('favorites.sortNewest')}</SelectItem>
+                        <SelectItem value="popular">{t('favorites.sortPopular')}</SelectItem>
+                        <SelectItem value="rating">{t('favorites.sortRating')}</SelectItem>
+                        <SelectItem value="price-low">{t('favorites.sortPriceLow')}</SelectItem>
+                        <SelectItem value="price-high">{t('favorites.sortPriceHigh')}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -182,8 +184,7 @@ const Favorites = () => {
               {/* Results Count */}
               <div className="flex items-center justify-between mb-6">
                 <p className="text-muted-foreground">
-                  Affichage de <span className="font-semibold text-foreground">{filteredTemplates.length}</span> sur{" "}
-                  <span className="font-semibold text-foreground">{favorites.length}</span> favoris
+                  {t('favorites.showing', { shown: filteredTemplates.length, total: favorites.length })}
                 </p>
               </div>
 
@@ -191,7 +192,7 @@ const Favorites = () => {
               {filteredTemplates.length === 0 ? (
                 <div className="text-center py-12">
                   <p className="text-muted-foreground">
-                    Aucun template ne correspond à votre recherche. Essayez de modifier vos filtres.
+                    {t('favorites.noMatch')}
                   </p>
                 </div>
               ) : (

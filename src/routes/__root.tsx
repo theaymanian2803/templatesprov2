@@ -1,5 +1,6 @@
 import { createRootRoute, HeadContent, Outlet, Scripts } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { MotionConfig } from 'framer-motion'
 import { TooltipProvider } from '@/components/ui/tooltip'
@@ -53,6 +54,7 @@ function RootDocument({ children }: { children: ReactNode }) {
 }
 
 function RootComponent() {
+  const { t } = useTranslation()
   return (
     <MotionConfig reducedMotion="user">
       <QueryClientProvider client={queryClient}>
@@ -60,12 +62,19 @@ function RootComponent() {
           <FavoritesProvider>
             <CartProvider>
               <TooltipProvider>
+                <a
+                  href="#main-content"
+                  className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[200] focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-[#111111] focus:shadow-lg">
+                  {t('common.skipToContent')}
+                </a>
                 <Toaster />
                 <Sonner />
                 <ScrollToTop />
                 <CookieConsent />
                 <ChatBubble />
-                <Outlet />
+                <div id="main-content">
+                  <Outlet />
+                </div>
               </TooltipProvider>
             </CartProvider>
           </FavoritesProvider>

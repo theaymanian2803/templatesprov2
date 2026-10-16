@@ -1,14 +1,18 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { AdminSidebar } from '@/components/admin/AdminSidebar'
+import { AuditLogList } from '@/components/admin/AuditLogList'
 import { ContactList } from '@/components/admin/ContactList'
 import { CouponList } from '@/components/admin/CouponList'
 import { DownloadList } from '@/components/admin/DownloadList'
+import { NewsletterList } from '@/components/admin/NewsletterList'
 import { OrderDetails } from '@/components/admin/OrderDetails'
 import { OrderList } from '@/components/admin/OrderList'
 import RefundRequestList from '@/components/admin/RefundRequestList'
 import { ReviewList } from '@/components/admin/ReviewList'
+import { SettingsPanel } from '@/components/admin/SettingsPanel'
 import { TemplateForm } from '@/components/admin/TemplateForm'
 import { TemplateList } from '@/components/admin/TemplateList'
+import { UserList } from '@/components/admin/UserList'
 import Footer from '@/components/Footer'
 import Navbar from '@/components/Navbar'
 import {
@@ -260,6 +264,10 @@ const Admin = () => {
     reviews: 'Reviews',
     contacts: 'Messages',
     refunds: 'Refunds',
+    users: 'Users',
+    newsletter: 'Newsletter',
+    settings: 'Settings',
+    audit: 'Audit log',
   }
 
   return (
@@ -384,6 +392,10 @@ const Admin = () => {
                 {activeTab === 'reviews' && <ReviewList />}
                 {activeTab === 'contacts' && <ContactList />}
                 {activeTab === 'downloads' && <DownloadList />}
+                {activeTab === 'users' && <UserList />}
+                {activeTab === 'newsletter' && <NewsletterList />}
+                {activeTab === 'settings' && <SettingsPanel />}
+                {activeTab === 'audit' && <AuditLogList />}
                 {activeTab === 'refunds' && (
                   <div className="glass-card p-6 rounded-2xl border border-border/50">
                     <RefundRequestList />

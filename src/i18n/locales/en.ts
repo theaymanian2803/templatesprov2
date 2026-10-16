@@ -6,6 +6,7 @@ export default {
     closeMenu: 'Close menu',
     openMenu: 'Open menu',
     loading: 'Loading…',
+    skipToContent: 'Skip to content',
   },
   nav: {
     browse: 'Browse',
@@ -74,6 +75,8 @@ export default {
       'A short weekly note with new templates, code, and insight from the people who build them. No spam — unsubscribe anytime.',
     emailPlaceholder: 'Enter your email',
     subscribe: 'Subscribe',
+    subscribeSuccess: 'Thanks — you are subscribed!',
+    subscribeError: 'Subscription failed',
     rights: '© {{year}} Unccodestore. All rights reserved.',
     privacy: 'Privacy',
     terms: 'Terms',

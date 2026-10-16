@@ -25,62 +25,75 @@ import {
   Send,
 } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link } from '@/lib/router'
+import { seoHead } from '@/lib/site'
 
-const methodIcons = [Mail, Phone, MessageSquare, MapPin]
-
-const quickLinks = [
-  { icon: FileQuestion, title: 'FAQ', description: 'Réponses rapides', href: '/faq' },
-  {
-    icon: Headphones,
-    title: 'Centre d\'aide',
-    description: 'Aide technique',
-    href: '/faq#support',
-  },
-]
-
-const contactData = {
-  hero_badge: 'Contactez-nous',
-  hero_headline: 'Nous serions ravis de',
-  hero_highlight: 'vous entendre',
-  hero_subheadline: 'Une question, un feedback ou besoin d\'aide ? Notre équipe est là pour vous.',
-  contact_methods: [
-    { title: 'Nous écrire', description: 'Envoyez-nous un email à tout moment', value: 'hello@unccodestore.com', action: 'mailto:hello@unccodestore.com' },
-    { title: 'Nous appeler', description: 'Lun-Ven, 9h-18h (heure EST)', value: '+1 (555) 123-4567', action: 'tel:+15551234567' },
-    { title: 'Chat en direct', description: 'Discutez avec notre équipe', value: 'Disponible 24h/24', action: '#' },
-    { title: 'Nous rendre visite', description: 'Notre siège social', value: '123 Design Street, NYC', action: '#' },
-  ],
-  form_title: 'Envoyez-nous un message',
-  form_subtitle: 'Remplissez le formulaire ci-dessous et nous vous répondrons dans les plus brefs délais.',
-  business_hours: [
-    { day: 'Lundi - Vendredi', hours: '9h00 - 18h00 (EST)' },
-    { day: 'Samedi', hours: '10h00 - 16h00 (EST)' },
-    { day: 'Dimanche', hours: 'Fermé' },
-  ],
-  live_chat_note: '💬 Chat en direct disponible 24h/24',
-  response_times: [
-    { label: 'Email', time: 'Sous 24 heures' },
-    { label: 'Chat en direct', time: 'Instantané' },
-    { label: 'Téléphone', time: 'Pendant les heures d\'ouverture' },
-  ],
-  location_title: 'Notre adresse',
-  location_subtitle: 'Rendez-nous visite à notre siège social',
-  location_address_line1: '123 Design Street',
-  location_address_line2: 'New York, NY 10001',
-  location_lat: 40.7128,
-  location_lng: -74.006,
-  location_zoom: 15,
+const LOCATION = {
+  address_line1: '123 Design Street',
+  address_line2: 'New York, NY 10001',
+  lat: 40.7128,
+  lng: -74.006,
+  zoom: 15,
 }
 
 const Contact = () => {
   const { toast } = useToast()
+  const { t } = useTranslation()
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const s = contactData
 
-  const contactMethods = s.contact_methods.map((m, i) => ({
-    ...m,
-    icon: methodIcons[i % methodIcons.length],
-  }))
+  const contactMethods = [
+    {
+      icon: Mail,
+      title: t('contact.writeTitle'),
+      description: t('contact.writeDesc'),
+      value: 'hello@unccodestore.com',
+      action: 'mailto:hello@unccodestore.com',
+    },
+    {
+      icon: Phone,
+      title: t('contact.callTitle'),
+      description: t('contact.callDesc'),
+      value: '+1 (555) 123-4567',
+      action: 'tel:+15551234567',
+    },
+    {
+      icon: MessageSquare,
+      title: t('contact.chatTitle'),
+      description: t('contact.chatDesc'),
+      value: t('contact.chatValue'),
+      action: '#',
+    },
+    {
+      icon: MapPin,
+      title: t('contact.visitTitle'),
+      description: t('contact.visitDesc'),
+      value: '123 Design Street, NYC',
+      action: '#',
+    },
+  ]
+
+  const quickLinks = [
+    { icon: FileQuestion, title: t('contact.faqTitle'), description: t('contact.faqDesc'), href: '/faq' },
+    {
+      icon: Headphones,
+      title: t('contact.helpCenterTitle'),
+      description: t('contact.helpCenterDesc'),
+      href: '/faq#support',
+    },
+  ]
+
+  const businessHours = [
+    { day: t('contact.hoursWeekdays'), hours: t('contact.hoursWeekdaysTime') },
+    { day: t('contact.hoursSaturday'), hours: t('contact.hoursSaturdayTime') },
+    { day: t('contact.hoursSunday'), hours: t('contact.hoursSundayTime') },
+  ]
+
+  const responseTimes = [
+    { label: t('contact.responseEmail'), time: t('contact.responseEmailTime') },
+    { label: t('contact.responseChat'), time: t('contact.responseChatTime') },
+    { label: t('contact.responsePhone'), time: t('contact.responsePhoneTime') },
+  ]
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -107,11 +120,11 @@ const Contact = () => {
     setIsSubmitting(false)
 
     if (error) {
-      toast({ title: 'Erreur lors de l\'envoi', description: error.message, variant: 'destructive' })
+      toast({ title: t('contact.errorTitle'), description: error.message, variant: 'destructive' })
       return
     }
 
-    toast({ title: 'Message envoyé !', description: 'Nous vous répondrons sous 24 heures.' })
+    toast({ title: t('contact.sentTitle'), description: t('contact.sentDesc') })
     ;(e.target as HTMLFormElement).reset()
   }
 
@@ -128,18 +141,13 @@ const Contact = () => {
           <div className="text-center max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-50 text-orange-500 font-medium text-sm mb-6">
               <Mail className="w-4 h-4" />
-              {s?.hero_badge || 'Contactez-nous'}
+              {t('contact.heroBadge')}
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-6 leading-[1.1]">
-              {s?.hero_headline || "Nous serions ravis de"}{' '}
-              <span className="text-orange-500">
-                {s?.hero_highlight || 'vous entendre'}
-              </span>
+              {t('contact.heroHeadline')}{' '}
+              <span className="text-orange-500">{t('contact.heroHighlight')}</span>
             </h1>
-            <p className="text-lg text-gray-500 leading-[1.7]">
-              {s?.hero_subheadline ||
-                'Une question, un feedback ou besoin d\'aide ? Notre équipe est là pour vous.'}
-            </p>
+            <p className="text-lg text-gray-500 leading-[1.7]">{t('contact.heroSubheadline')}</p>
           </div>
         </div>
       </section>
@@ -173,61 +181,72 @@ const Contact = () => {
             <div className="lg:col-span-3">
               <div className="bg-white p-8 rounded-xl border border-gray-200">
                 <h2 className="text-2xl font-extrabold text-gray-900 mb-2">
-                  {s?.form_title || 'Envoyez-nous un message'}
+                  {t('contact.formTitle')}
                 </h2>
-                <p className="text-gray-500 mb-8 leading-[1.7]">
-                  {s?.form_subtitle ||
-                    "Remplissez le formulaire ci-dessous et nous vous répondrons dans les plus brefs délais."}
-                </p>
+                <p className="text-gray-500 mb-8 leading-[1.7]">{t('contact.formSubtitle')}</p>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="firstName">Prénom</Label>
-                      <Input id="firstName" name="firstName" placeholder="Jean" required />
+                      <Label htmlFor="firstName">{t('contact.firstName')}</Label>
+                      <Input
+                        id="firstName"
+                        name="firstName"
+                        placeholder={t('contact.firstNamePlaceholder')}
+                        required
+                      />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="lastName">Nom</Label>
-                      <Input id="lastName" name="lastName" placeholder="Dupont" required />
+                      <Label htmlFor="lastName">{t('contact.lastName')}</Label>
+                      <Input
+                        id="lastName"
+                        name="lastName"
+                        placeholder={t('contact.lastNamePlaceholder')}
+                        required
+                      />
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="email">Adresse e-mail</Label>
+                    <Label htmlFor="email">{t('contact.emailLabel')}</Label>
                     <Input
                       id="email"
                       name="email"
                       type="email"
-                      placeholder="jean@exemple.com"
+                      placeholder={t('contact.emailPlaceholder')}
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="subject">Sujet</Label>
+                    <Label htmlFor="subject">{t('contact.subject')}</Label>
                     <Select name="subject" required>
                       <SelectTrigger>
-                        <SelectValue placeholder="Choisissez un sujet" />
+                        <SelectValue placeholder={t('contact.subjectPlaceholder')} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="general">Demande générale</SelectItem>
-                        <SelectItem value="support">Support technique</SelectItem>
-                        <SelectItem value="sales">Question commerciale</SelectItem>
-                        <SelectItem value="licensing">Aide licence</SelectItem>
-                        <SelectItem value="refund">Demande de remboursement</SelectItem>
-                        <SelectItem value="partnership">Partenariat</SelectItem>
-                        <SelectItem value="other">Autre</SelectItem>
+                        <SelectItem value="general">{t('contact.subjectGeneral')}</SelectItem>
+                        <SelectItem value="support">{t('contact.subjectSupport')}</SelectItem>
+                        <SelectItem value="sales">{t('contact.subjectSales')}</SelectItem>
+                        <SelectItem value="licensing">{t('contact.subjectLicensing')}</SelectItem>
+                        <SelectItem value="refund">{t('contact.subjectRefund')}</SelectItem>
+                        <SelectItem value="partnership">{t('contact.subjectPartnership')}</SelectItem>
+                        <SelectItem value="other">{t('contact.subjectOther')}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="orderNumber">Numéro de commande (optionnel)</Label>
-                    <Input id="orderNumber" name="orderNumber" placeholder="TP-XXXXXX" />
+                    <Label htmlFor="orderNumber">{t('contact.orderNumber')}</Label>
+                    <Input
+                      id="orderNumber"
+                      name="orderNumber"
+                      placeholder={t('contact.orderNumberPlaceholder')}
+                    />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="message">Message</Label>
+                    <Label htmlFor="message">{t('contact.message')}</Label>
                     <Textarea
                       id="message"
                       name="message"
-                      placeholder="Dites-nous comment nous pouvons vous aider..."
+                      placeholder={t('contact.messagePlaceholder')}
                       rows={5}
                       required
                     />
@@ -238,11 +257,11 @@ const Contact = () => {
                     className="w-full gap-2 bg-orange-500 text-white hover:bg-orange-600 font-semibold"
                     disabled={isSubmitting}>
                     {isSubmitting ? (
-                      <>Envoi en cours...</>
+                      <>{t('contact.sending')}</>
                     ) : (
                       <>
                         <Send className="w-5 h-5" />
-                        Envoyer
+                        {t('contact.send')}
                       </>
                     )}
                   </Button>
@@ -253,7 +272,7 @@ const Contact = () => {
             {/* Sidebar Info */}
             <div className="lg:col-span-2 space-y-6">
               <div className="bg-white p-6 rounded-xl border border-gray-200">
-                <h3 className="font-bold text-gray-900 mb-4">Liens rapides</h3>
+                <h3 className="font-bold text-gray-900 mb-4">{t('contact.quickLinksTitle')}</h3>
                 <div className="space-y-3">
                   {quickLinks.map((link, index) => (
                     <Link
@@ -276,10 +295,10 @@ const Contact = () => {
               <div className="bg-white p-6 rounded-xl border border-gray-200">
                 <div className="flex items-center gap-2 mb-4">
                   <Clock className="w-5 h-5 text-orange-500" />
-                  <h3 className="font-bold text-gray-900">Horaires d'ouverture</h3>
+                  <h3 className="font-bold text-gray-900">{t('contact.businessHoursTitle')}</h3>
                 </div>
                 <div className="space-y-2 text-sm">
-                  {(s?.business_hours || []).map((h, i) => (
+                  {businessHours.map((h, i) => (
                     <div key={i} className="flex justify-between">
                       <span className="text-gray-500">{h.day}</span>
                       <span className="text-gray-900">{h.hours}</span>
@@ -287,17 +306,15 @@ const Contact = () => {
                   ))}
                 </div>
                 <div className="mt-4 p-3 rounded-lg bg-orange-50 text-sm">
-                  <span className="text-orange-500 font-medium">
-                    {s?.live_chat_note || '💬 Chat en direct disponible 24h/24 et 7j/7'}
-                  </span>
+                  <span className="text-orange-500 font-medium">{t('contact.liveChatNote')}</span>
                 </div>
               </div>
 
               {/* Response Time */}
               <div className="bg-white p-6 rounded-xl border border-gray-200">
-                <h3 className="font-bold text-gray-900 mb-4">Délai de réponse estimé</h3>
+                <h3 className="font-bold text-gray-900 mb-4">{t('contact.responseTimesTitle')}</h3>
                 <div className="space-y-3">
-                  {(s?.response_times || []).map((r, i) => (
+                  {responseTimes.map((r, i) => (
                     <div key={i} className="flex items-center gap-3">
                       <div
                         className={`w-2 h-2 rounded-full ${i === 0 ? 'bg-orange-500' : i === 1 ? 'bg-amber-500' : 'bg-gray-300'}`}
@@ -319,37 +336,31 @@ const Contact = () => {
         <div className="container mx-auto">
           <div className="text-center mb-8">
             <h2 className="text-2xl font-extrabold text-gray-900 mb-2">
-              {s?.location_title || 'Notre adresse'}
+              {t('contact.locationTitle')}
             </h2>
-            <p className="text-gray-500">
-              {s?.location_subtitle || 'Rendez-nous visite'}
-            </p>
+            <p className="text-gray-500">{t('contact.locationSubtitle')}</p>
           </div>
           <div className="grid lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 rounded-xl overflow-hidden border border-gray-200 h-[400px]">
               <iframe
-                title="Our location"
+                title={t('contact.mapTitle')}
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
-                src={`https://www.openstreetmap.org/export/embed.html?bbox=${(s?.location_lng ?? -74.006) - 0.015},${(s?.location_lat ?? 40.7128) - 0.01},${(s?.location_lng ?? -74.006) + 0.015},${(s?.location_lat ?? 40.7128) + 0.01}&layer=mapnik&marker=${s?.location_lat ?? 40.7128},${s?.location_lng ?? -74.006}`}
+                src={`https://www.openstreetmap.org/export/embed.html?bbox=${LOCATION.lng - 0.015},${LOCATION.lat - 0.01},${LOCATION.lng + 0.015},${LOCATION.lat + 0.01}&layer=mapnik&marker=${LOCATION.lat},${LOCATION.lng}`}
               />
             </div>
             <div className="flex flex-col justify-center bg-white p-8 rounded-xl border border-gray-200">
               <MapPin className="w-10 h-10 text-orange-500 mb-4" />
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Adresse</h3>
-              <p className="text-gray-500 mb-1">
-                {s?.location_address_line1 || '123 Design Street'}
-              </p>
-              <p className="text-gray-500 mb-6">
-                {s?.location_address_line2 || 'New York, NY 10001'}
-              </p>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">{t('contact.addressLabel')}</h3>
+              <p className="text-gray-500 mb-1">{LOCATION.address_line1}</p>
+              <p className="text-gray-500 mb-6">{LOCATION.address_line2}</p>
               <a
-                href={`https://www.openstreetmap.org/?mlat=${s?.location_lat ?? 40.7128}&mlon=${s?.location_lng ?? -74.006}#map=${s?.location_zoom ?? 15}/${s?.location_lat ?? 40.7128}/${s?.location_lng ?? -74.006}`}
+                href={`https://www.openstreetmap.org/?mlat=${LOCATION.lat}&mlon=${LOCATION.lng}#map=${LOCATION.zoom}/${LOCATION.lat}/${LOCATION.lng}`}
                 target="_blank"
                 rel="noopener noreferrer">
                 <Button variant="outline" size="sm" className="gap-2 border-gray-300 text-gray-700 hover:border-orange-300">
-                  <MapPin className="w-4 h-4" /> Itinéraire
+                  <MapPin className="w-4 h-4" /> {t('contact.directions')}
                 </Button>
               </a>
             </div>
@@ -362,4 +373,12 @@ const Contact = () => {
   )
 }
 
-export const Route = createFileRoute('/contact')({ component: Contact })
+export const Route = createFileRoute('/contact')({
+  component: Contact,
+  head: () =>
+    seoHead({
+      title: 'Contact',
+      description: 'Contactez notre équipe pour toute question, feedback ou demande de support.',
+      path: '/contact',
+    }),
+})

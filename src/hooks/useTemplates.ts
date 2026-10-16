@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query"
-import { listTemplates, listTemplatesPaginated, getTemplate, getCategories } from "@/server/functions/templates"
+import { listTemplates, listTemplatesPaginated, getTemplate, getCategories, searchCatalog } from "@/server/functions/templates"
 
 export interface Template {
   id: string; title: string; description: string | null; admin_description?: string | null; category: string
   price: number; extended_price: number | null; image_url: string
   gallery_images: string[]; rating: number; sales: number; review_count?: number
   featured: boolean; tech_stack: string[]; features: string[]; demo_url: string | null
-  source_file_url?: string | null; youtube_id: string | null; license_product?: string | null; created_at: string; updated_at: string
+  source_file_url?: string | null; youtube_id: string | null; license_product?: string | null; created_at: Date; updated_at: Date
   download_count: number
 }
 
@@ -36,4 +36,33 @@ export const useTemplate = (id: string) => {
 
 export const useCategories = () => {
   return useQuery({ queryKey: ["template-categories"], queryFn: async () => getCategories() })
+}
+
+export interface CatalogSearchInput {
+  category?: string | null
+  query?: string
+  minPrice?: number
+  maxPrice?: number
+  onSale?: boolean
+  rating?: number | null
+  sales?: string[]
+  sort?: string
+  page?: number
+  pageSize?: number
+}
+
+export interface CatalogSearchResult {
+  data: Template[]
+  total: number
+  page: number
+  pageSize: number
+  totalPages: number
+  categoryCounts: Record<string, number>
+}
+
+export const useSearchCatalog = (options: CatalogSearchInput) => {
+  return useQuery({
+    queryKey: ["catalog-search", options],
+    queryFn: async () => searchCatalog({ data: options as any }) as Promise<CatalogSearchResult>,
+  })
 }

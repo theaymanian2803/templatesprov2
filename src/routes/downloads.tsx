@@ -19,8 +19,10 @@ import { Crown, Download, FileArchive, Loader2, Package, Rocket, Search, Star, T
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from '@/lib/router'
 import { useQueryClient } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 
 const Downloads = () => {
+  const { t } = useTranslation()
   const { user, loading: authLoading } = useAuth()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
@@ -56,8 +58,8 @@ const Downloads = () => {
       setDownloadingId(null)
     } catch (error: unknown) {
       toast({
-        title: 'Échec du téléchargement',
-        description: error instanceof Error ? error.message : 'Impossible de générer le lien de téléchargement',
+        title: t('downloads.downloadFailed'),
+        description: error instanceof Error ? error.message : t('downloads.downloadFailedDesc'),
         variant: 'destructive',
       })
     } finally {
@@ -66,16 +68,16 @@ const Downloads = () => {
   }
 
   const handleRemove = async (itemId: string, title: string) => {
-    if (!confirm(`Supprimer "${title}" de vos téléchargements ? Cette action est irréversible.`)) return
+    if (!confirm(t('downloads.confirmRemove', { title }))) return
     setDeletingId(itemId)
     try {
       await removePurchasedTemplate({ data: itemId })
 
       queryClient.invalidateQueries({ queryKey: ['purchased-templates'] })
       queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] })
-      toast({ title: 'Template supprimé', description: `"${title}" a été retiré de vos téléchargements.` })
+      toast({ title: t('downloads.removedTitle'), description: t('downloads.removedDesc', { title }) })
     } catch (error: unknown) {
-      toast({ title: 'Erreur', description: error instanceof Error ? error.message : 'Échec de la suppression', variant: 'destructive' })
+      toast({ title: t('downloads.errorTitle'), description: error instanceof Error ? error.message : t('downloads.removeFailed'), variant: 'destructive' })
     } finally {
       setDeletingId(null)
     }
@@ -93,10 +95,10 @@ const Downloads = () => {
         <div className="container mx-auto max-w-4xl">
           <div className="mb-8">
             <h1 className="text-3xl md:text-4xl font-display font-bold text-foreground">
-              Mes téléchargements
+              {t('downloads.title')}
             </h1>
             <p className="text-muted-foreground mt-1">
-              Accédez à tous vos templates achetés à tout moment
+              {t('downloads.subtitle')}
             </p>
           </div>
 
@@ -109,14 +111,14 @@ const Downloads = () => {
                 <Crown className="w-6 h-6" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-bold font-slab">Pass Tout Accès actif</p>
+                <p className="font-bold font-slab">{t('downloads.passActive')}</p>
                 <p className="text-sm text-white/85">
-                  Tous les templates du catalogue sont inclus – y compris les futurs ajouts.
+                  {t('downloads.passDesc')}
                 </p>
               </div>
               <Link to="/templates">
                 <Button size="sm" className="bg-white text-[#e85a2d] hover:bg-[#FFF4EF] font-semibold shrink-0">
-                  Parcourir le catalogue
+                  {t('downloads.browseCatalog')}
                 </Button>
               </Link>
             </div>
@@ -126,7 +128,7 @@ const Downloads = () => {
           <div className="relative mb-6">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
-              placeholder="Rechercher dans mes achats..."
+              placeholder={t('downloads.searchPlaceholder')}
               className="pl-10"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -144,16 +146,16 @@ const Downloads = () => {
               <CardContent className="flex flex-col items-center justify-center py-16 text-center">
                 <Package className="w-12 h-12 text-muted-foreground mb-4" />
                 <h3 className="text-lg font-semibold text-foreground mb-2">
-                  {search ? 'Aucun template trouvé' : 'Aucun achat pour le moment'}
+                  {search ? t('downloads.noTemplate') : t('downloads.noPurchases')}
                 </h3>
                 <p className="text-sm text-muted-foreground mb-4">
                   {search
-                    ? 'Essayez un autre terme de recherche'
-                    : 'Parcourez notre catalogue pour trouver le template parfait'}
+                    ? t('downloads.noTemplateHint')
+                    : t('downloads.noPurchasesHint')}
                 </p>
                 {!search && (
                   <Link to="/templates">
-                    <Button>Parcourir</Button>
+                    <Button>{t('downloads.browse')}</Button>
                   </Link>
                 )}
               </CardContent>
@@ -175,11 +177,11 @@ const Downloads = () => {
                         </Link>
                         <div className="flex items-center gap-2 text-xs text-muted-foreground">
                           <Badge variant="outline" className={`text-[10px] capitalize ${item.license_type === 'pass' ? 'border-[#e85a2d]/40 bg-[#e85a2d]/5 text-[#e85a2d]' : ''}`}>
-                            {item.license_type === 'pass' ? 'Pass Tout Accès' : item.license_type}
+                            {item.license_type === 'pass' ? t('downloads.passLabel') : item.license_type}
                           </Badge>
                           <span>·</span>
                           {item.license_type === 'pass' ? (
-                            <span className="text-[#e85a2d] font-semibold">Inclus</span>
+                            <span className="text-[#e85a2d] font-semibold">{t('downloads.included')}</span>
                           ) : (
                             <>
                               <span>{new Date(item.purchased_at).toLocaleDateString()}</span>
@@ -195,7 +197,7 @@ const Downloads = () => {
                       {!item.has_review && (
                         <Link to={`/template/${item.template_id}`}>
                           <Button variant="ghost" size="sm" className="gap-1 text-accent">
-                            <Star className="w-3 h-3" /> Avis
+                            <Star className="w-3 h-3" /> {t('downloads.review')}
                           </Button>
                         </Link>
                       )}
@@ -213,7 +215,7 @@ const Downloads = () => {
                             ) : (
                               <Download className="w-3 h-3" />
                             )}
-                            Télécharger
+                            {t('downloads.download')}
                           </Button>
                           <Button
                             size="sm"
@@ -223,11 +225,11 @@ const Downloads = () => {
                               setHostingTitle(item.template_title)
                               setHostingOpen(true)
                             }}>
-                            <Rocket className="w-3 h-3" /> Héberger
+                            <Rocket className="w-3 h-3" /> {t('downloads.host')}
                           </Button>
                         </>
                       ) : (
-                        <span className="text-xs text-muted-foreground">Fichier non disponible</span>
+                        <span className="text-xs text-muted-foreground">{t('downloads.fileUnavailable')}</span>
                       )}
                       {item.license_type !== 'pass' && (
                         <Button

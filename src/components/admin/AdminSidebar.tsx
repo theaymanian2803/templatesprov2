@@ -7,6 +7,10 @@ import {
   RotateCcw,
   LayoutDashboard,
   Download,
+  Users,
+  History,
+  Mail,
+  Settings,
 } from "lucide-react";
 import {
   Sidebar,
@@ -29,6 +33,10 @@ const managementItems = [
   { title: "Reviews", value: "reviews", icon: Star },
   { title: "Messages", value: "contacts", icon: MessageCircle },
   { title: "Refunds", value: "refunds", icon: RotateCcw },
+  { title: "Users", value: "users", icon: Users },
+  { title: "Newsletter", value: "newsletter", icon: Mail },
+  { title: "Settings", value: "settings", icon: Settings },
+  { title: "Audit log", value: "audit", icon: History },
 ];
 
 interface AdminSidebarProps {

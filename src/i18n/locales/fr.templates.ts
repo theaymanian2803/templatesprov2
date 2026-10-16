@@ -20,6 +20,7 @@ export default {
     noItems: 'Aucun élément ne correspond à votre recherche',
     noItemsDesc: 'Essayez de retirer un filtre ou de parcourir tous les templates.',
     resetFilters: 'Réinitialiser les filtres',
+    uncategorized: 'Non classé',
     showResults_one: 'Afficher {{count}} résultat',
     showResults_other: 'Afficher {{count}} résultats',
   },

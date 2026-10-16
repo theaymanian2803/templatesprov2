@@ -6,6 +6,7 @@ export default {
     closeMenu: 'إغلاق القائمة',
     openMenu: 'فتح القائمة',
     loading: 'جارٍ التحميل…',
+    skipToContent: 'تخطَّ إلى المحتوى',
   },
   nav: {
     browse: 'تصفح',
@@ -74,6 +75,8 @@ export default {
       'رسالة أسبوعية قصيرة تجمع قوالب جديدة وأكواداً ورؤى من مطوريها. بلا إزعاج — يمكنك إلغاء الاشتراك في أي وقت.',
     emailPlaceholder: 'أدخل بريدك الإلكتروني',
     subscribe: 'اشتراك',
+    subscribeSuccess: 'شكرًا — تم تسجيل اشتراكك!',
+    subscribeError: 'فشل الاشتراك',
     rights: '© {{year}} Unccodestore. جميع الحقوق محفوظة.',
     privacy: 'الخصوصية',
     terms: 'الشروط',

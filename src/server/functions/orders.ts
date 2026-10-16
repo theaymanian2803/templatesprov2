@@ -210,6 +210,13 @@ export const capturePayPalOrder = createServerFn({ method: 'POST' })
       })
     } else if (data.isAllAccess) {
       await db.insert(all_access_passes).values({ user_id: user.id, order_id: order.id, price: totalAfterDiscount })
+      await db.insert(notifications).values({
+        user_id: user.id,
+        type: 'all_access',
+        title: 'All-Access Pass activated',
+        message: 'You now have access to every template in the catalog, including future additions.',
+        metadata: { order_id: order.id },
+      })
     } else {
       await db.insert(order_items).values(
         verified.map((item) => ({
@@ -222,6 +229,13 @@ export const capturePayPalOrder = createServerFn({ method: 'POST' })
       )
       for (const v of verified) await incrementSales(v.id)
       await issueKeysForOrder(order.id)
+      await db.insert(notifications).values({
+        user_id: user.id,
+        type: 'order',
+        title: 'Order confirmed',
+        message: `Your order ${order.id.slice(0, 8)} is complete and ready to download.`,
+        metadata: { order_id: order.id },
+      })
     }
     return { success: true, orderId: order.id, paypalOrderId: captureData.id }
   })
@@ -261,6 +275,13 @@ export const claimFreeOrder = createServerFn({ method: 'POST' })
     )
     for (const v of verified) await incrementSales(v.id)
     await issueKeysForOrder(order.id)
+    await db.insert(notifications).values({
+      user_id: user.id,
+      type: 'order',
+      title: 'Order confirmed',
+      message: `Your order ${order.id.slice(0, 8)} is complete and ready to download.`,
+      metadata: { order_id: order.id },
+    })
     return { success: true, orderId: order.id, free: true }
   })
 

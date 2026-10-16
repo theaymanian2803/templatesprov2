@@ -2,6 +2,7 @@ import { useState, useCallback, forwardRef, type ComponentPropsWithoutRef } from
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 
 const WHATSAPP_NUMBER = "212694784176";
 
@@ -22,13 +23,14 @@ const WhatsAppIcon = forwardRef<SVGSVGElement, ComponentPropsWithoutRef<"svg">>(
 WhatsAppIcon.displayName = "WhatsAppIcon";
 
 const ChatBubble = () => {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
-  const [whatsappMsg, setWhatsappMsg] = useState("Bonjour ! J'ai une question à propos de TemplatePro.");
+  const [whatsappMsg, setWhatsappMsg] = useState(() => t('chat.defaultMessage'));
 
   const getWhatsAppUrl = useCallback(() => {
-    const message = (whatsappMsg.trim() || "Bonjour ! J'ai une question à propos de TemplatePro.").slice(0, 1000);
+    const message = (whatsappMsg.trim() || t('chat.defaultMessage')).slice(0, 1000);
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-  }, [whatsappMsg]);
+  }, [whatsappMsg, t]);
 
   const handleOpenWhatsAppChat = () => {
     const url = getWhatsAppUrl();
@@ -47,7 +49,7 @@ const ChatBubble = () => {
 
   const handleClose = () => {
     setIsOpen(false);
-    setTimeout(() => setWhatsappMsg("Bonjour ! J'ai une question à propos de TemplatePro."), 300);
+    setTimeout(() => setWhatsappMsg(t('chat.defaultMessage')), 300);
   };
 
   return (
@@ -68,7 +70,7 @@ const ChatBubble = () => {
                   WhatsApp
                 </h3>
                 <p className="text-primary-foreground/70 text-xs">
-                  Envoyez-nous un message pour une aide personnalisée
+                  {t('chat.headerSubtitle')}
                 </p>
               </div>
               <button onClick={handleClose} className="text-primary-foreground/80 hover:text-primary-foreground">
@@ -84,19 +86,19 @@ const ChatBubble = () => {
                     <WhatsAppIcon />
                   </div>
                   <div>
-                    <p className="font-semibold text-foreground text-sm">Support TemplatePro</p>
+                    <p className="font-semibold text-foreground text-sm">{t('chat.supportName')}</p>
                     <p className="text-xs text-muted-foreground">+{WHATSAPP_NUMBER}</p>
-                    <p className="text-xs text-green-600 mt-0.5">● Online</p>
+                    <p className="text-xs text-green-600 mt-0.5">● {t('chat.online')}</p>
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground">Votre message</label>
+                  <label className="text-sm font-medium text-foreground">{t('chat.yourMessage')}</label>
                   <textarea
                     value={whatsappMsg}
                     onChange={(e) => setWhatsappMsg(e.target.value)}
                     className="w-full min-h-[120px] p-3 rounded-xl border border-border/50 bg-background text-foreground text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
-                    placeholder="Tapez votre message ici..."
+                    placeholder={t('chat.placeholder')}
                   />
                 </div>
               </div>
@@ -106,10 +108,10 @@ const ChatBubble = () => {
                   type="button"
                   onClick={handleOpenWhatsAppChat}
                   className="w-full rounded-xl bg-green-600 hover:bg-green-700 text-white gap-2"
-                  aria-label="Open WhatsApp chat"
+                  aria-label={t('chat.openChat')}
                 >
                   <WhatsAppIcon />
-                  Ouvrir le chat WhatsApp
+                  {t('chat.openChat')}
                 </Button>
               </div>
             </div>

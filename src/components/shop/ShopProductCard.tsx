@@ -10,6 +10,7 @@ import {
   getDisplaySales,
   formatSales,
 } from '@/lib/seeded'
+import { formatPrice } from '@/lib/format'
 
 const authorPool = ['Nimbus Studio', 'Pixel Forge', 'Lumen Labs', 'Cobalt Co.', 'Atlas Dev', 'North Peak']
 
@@ -19,7 +20,7 @@ const resolveAuthor = (id: string) => {
   return authorPool[hash % authorPool.length]
 }
 
-const formatDate = (iso: string) => {
+const formatDate = (iso: string | Date) => {
   try {
     return new Date(iso).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -142,7 +143,7 @@ const ShopProductCard = ({ template, query, cardView }: ShopProductCardProps) =>
             <p className="text-xs text-gray-500 mb-2">{t('shopCard.byAuthor', { author })}</p>
             <div className="flex items-center gap-1.5 mb-3">
               <span className={`font-bold text-sm ${isFree ? 'text-emerald-600' : 'text-gray-900'}`}>
-                {isFree ? t('shopCard.free', { defaultValue: 'Free' }) : `$${Number(template.price).toFixed(0)}`}
+                {isFree ? t('shopCard.free', { defaultValue: 'Free' }) : formatPrice(template.price)}
               </span>
               <div className="flex items-center gap-0.5">
                 {Array.from({ length: 5 }).map((_, s) => (
@@ -231,7 +232,7 @@ const ShopProductCard = ({ template, query, cardView }: ShopProductCardProps) =>
 
         <div className="text-right mb-3">
           <div className={`text-2xl font-bold ${isFree ? 'text-emerald-600' : 'text-gray-900'}`}>
-            {isFree ? t('shopCard.free', { defaultValue: 'Free' }) : `$${Number(template.price).toFixed(0)}`}
+            {isFree ? t('shopCard.free', { defaultValue: 'Free' }) : formatPrice(template.price)}
           </div>
           <div className="text-xs text-gray-500 mt-1 flex items-center justify-end gap-1">
             <Download className="w-3 h-3" />

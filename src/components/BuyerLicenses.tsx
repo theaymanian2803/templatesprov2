@@ -7,9 +7,11 @@ import { claimMyLicenses } from '@/server/functions/licenses'
 import { useQueryClient } from '@tanstack/react-query'
 import { useAuth } from '@/contexts/AuthContext'
 import { KeyRound, Copy, Loader2, RefreshCw } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 const BuyerLicenses = () => {
   const { user } = useAuth()
+  const { t } = useTranslation()
   const { data: licenses, isLoading } = useMyLicenses()
   const { data: pending } = useMyPendingLicenses()
   const { toast } = useToast()
@@ -47,7 +49,7 @@ const BuyerLicenses = () => {
   if (isLoading || (claiming && !licenses?.length)) {
     return (
       <div className="mb-6 flex items-center gap-2 text-sm text-muted-foreground">
-        <Loader2 className="w-4 h-4 animate-spin" /> Loading your licenses…
+        <Loader2 className="w-4 h-4 animate-spin" /> {t('licenses.loading')}
       </div>
     )
   }
@@ -57,7 +59,7 @@ const BuyerLicenses = () => {
 
   const copy = async (key: string) => {
     await navigator.clipboard.writeText(key)
-    toast({ title: 'License key copied', description: 'Paste it into your site’s /admin → Activate.' })
+    toast({ title: t('licenses.copiedTitle'), description: t('licenses.copiedDesc') })
   }
 
   return (
@@ -65,7 +67,7 @@ const BuyerLicenses = () => {
       {licenses?.length ? (
         <>
           <h2 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
-            <KeyRound className="w-5 h-5 text-primary" /> Your license keys
+            <KeyRound className="w-5 h-5 text-primary" /> {t('licenses.yourKeys')}
           </h2>
           <div className="space-y-3">
             {licenses.map((lic) => (
@@ -76,14 +78,14 @@ const BuyerLicenses = () => {
                     <code className="text-xs font-mono text-muted-foreground break-all">{lic.key}</code>
                   </div>
                   <Button size="sm" variant="outline" className="gap-1 shrink-0" onClick={() => copy(lic.key)}>
-                    <Copy className="w-3 h-3" /> Copy
+                    <Copy className="w-3 h-3" /> {t('licenses.copy')}
                   </Button>
                 </CardContent>
               </Card>
             ))}
           </div>
           <p className="text-xs text-muted-foreground mt-2">
-            Paste your key into your deployed template’s <code>/admin</code> → <strong>Activate</strong> screen.
+            {t('licenses.hint')}
           </p>
         </>
       ) : null}
@@ -93,7 +95,7 @@ const BuyerLicenses = () => {
           <CardContent className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4">
             <div className="min-w-0">
               <p className="text-sm font-semibold text-foreground flex items-center gap-2">
-                <Loader2 className="w-4 h-4 animate-spin text-primary" /> Generating your key…
+                <Loader2 className="w-4 h-4 animate-spin text-primary" /> {t('licenses.generating')}
               </p>
               <ul className="text-xs text-muted-foreground mt-1 space-y-0.5">
                 {pending!.map((p) => (
@@ -110,7 +112,7 @@ const BuyerLicenses = () => {
               onClick={refresh}
               disabled={refreshing}
             >
-              <RefreshCw className={`w-3 h-3 ${refreshing ? 'animate-spin' : ''}`} /> Refresh
+              <RefreshCw className={`w-3 h-3 ${refreshing ? 'animate-spin' : ''}`} /> {t('licenses.refresh')}
             </Button>
           </CardContent>
         </Card>

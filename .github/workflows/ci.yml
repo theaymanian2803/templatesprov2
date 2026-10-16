@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: lint · typecheck · test · build
+    runs-on: ubuntu-latest
+    env:
+      # Placeholder values so the build/bundler never sees undefined env.
+      # No real secrets are used in CI.
+      BETTER_AUTH_URL: http://localhost:8080
+      BETTER_AUTH_SECRET: ci-placeholder-secret-min-32-characters
+      TURSO_URL: file:./ci.db
+      TURSO_AUTH_TOKEN: ""
+      VITE_PAYPAL_CLIENT_ID: ci-placeholder
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # `src/routeTree.gen.ts` is gitignored and only produced by the TanStack
+      # Start Vite plugin, so we build first to generate it before typechecking.
+      - name: Build
+        run: npm run build
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm run test

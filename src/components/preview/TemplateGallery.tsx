@@ -3,18 +3,20 @@ import { cn } from "@/lib/utils";
 import { Template } from "@/hooks/useTemplates";
 import { X, ChevronLeft, ChevronRight, Maximize2, ZoomIn, ZoomOut, RotateCcw } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 interface TemplateGalleryProps {
   template: Template;
 }
 
 const TemplateGallery = ({ template }: TemplateGalleryProps) => {
+  const { t } = useTranslation();
   const allImages = [
-    { id: 0, src: template.image_url, label: "Aperçu principal" },
+    { id: 0, src: template.image_url, label: t('previewUi.galleryMainPreview') },
     ...(template.gallery_images || []).map((src, index) => ({
       id: index + 1,
       src,
-      label: `Capture ${index + 1}`,
+      label: t('previewUi.galleryScreenshot', { n: index + 1 }),
     })),
   ];
 
@@ -36,7 +38,7 @@ const TemplateGallery = ({ template }: TemplateGalleryProps) => {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-display font-bold text-foreground">
-            Aperçu du modèle
+            {t('previewUi.galleryModelPreview')}
           </h2>
         </div>
         <div
@@ -68,14 +70,14 @@ const TemplateGallery = ({ template }: TemplateGalleryProps) => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
           <h2 className="text-2xl font-display font-bold text-foreground">
-            Captures d'écran
+            {t('previewUi.galleryScreenshots')}
           </h2>
           <button
             onClick={() => openLightbox(allImages.findIndex((i) => i.id === activeImage.id))}
             className="text-sm text-primary hover:underline flex items-center gap-1.5"
           >
             <Maximize2 className="w-4 h-4" />
-            Voir en plein écran
+            {t('previewUi.galleryViewFullscreen')}
           </button>
       </div>
 

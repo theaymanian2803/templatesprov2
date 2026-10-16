@@ -1,6 +1,9 @@
-import { Twitter, Instagram, Linkedin, Github, Youtube, Mail } from 'lucide-react'
+import { useState } from 'react'
+import { Twitter, Instagram, Linkedin, Github, Youtube, Mail, Loader2 } from 'lucide-react'
 import { Link } from '@/lib/router'
 import { useTranslation } from 'react-i18next'
+import { useToast } from '@/hooks/use-toast'
+import { subscribeToNewsletter } from '@/server/functions/newsletter'
 
 const footerLinkKeys: Record<string, { key: string; to: string }[]> = {
   footerBrowse: [
@@ -30,7 +33,26 @@ const footerLinkKeys: Record<string, { key: string; to: string }[]> = {
 
 const Footer = () => {
   const { t } = useTranslation()
+  const { toast } = useToast()
   const year = new Date().getFullYear()
+  const [email, setEmail] = useState('')
+  const [isSubscribing, setIsSubscribing] = useState(false)
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault()
+    const value = email.trim()
+    if (!value || isSubscribing) return
+    setIsSubscribing(true)
+    try {
+      await subscribeToNewsletter({ data: { email: value } })
+      toast({ title: t('footer.subscribeSuccess') })
+      setEmail('')
+    } catch (error: any) {
+      toast({ title: t('footer.subscribeError'), description: error.message, variant: 'destructive' })
+    } finally {
+      setIsSubscribing(false)
+    }
+  }
 
   return (
     <footer className="relative overflow-hidden bg-[#F5F4F0] text-[#111111] pt-16">
@@ -107,19 +129,25 @@ const Footer = () => {
               </p>
             </div>
             <form
-              onSubmit={(e) => e.preventDefault()}
+              onSubmit={handleSubscribe}
               className="flex w-full md:w-auto gap-3">
               <div className="relative flex-1 md:w-72">
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#787774]/60" />
                 <input
                   type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  aria-label={t('footer.emailPlaceholder')}
                   placeholder={t('footer.emailPlaceholder')}
                   className="w-full h-11 pl-11 pr-4 rounded-lg bg-white border border-[#EAEAEA] text-sm text-[#111111] placeholder:text-[#787774]/50 focus:outline-none focus:border-[#e85a2d]/50 focus:ring-2 focus:ring-[#e85a2d]/15 transition-colors"
                 />
               </div>
               <button
                 type="submit"
-                className="h-11 px-6 rounded-lg bg-[#e85a2d] text-white font-semibold text-sm hover:bg-[#ef7a52] transition-colors whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e85a2d]/50">
+                disabled={isSubscribing}
+                className="h-11 px-6 rounded-lg bg-[#e85a2d] text-white font-semibold text-sm hover:bg-[#ef7a52] transition-colors whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e85a2d]/50 disabled:opacity-60 inline-flex items-center gap-2">
+                {isSubscribing && <Loader2 className="w-4 h-4 animate-spin" />}
                 {t('footer.subscribe')}
               </button>
             </form>

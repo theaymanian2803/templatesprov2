@@ -174,8 +174,9 @@ const HeroSection = () => {
                     <img
                       src={webImage}
                       alt=""
-                      loading="lazy"
+                      loading="eager"
                       decoding="async"
+                      {...({ fetchpriority: 'high' } as Record<string, string>)}
                       draggable={false}
                       onError={() => setFailedImgs((prev) => ({ ...prev, web: true }))}
                     />
@@ -193,7 +194,7 @@ const HeroSection = () => {
                       className="phone-screen-img"
                       src={phoneImage}
                       alt=""
-                      loading="lazy"
+                      loading="eager"
                       decoding="async"
                       draggable={false}
                       onError={() => setFailedImgs((prev) => ({ ...prev, phone: true }))}

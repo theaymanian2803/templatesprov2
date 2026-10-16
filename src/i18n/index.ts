@@ -12,6 +12,12 @@ import arPreview from './locales/ar.preview'
 import enCheckout from './locales/en.checkout'
 import frCheckout from './locales/fr.checkout'
 import arCheckout from './locales/ar.checkout'
+import enPages from './locales/en.pages'
+import frPages from './locales/fr.pages'
+import arPages from './locales/ar.pages'
+import enComponents from './locales/en.components'
+import frComponents from './locales/fr.components'
+import arComponents from './locales/ar.components'
 
 export type Lang = 'fr' | 'ar' | 'en'
 
@@ -43,9 +49,9 @@ const initialLang = getInitialLang()
 
 i18n.use(initReactI18next).init({
   resources: {
-    en: { translation: { ...en, ...enTemplates, ...enPreview, ...enCheckout } },
-    fr: { translation: { ...fr, ...frTemplates, ...frPreview, ...frCheckout } },
-    ar: { translation: { ...ar, ...arTemplates, ...arPreview, ...arCheckout } },
+    en: { translation: { ...en, ...enTemplates, ...enPreview, ...enCheckout, ...enPages, ...enComponents } },
+    fr: { translation: { ...fr, ...frTemplates, ...frPreview, ...frCheckout, ...frPages, ...frComponents } },
+    ar: { translation: { ...ar, ...arTemplates, ...arPreview, ...arCheckout, ...arPages, ...arComponents } },
   },
   lng: initialLang,
   fallbackLng: 'fr',

@@ -27,7 +27,7 @@ export function useLocation() {
 }
 
 export function useParams<T extends Record<string, string> = Record<string, string>>() {
-  return useTanstackParams({ strict: false }) as T
+  return useTanstackParams({ strict: false } as any) as T
 }
 
 export function useSearchParams() {
@@ -47,7 +47,7 @@ export function useSearchParams() {
       } else {
         Object.assign(obj, params)
       }
-      return navigate({ to: '.', search: obj, replace: opts?.replace })
+      return navigate({ to: '.', search: obj, replace: opts?.replace } as any)
     },
     [navigate],
   )

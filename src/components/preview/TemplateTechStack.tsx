@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 interface TemplateTechStackProps {
   techStack: string[];
 }
@@ -37,6 +39,7 @@ const getTechIcon = (tech: string): string => {
 };
 
 const TemplateTechStack = ({ techStack }: TemplateTechStackProps) => {
+  const { t } = useTranslation();
   // If no tech stack, don't render the section
   if (!techStack || techStack.length === 0) {
     return null;
@@ -45,12 +48,12 @@ const TemplateTechStack = ({ techStack }: TemplateTechStackProps) => {
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-display font-bold text-foreground">
-        Stack technique
+        {t('previewUi.techTitle')}
       </h2>
 
       {/* Technologies */}
       <div className="glass-card p-6 rounded-xl border border-border/50">
-        <h3 className="font-semibold text-foreground mb-4">Construit avec</h3>
+        <h3 className="font-semibold text-foreground mb-4">{t('previewUi.techBuiltWith')}</h3>
         <div className="flex flex-wrap gap-3">
           {techStack.map((tech, index) => (
             <div

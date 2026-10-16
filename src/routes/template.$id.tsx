@@ -18,6 +18,7 @@ import { useTemplate } from '@/hooks/useTemplates'
 import { getTemplateDownloadUrl } from '@/server/functions/dashboard'
 import { recordDownload } from '@/server/functions/downloads'
 import { getDirectDownloadUrl } from '@/lib/utils'
+import { resolveTemplateAction } from '@/lib/templateAction'
 import { ArrowLeft, BadgeCheck, Download, Home, Loader2, Maximize2, ShoppingBag } from 'lucide-react'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
@@ -133,6 +134,7 @@ const TemplatePreview = () => {
   }
 
   const liveUrl = template.demo_url
+  const action = resolveTemplateAction(template.price, !!downloadInfo?.source_file_url)
 
   return (
     <main className="min-h-screen bg-background">
@@ -169,7 +171,7 @@ const TemplatePreview = () => {
                 <span className="text-border">·</span>
                 <span className="inline-flex items-center gap-1">
                   <Download className="w-3.5 h-3.5" />
-                  {(template.download_count ?? 0).toLocaleString()} downloads
+                  {t('preview.downloadsCount', { count: (template.download_count ?? 0).toLocaleString() })}
                 </span>
               </div>
             </div>
@@ -184,7 +186,19 @@ const TemplatePreview = () => {
                   {t('preview.fullscreenPreview')} <Maximize2 className="w-4 h-4" />
                 </Button>
               )}
-              {downloadInfo?.source_file_url ? (
+              {action === 'free' ? (
+                <>
+                  <span className="inline-flex items-center justify-center h-9 px-3 rounded-md bg-emerald-500 text-white text-xs font-bold uppercase tracking-wide w-full sm:w-auto">
+                    {t('preview.free', { defaultValue: 'Free' })}
+                  </span>
+                  <Button
+                    className="bg-blue-600 hover:bg-blue-700 text-white border-none gap-2 w-full sm:w-auto text-xs sm:text-sm"
+                    onClick={handleBuyClick}>
+                    <ShoppingBag className="w-4 h-4" />
+                    {t('preview.getForFree')}
+                  </Button>
+                </>
+              ) : action === 'download' ? (
                 <>
                   <Button
                     className="bg-[#e85a2d] hover:bg-[#ef7a52] text-white border-none gap-2 w-full sm:w-auto text-xs sm:text-sm"
@@ -209,9 +223,7 @@ const TemplatePreview = () => {
                   className="bg-blue-600 hover:bg-blue-700 text-white border-none gap-2 w-full sm:w-auto text-xs sm:text-sm"
                   onClick={handleBuyClick}>
                   <ShoppingBag className="w-4 h-4" />
-                  {Number(template.price) > 0
-                    ? t('preview.buyFor', { price: template.price })
-                    : t('preview.getForFree')}
+                  {t('preview.buyFor', { price: template.price })}
                 </Button>
               )}
             </div>

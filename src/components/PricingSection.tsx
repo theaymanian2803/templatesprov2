@@ -7,6 +7,7 @@ import { getCatalogPriceRange } from "@/server/functions/templates";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { formatPrice } from "@/lib/format";
 
 const useCatalogPriceRange = () => {
   return useQuery({
@@ -22,8 +23,8 @@ const PricingSection = () => {
   const { t } = useTranslation();
   const { data: priceRange } = useCatalogPriceRange();
 
-  const indFeatures = ["Achat à l'unité", "Licences standard et étendue", "6 mois de support", "Mises à jour à vie", "Fichiers sources inclus"];
-  const aaFeatures = ["Accès à TOUS les templates", "Tous les futurs templates inclus", "Licence standard pour tous", "Support prioritaire", "Mises à jour à vie", "Fichiers sources inclus"];
+  const indFeatures = [t('pricingExtra.indFeature1'), t('pricingExtra.indFeature2'), t('pricingExtra.indFeature3'), t('pricingExtra.indFeature4'), t('pricingExtra.indFeature5')];
+  const aaFeatures = [t('pricingExtra.aaFeature1'), t('pricingExtra.aaFeature2'), t('pricingExtra.aaFeature3'), t('pricingExtra.aaFeature4'), t('pricingExtra.aaFeature5'), t('pricingExtra.aaFeature6')];
   const indCtaLink = "/templates";
   const aaPrice = ALL_ACCESS_PRICE;
 
@@ -47,12 +48,12 @@ const PricingSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center max-w-2xl mx-auto mb-8"
         >
-          <span className="text-sm font-semibold text-[#e85a2d] uppercase tracking-wider">Tarifs</span>
+          <span className="text-sm font-semibold text-[#e85a2d] uppercase tracking-wider">{t('pricingExtra.badge')}</span>
           <h2 className="font-slab text-3xl md:text-4xl font-bold text-[#111111] mt-3 mb-3">
-            Tarifs simples et transparents
+            {t('pricingExtra.title')}
           </h2>
           <p className="text-base md:text-lg text-[#787774]">
-            Achetez des templates individuellement ou obtenez tout avec un paiement unique.
+            {t('pricingExtra.subtitle')}
           </p>
         </motion.div>
 
@@ -65,15 +66,15 @@ const PricingSection = () => {
             className="relative p-6 md:p-7 rounded-2xl bg-white border border-[#EAEAEA] hover:border-[#e85a2d]/40 hover:shadow-lg transition-all duration-300"
           >
             <div className="text-center mb-6">
-              <h3 className="font-slab text-2xl font-bold text-[#111111] mb-2">Templates individuels</h3>
-              <p className="text-[#787774] text-sm mb-4">Achetez seulement ce dont vous avez besoin</p>
+              <h3 className="font-slab text-2xl font-bold text-[#111111] mb-2">{t('pricingExtra.individualTitle')}</h3>
+              <p className="text-[#787774] text-sm mb-4">{t('pricingExtra.individualDesc')}</p>
               <div className="flex items-baseline justify-center gap-1">
                 <span className="font-slab text-4xl font-bold text-[#111111]">
                   <span className="text-[#e85a2d]">{t('pricing.free')}</span> {t('pricing.andUp')}
                 </span>
               </div>
               <p className="text-sm text-[#787774] mt-2">
-                {t('pricing.upTo', { max: `$${maxPrice}` })}
+                {t('pricing.upTo', { max: formatPrice(maxPrice) })}
               </p>
             </div>
             <ul className="space-y-3.5 mb-6">
@@ -87,7 +88,7 @@ const PricingSection = () => {
               ))}
             </ul>
             <Button variant="outline" size="lg" className="w-full" onClick={() => navigate(indCtaLink)}>
-              Parcourir
+              {t('pricingExtra.individualCta')}
             </Button>
           </motion.div>
 
@@ -100,15 +101,15 @@ const PricingSection = () => {
           >
             <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-[#e85a2d] text-white text-sm font-semibold flex items-center gap-1">
               <Crown className="w-3.5 h-3.5" />
-              Meilleur rapport qualité-prix
+              {t('pricingExtra.bestValue')}
             </div>
             <div className="text-center mb-6">
-              <h3 className="font-slab text-2xl font-bold text-[#111111] mb-2">Pass Tout Accès</h3>
-              <p className="text-[#787774] text-sm mb-4">Un paiement, tous les templates</p>
+              <h3 className="font-slab text-2xl font-bold text-[#111111] mb-2">{t('pricingExtra.allAccessTitle')}</h3>
+              <p className="text-[#787774] text-sm mb-4">{t('pricingExtra.allAccessDesc')}</p>
               <div className="flex items-baseline justify-center gap-1">
-                <span className="font-slab text-4xl font-bold text-[#111111]">${aaPrice}</span>
+                <span className="font-slab text-4xl font-bold text-[#111111]">{formatPrice(aaPrice)}</span>
               </div>
-              <p className="text-sm text-[#787774] mt-2">paiement unique</p>
+              <p className="text-sm text-[#787774] mt-2">{t('pricingExtra.oneTime')}</p>
             </div>
             <ul className="space-y-3.5 mb-6">
               {aaFeatures.map((f, i) => (
@@ -121,7 +122,7 @@ const PricingSection = () => {
               ))}
             </ul>
             <Button size="lg" className="w-full bg-[#e85a2d] hover:bg-[#d94523]" onClick={handleBuyAllAccess}>
-              Obtenir le Pass – ${aaPrice}
+              {t('pricingExtra.allAccessCta', { price: aaPrice })}
             </Button>
           </motion.div>
         </div>

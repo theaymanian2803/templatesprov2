@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { useCart } from '@/contexts/CartContext'
 import { Skeleton } from '@/components/ui/skeleton'
 import { motion } from 'framer-motion'
+import { formatPrice } from '@/lib/format'
 
 export type Template = {
   id: string
@@ -117,7 +118,7 @@ const ThemeCard = ({ template, index = 0 }: { template: Template; index?: number
           {/* Meta row — flex-wrap guarantees it never overflows the card body */}
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
             <span className="text-xs font-bold text-[#111111]">
-              ${Number(template.price).toFixed(0)}
+              {formatPrice(template.price)}
             </span>
             <div className="flex items-center gap-0.5">
               {Array.from({ length: 5 }).map((_, s) => (

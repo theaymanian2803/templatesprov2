@@ -6,6 +6,7 @@ import { getDirectDownloadUrl } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
 import { Download, FileArchive, Loader2 } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface OrderItemsListProps {
   orderId: string
@@ -14,6 +15,7 @@ interface OrderItemsListProps {
 
 const OrderItemsList = ({ orderId, orderStatus }: OrderItemsListProps) => {
   const { toast } = useToast()
+  const { t } = useTranslation()
   const [downloadingId, setDownloadingId] = useState<string | null>(null)
 
   const { data: items, isLoading } = useQuery({
@@ -30,8 +32,8 @@ const OrderItemsList = ({ orderId, orderStatus }: OrderItemsListProps) => {
       setDownloadingId(null)
     } catch (error: any) {
       toast({
-        title: 'Échec du téléchargement',
-        description: error.message || 'Impossible de générer le lien de téléchargement',
+        title: t('orderItems.downloadFailed'),
+        description: error.message || t('orderItems.downloadFailedDesc'),
         variant: 'destructive',
       })
     } finally {
@@ -53,7 +55,7 @@ const OrderItemsList = ({ orderId, orderStatus }: OrderItemsListProps) => {
   if (!items?.length) {
     return (
       <div className="p-3 border-t text-sm text-muted-foreground">
-        Aucun article trouvé pour cette commande.
+        {t('orderItems.empty')}
       </div>
     )
   }
@@ -84,10 +86,10 @@ const OrderItemsList = ({ orderId, orderStatus }: OrderItemsListProps) => {
               ) : (
                 <Download className="w-3 h-3" />
               )}
-              <span className="ml-1">Télécharger</span>
+              <span className="ml-1">{t('orderItems.download')}</span>
             </Button>
           ) : !canDownload ? (
-            <span className="text-xs text-muted-foreground">Disponible après finalisation</span>
+            <span className="text-xs text-muted-foreground">{t('orderItems.availableAfter')}</span>
           ) : null}
         </div>
       ))}

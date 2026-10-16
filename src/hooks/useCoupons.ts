@@ -7,7 +7,7 @@ export const useCoupons = () => useQuery({ queryKey: ["coupons"], queryFn: async
 
 export const useCreateCoupon = () => {
   const queryClient = useQueryClient()
-  return useMutation({ mutationFn: async (coupon: Partial<Coupon>) => { await createCoupon({ data: coupon }) }, onSuccess: () => queryClient.invalidateQueries({ queryKey: ["coupons"] }) })
+  return useMutation({ mutationFn: async (coupon: Partial<Coupon> & { code: string }) => { await createCoupon({ data: coupon }) }, onSuccess: () => queryClient.invalidateQueries({ queryKey: ["coupons"] }) })
 }
 
 export const useDeleteCoupon = () => {

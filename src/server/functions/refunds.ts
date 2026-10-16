@@ -3,6 +3,7 @@ import { db } from '../db/client'
 import { refund_requests, orders } from '../db/schema'
 import { eq, and, desc, inArray } from 'drizzle-orm'
 import { requireAdmin, requireUser, isAdmin } from '../admin'
+import { logAudit } from '../audit'
 
 export const createRefundRequest = createServerFn({ method: 'POST' })
   .validator((v: { orderId: string; reason: string }) => v)
@@ -47,11 +48,12 @@ export const listRefundRequests = createServerFn({ method: 'GET' }).handler(asyn
 export const updateRefundRequest = createServerFn({ method: 'POST' })
   .validator((v: { id: string; status: string; adminNotes?: string }) => v)
   .handler(async ({ data }) => {
-    await requireAdmin()
+    const admin = await requireAdmin()
     await db
       .update(refund_requests)
       .set({ status: data.status, admin_notes: data.adminNotes ?? null, updated_at: new Date() })
       .where(eq(refund_requests.id, data.id))
+    await logAudit({ action: 'refund.status', entityType: 'refund', entityId: data.id, actor: admin, metadata: { status: data.status } })
     return { success: true }
   })
 
@@ -76,7 +78,8 @@ export const adminListRefundRequestsWithDetails = createServerFn({ method: 'GET'
 export const adminDeleteRefundRequest = createServerFn({ method: 'POST' })
   .validator((id: string) => id)
   .handler(async ({ data: id }) => {
-    await requireAdmin()
+    const admin = await requireAdmin()
     await db.delete(refund_requests).where(eq(refund_requests.id, id))
+    await logAudit({ action: 'refund.delete', entityType: 'refund', entityId: id, actor: admin })
     return { success: true }
   })

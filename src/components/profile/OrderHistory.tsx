@@ -8,6 +8,7 @@ import { ShoppingBag, Package, ChevronDown, ChevronUp } from "lucide-react";
 import RefundButton from "./RefundButton";
 import { format } from "date-fns";
 import OrderItemsList from "./OrderItemsList";
+import { useTranslation } from "react-i18next";
 
 const statusVariant = (status: string) => {
   switch (status) {
@@ -21,6 +22,7 @@ const statusVariant = (status: string) => {
 };
 
 const OrderHistory = () => {
+  const { t } = useTranslation();
   const { data: orders, isLoading } = useMyOrders();
   const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null);
 
@@ -33,9 +35,9 @@ const OrderHistory = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <ShoppingBag className="w-5 h-5" />
-          Historique des commandes
+          {t('orderHistory.title')}
         </CardTitle>
-        <CardDescription>Vos achats passés et leur statut</CardDescription>
+        <CardDescription>{t('orderHistory.desc')}</CardDescription>
       </CardHeader>
       <CardContent>
         {isLoading ? (
@@ -46,8 +48,8 @@ const OrderHistory = () => {
         ) : !orders?.length ? (
           <div className="text-center py-8 text-muted-foreground">
             <Package className="w-10 h-10 mx-auto mb-3 opacity-50" />
-            <p className="font-medium">Aucune commande pour le moment</p>
-            <p className="text-sm">Vos achats apparaîtront ici.</p>
+            <p className="font-medium">{t('orderHistory.empty')}</p>
+            <p className="text-sm">{t('orderHistory.emptyDesc')}</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -60,11 +62,11 @@ const OrderHistory = () => {
                     className="w-full flex items-center justify-between p-3 bg-muted/30 hover:bg-muted/50 transition-colors text-left"
                   >
                     <div className="space-y-1">
-                      <p className="text-sm font-medium text-foreground">
-                        Commande nº {order.id.slice(0, 8)}
-                      </p>
+                        <p className="text-sm font-medium text-foreground">
+                          {t('orderHistory.orderNo', { id: order.id.slice(0, 8) })}
+                        </p>
                       <p className="text-xs text-muted-foreground">
-                        {format(new Date(order.created_at), "MMM d, yyyy 'à' h:mm a")}
+                        {format(new Date(order.created_at), "MMM d, yyyy • h:mm a")}
                       </p>
                     </div>
                     <div className="flex items-center gap-3">

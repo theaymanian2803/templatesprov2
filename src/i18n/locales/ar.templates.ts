@@ -23,6 +23,7 @@ export default {
     noItems: 'لا توجد عناصر تطابق بحثك',
     noItemsDesc: 'جرّب إزالة أحد عوامل التصفية أو تصفح جميع القوالب.',
     resetFilters: 'إعادة تعيين الفلاتر',
+    uncategorized: 'غير مصنّف',
     showResults_one: 'عرض {{count}} نتيجة',
     showResults_two: 'عرض {{count}} نتيجتين',
     showResults_few: 'عرض {{count}} نتائج',

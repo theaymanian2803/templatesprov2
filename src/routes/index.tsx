@@ -11,6 +11,7 @@ import SpaThemes from '@/components/SpaThemes'
 import TemplatesSection from '@/components/TemplatesSection'
 import UniqueThemesBanner from '@/components/UniqueThemesBanner'
 import WebsiteAppShowcase from '@/components/WebsiteAppShowcase'
+import { seoHead } from '@/lib/site'
 
 const Index = () => {
   return (
@@ -31,4 +32,13 @@ const Index = () => {
   )
 }
 
-export const Route = createFileRoute('/')({ component: Index })
+export const Route = createFileRoute('/')({
+  component: Index,
+  head: () =>
+    seoHead({
+      title: 'Unccodestore — Templates Web Premium & Code Source',
+      description:
+        'Plateforme de templates web premium, de code source et de kits UI prêts pour la production. Achetez des assets professionnels pour développeurs et designers.',
+      path: '/',
+    }),
+})

@@ -4,6 +4,7 @@ export default defineConfig({
   schema: './src/server/db/schema.ts',
   out: './drizzle',
   dialect: 'turso',
+  strict: true,
   dbCredentials: {
     url: process.env.TURSO_URL ?? '',
     authToken: process.env.TURSO_AUTH_TOKEN ?? '',

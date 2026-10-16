@@ -2,6 +2,7 @@ import { Link } from "@/lib/router";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Star, ArrowRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import type { PurchasedTemplate } from "@/hooks/useDashboard";
 
 interface ReviewReminderBannerProps {
@@ -9,6 +10,7 @@ interface ReviewReminderBannerProps {
 }
 
 const ReviewReminderBanner = ({ templates }: ReviewReminderBannerProps) => {
+  const { t } = useTranslation();
   if (templates.length === 0) return null;
 
   const first = templates[0];
@@ -23,17 +25,17 @@ const ReviewReminderBanner = ({ templates }: ReviewReminderBannerProps) => {
           <div>
             <p className="text-sm font-semibold text-foreground">
               {templates.length === 1
-                ? `Partagez votre avis sur "${first.template_title}"`
-                : `Vous avez ${templates.length} templates en attente d'avis`}
+                ? t('reviewReminder.single', { title: first.template_title })
+                : t('reviewReminder.multiple', { count: templates.length })}
             </p>
             <p className="text-xs text-muted-foreground">
-              Vos avis aident d'autres développeurs à faire les bons choix
+              {t('reviewReminder.hint')}
             </p>
           </div>
         </div>
         <Link to={`/template/${first.template_id}`}>
           <Button size="sm" variant="outline" className="gap-1 border-accent/30 text-accent hover:bg-accent/10">
-            Laisser un avis <ArrowRight className="w-3 h-3" />
+            {t('reviewReminder.cta')} <ArrowRight className="w-3 h-3" />
           </Button>
         </Link>
       </CardContent>

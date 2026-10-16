@@ -2,17 +2,19 @@ import { Link } from "@/lib/router";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { HelpCircle, MessageCircle, FileText } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const SupportCard = () => {
+  const { t } = useTranslation();
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <HelpCircle className="w-5 h-5" />
-          Besoin d'aide ?
+          {t('support.title')}
         </CardTitle>
         <CardDescription>
-          Des questions sur vos commandes, modèles ou compte ? Nous sommes là pour vous aider.
+          {t('support.desc')}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -20,19 +22,19 @@ const SupportCard = () => {
           <Button asChild variant="default" className="gap-2 flex-1">
             <Link to="/contact">
               <MessageCircle className="w-4 h-4" />
-              Contacter le support
+              {t('support.contact')}
             </Link>
           </Button>
           <Button asChild variant="outline" className="gap-2 flex-1">
             <Link to="/faq">
               <FileText className="w-4 h-4" />
-              Voir la FAQ
+              {t('support.faq')}
             </Link>
           </Button>
           <Button asChild variant="outline" className="gap-2 flex-1">
             <Link to="/refunds">
               <HelpCircle className="w-4 h-4" />
-              Politique de remboursement
+              {t('support.refunds')}
             </Link>
           </Button>
         </div>

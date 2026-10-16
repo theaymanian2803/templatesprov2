@@ -12,8 +12,10 @@ import { useCart } from '@/contexts/CartContext'
 import { useFavorites } from '@/contexts/FavoritesContext'
 import { useAllAccessPass, ALL_ACCESS_PRICE } from '@/hooks/useAllAccessPass'
 import { useAdminRole } from '@/hooks/useAdminRole'
+import { useUnreadNotificationCount } from '@/hooks/useNotifications'
 import {
   ArrowRight,
+  Bell,
   ChevronDown,
   ChevronRight,
   Crown,
@@ -114,6 +116,7 @@ const Navbar = () => {
   const { favorites } = useFavorites()
   const { data: allAccessPass } = useAllAccessPass()
   const { data: isAdmin } = useAdminRole()
+  const { data: unreadNotifications } = useUnreadNotificationCount(!!user)
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { data: categories } = useCategories()
@@ -340,6 +343,17 @@ const Navbar = () => {
             {user ? (
               <>
                 <Link
+                  to="/notifications"
+                  className="relative p-2.5 rounded-full hover:bg-[#F5F4F0] transition-colors"
+                  aria-label={t('notifications.title')}>
+                  <Bell className="w-[18px] h-[18px] text-[#2F3437]" />
+                  {!!unreadNotifications && unreadNotifications > 0 && (
+                    <span className="absolute top-1 right-1 w-4 h-4 bg-[#e85a2d] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                      {unreadNotifications > 9 ? '9+' : unreadNotifications}
+                    </span>
+                  )}
+                </Link>
+                <Link
                   to="/favorites"
                   className="relative p-2.5 rounded-full hover:bg-[#F5F4F0] transition-colors"
                   aria-label={t('nav.favorites')}>
@@ -383,6 +397,12 @@ const Navbar = () => {
                       <Link to="/downloads">
                         <Download className="w-4 h-4 mr-2" />
                         {t('nav.myDownloads')}
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild className={userMenuItemClasses}>
+                      <Link to="/notifications">
+                        <Bell className="w-4 h-4 mr-2" />
+                        {t('notifications.title')}
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild className={userMenuItemClasses}>
@@ -431,6 +451,16 @@ const Navbar = () => {
 
           {/* Mobile Actions */}
           <div className="lg:hidden flex items-center gap-1 shrink-0">
+            {user && (
+              <Link to="/notifications" className="relative p-2" aria-label={t('notifications.title')}>
+                <Bell className="w-5 h-5 text-[#2F3437]" />
+                {!!unreadNotifications && unreadNotifications > 0 && (
+                  <span className="absolute top-0 right-0 w-4 h-4 bg-[#e85a2d] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                    {unreadNotifications > 9 ? '9+' : unreadNotifications}
+                  </span>
+                )}
+              </Link>
+            )}
             <Link to="/cart" className="relative p-2" aria-label={t('nav.cart')}>
               <ShoppingCart className="w-5 h-5 text-[#2F3437]" />
               {totalItems > 0 && (
@@ -508,6 +538,7 @@ const Navbar = () => {
                   <p className="text-[11px] font-bold text-[#787774]/70 uppercase tracking-widest px-3 mt-4 mb-1">{t('nav.account')}</p>
                   <MobileNavLink to="/dashboard" onClick={() => setIsOpen(false)}>{t('nav.dashboard')}</MobileNavLink>
                   <MobileNavLink to="/downloads" onClick={() => setIsOpen(false)}>{t('nav.myDownloads')}</MobileNavLink>
+                  <MobileNavLink to="/notifications" onClick={() => setIsOpen(false)}>{t('notifications.title')}</MobileNavLink>
                   <MobileNavLink to="/favorites" onClick={() => setIsOpen(false)}>{t('nav.favorites')} {favorites.length > 0 && `(${favorites.length})`}</MobileNavLink>
                   <MobileNavLink to="/profile" onClick={() => setIsOpen(false)}>{t('nav.settings')}</MobileNavLink>
                 </>

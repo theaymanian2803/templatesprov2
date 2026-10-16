@@ -8,6 +8,7 @@ import {
   getDisplaySales,
   getDisplayRating,
 } from '@/lib/seeded'
+import { formatPrice } from '@/lib/format'
 
 interface TemplateCardProps {
   id: string
@@ -92,6 +93,7 @@ const TemplateCard = ({
             src={image || '/placeholder.svg'}
             alt={title}
             loading="lazy"
+            decoding="async"
             className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
           />
 
@@ -172,7 +174,7 @@ const TemplateCard = ({
               <span>{t('card.sales', { count: displaySales })}</span>
             </div>
             <div className={`font-extrabold text-lg tracking-tight ${isFree ? 'text-emerald-600' : 'text-foreground'}`}>
-              {isFree ? t('card.free', { defaultValue: 'Free' }) : `$${Number(price).toFixed(0)}`}
+              {isFree ? t('card.free', { defaultValue: 'Free' }) : formatPrice(price)}
             </div>
           </div>
 

@@ -23,37 +23,46 @@ import { getMyProfile, updateProfile } from '@/server/functions/admin'
 import { authClient } from '@/lib/auth-client'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Eye, EyeOff, KeyRound, Loader2, Lock, Mail, Save, User } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from '@/lib/router'
 import { z } from 'zod'
 
-const profileSchema = z.object({
-  displayName: z
-    .string()
-    .min(1, "Le nom d'affichage est requis")
-    .max(50, "Le nom ne peut pas dépasser 50 caractères"),
-  avatarUrl: z.string().url('Doit être une URL valide').optional().or(z.literal('')),
-})
+type T = (key: string) => string
 
-const passwordSchema = z
-  .object({
-    currentPassword: z.string().min(6, 'Le mot de passe doit contenir au moins 6 caractères'),
-    newPassword: z.string().min(6, 'Le mot de passe doit contenir au moins 6 caractères'),
-    confirmPassword: z.string().min(6, 'Le mot de passe doit contenir au moins 6 caractères'),
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Les mots de passe ne correspondent pas",
-    path: ['confirmPassword'],
+const makeProfileSchema = (t: T) =>
+  z.object({
+    displayName: z
+      .string()
+      .min(1, t('profile.displayNameRequired'))
+      .max(50, t('profile.displayNameMax')),
+    avatarUrl: z.string().url(t('profile.validUrl')).optional().or(z.literal('')),
   })
 
-type ProfileFormData = z.infer<typeof profileSchema>
-type PasswordFormData = z.infer<typeof passwordSchema>
+const makePasswordSchema = (t: T) =>
+  z
+    .object({
+      currentPassword: z.string().min(6, t('profile.passwordMin')),
+      newPassword: z.string().min(6, t('profile.passwordMin')),
+      confirmPassword: z.string().min(6, t('profile.passwordMin')),
+    })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+      message: t('profile.passwordsMismatch'),
+      path: ['confirmPassword'],
+    })
+
+type ProfileFormData = z.infer<ReturnType<typeof makeProfileSchema>>
+type PasswordFormData = z.infer<ReturnType<typeof makePasswordSchema>>
 
 const Profile = () => {
   const { user, loading: authLoading } = useAuth()
   const navigate = useNavigate()
   const { toast } = useToast()
+  const { t } = useTranslation()
+
+  const profileSchema = useMemo(() => makeProfileSchema(t), [t])
+  const passwordSchema = useMemo(() => makePasswordSchema(t), [t])
 
   const [showCurrentPassword, setShowCurrentPassword] = useState(false)
   const [showNewPassword, setShowNewPassword] = useState(false)
@@ -118,13 +127,13 @@ const Profile = () => {
       await updateProfile({ data: { displayName: data.displayName, avatarUrl: data.avatarUrl || null } })
 
       toast({
-        title: 'Profil mis à jour',
-        description: 'Votre profil a été mis à jour avec succès.',
+        title: t('profile.profileUpdated'),
+        description: t('profile.profileUpdatedDesc'),
       })
     } catch (error: any) {
       toast({
-        title: 'Erreur',
-        description: error.message || 'Échec de la mise à jour du profil',
+        title: t('profile.error'),
+        description: error.message || t('profile.profileUpdateFailed'),
         variant: 'destructive',
       })
     } finally {
@@ -141,18 +150,18 @@ const Profile = () => {
       })
 
       if (error) {
-        throw new Error(error.message || 'Le mot de passe actuel est incorrect')
+        throw new Error(error.message || t('profile.currentPasswordIncorrect'))
       }
 
       passwordForm.reset()
       toast({
-        title: 'Mot de passe modifié',
-        description: 'Votre mot de passe a été mis à jour avec succès.',
+        title: t('profile.passwordChanged'),
+        description: t('profile.passwordChangedDesc'),
       })
     } catch (error: any) {
       toast({
-        title: 'Erreur',
-        description: error.message || 'Échec du changement de mot de passe',
+        title: t('profile.error'),
+        description: error.message || t('profile.passwordChangeFailed'),
         variant: 'destructive',
       })
     } finally {
@@ -191,7 +200,7 @@ const Profile = () => {
             </Avatar>
             <div>
               <h1 className="text-2xl md:text-3xl font-display font-bold text-foreground">
-                Mon profil
+                {t('profile.title')}
               </h1>
               <p className="text-muted-foreground">{user?.email}</p>
             </div>
@@ -203,10 +212,9 @@ const Profile = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <User className="w-5 h-5" />
-                  Profile Information
-                  Informations du profil
+                  {t('profile.profileInfo')}
                 </CardTitle>
-                <CardDescription>Modifiez votre nom d'affichage et votre avatar</CardDescription>
+                <CardDescription>{t('profile.profileInfoDesc')}</CardDescription>
               </CardHeader>
               <CardContent>
                 {isLoadingProfile ? (
@@ -224,9 +232,9 @@ const Profile = () => {
                         name="displayName"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Nom d'affichage</FormLabel>
+                            <FormLabel>{t('profile.displayName')}</FormLabel>
                             <FormControl>
-                              <Input placeholder="Votre nom" {...field} />
+                              <Input placeholder={t('profile.displayNamePlaceholder')} {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -238,7 +246,7 @@ const Profile = () => {
                         name="avatarUrl"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>URL de l'avatar</FormLabel>
+                            <FormLabel>{t('profile.avatarUrl')}</FormLabel>
                             <FormControl>
                               <Input placeholder="https://example.com/avatar.jpg" {...field} />
                             </FormControl>
@@ -253,7 +261,7 @@ const Profile = () => {
                         ) : (
                           <Save className="w-4 h-4 mr-2" />
                         )}
-                        Enregistrer
+                        {t('profile.save')}
                       </Button>
                     </form>
                   </Form>
@@ -266,10 +274,9 @@ const Profile = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Mail className="w-5 h-5" />
-                  Email Address
-                  Adresse e-mail
+                  {t('profile.emailTitle')}
                 </CardTitle>
-                <CardDescription>Votre adresse e-mail est utilisée pour l'authentification</CardDescription>
+                <CardDescription>{t('profile.emailDesc')}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
@@ -277,7 +284,7 @@ const Profile = () => {
                   <span className="text-foreground">{user?.email}</span>
                 </div>
                 <p className="text-xs text-muted-foreground mt-2">
-                  Contactez le support si vous devez changer votre adresse e-mail.
+                  {t('profile.emailNote')}
                 </p>
               </CardContent>
             </Card>
@@ -287,9 +294,9 @@ const Profile = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <KeyRound className="w-5 h-5" />
-                  Change Password
+                  {t('profile.changePassword')}
                 </CardTitle>
-                <CardDescription>Mettez à jour votre mot de passe pour sécuriser votre compte</CardDescription>
+                <CardDescription>{t('profile.changePasswordDesc')}</CardDescription>
               </CardHeader>
               <CardContent>
                 <Form {...passwordForm}>
@@ -301,7 +308,7 @@ const Profile = () => {
                       name="currentPassword"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Mot de passe actuel</FormLabel>
+                          <FormLabel>{t('profile.currentPassword')}</FormLabel>
                           <FormControl>
                             <div className="relative">
                               <Input
@@ -332,7 +339,7 @@ const Profile = () => {
                       name="newPassword"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Nouveau mot de passe</FormLabel>
+                          <FormLabel>{t('profile.newPassword')}</FormLabel>
                           <FormControl>
                             <div className="relative">
                               <Input
@@ -361,7 +368,7 @@ const Profile = () => {
                       name="confirmPassword"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Confirmer le nouveau mot de passe</FormLabel>
+                          <FormLabel>{t('profile.confirmNewPassword')}</FormLabel>
                           <FormControl>
                             <div className="relative">
                               <Input
@@ -391,7 +398,7 @@ const Profile = () => {
                       ) : (
                         <Lock className="w-4 h-4 mr-2" />
                       )}
-                  Modifier
+                      {t('profile.update')}
                     </Button>
                   </form>
                 </Form>

@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "@/lib/router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,9 +11,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Mail, Lock, User, ArrowRight, Loader2, ArrowLeft, CheckCircle, Eye, EyeOff } from "lucide-react";
 import { z } from "zod";
-
-const emailSchema = z.string().email("Veuillez entrer une adresse email valide");
-const passwordSchema = z.string().min(6, "Le mot de passe doit contenir au moins 6 caractères");
 
 const GoogleIcon = ({ size = 20 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true">
@@ -49,7 +47,11 @@ const Auth = () => {
   
   const { signIn, signUp, resetPassword, signInWithGoogle, user } = useAuth();
   const { toast } = useToast();
+  const { t } = useTranslation();
   const navigate = useNavigate();
+
+  const emailSchema = useMemo(() => z.string().email(t('auth.emailInvalid')), [t]);
+  const passwordSchema = useMemo(() => z.string().min(6, t('auth.passwordMin')), [t]);
 
   useEffect(() => {
     if (user) {
@@ -62,12 +64,12 @@ const Auth = () => {
     
     const emailResult = emailSchema.safeParse(email);
     if (!emailResult.success) {
-      newErrors.email = emailResult.error.errors[0].message;
+      newErrors.email = emailResult.error.issues[0].message;
     }
     
     const passwordResult = passwordSchema.safeParse(password);
     if (!passwordResult.success) {
-      newErrors.password = passwordResult.error.errors[0].message;
+      newErrors.password = passwordResult.error.issues[0].message;
     }
     
     setErrors(newErrors);
@@ -87,21 +89,21 @@ const Auth = () => {
         if (error) {
           if (error.message.includes("Invalid login credentials")) {
             toast({
-              title: "Connexion échouée",
-              description: "Email ou mot de passe incorrect. Veuillez réessayer.",
+              title: t('auth.loginFailed'),
+              description: t('auth.invalidCredentials'),
               variant: "destructive",
             });
           } else {
             toast({
-              title: "Connexion échouée",
+              title: t('auth.loginFailed'),
               description: error.message,
               variant: "destructive",
             });
           }
         } else {
           toast({
-            title: "Bon retour !",
-            description: "Vous êtes connecté avec succès.",
+            title: t('auth.welcomeBack'),
+            description: t('auth.signedInSuccess'),
           });
           navigate("/");
         }
@@ -110,21 +112,21 @@ const Auth = () => {
         if (error) {
           if (error.message.includes("User already registered")) {
             toast({
-              title: "Inscription échouée",
-              description: "Cet email est déjà utilisé. Connectez-vous plutôt.",
+              title: t('auth.signupFailed'),
+              description: t('auth.emailInUse'),
               variant: "destructive",
             });
           } else {
             toast({
-              title: "Inscription échouée",
+              title: t('auth.signupFailed'),
               description: error.message,
               variant: "destructive",
             });
           }
         } else {
           toast({
-            title: "Compte créé !",
-            description: "Bienvenue sur Unccodestore !",
+            title: t('auth.accountCreated'),
+            description: t('auth.accountCreatedDesc'),
           });
           navigate("/");
         }
@@ -139,7 +141,7 @@ const Auth = () => {
     
     const emailResult = emailSchema.safeParse(email);
     if (!emailResult.success) {
-      setErrors({ email: emailResult.error.errors[0].message });
+      setErrors({ email: emailResult.error.issues[0].message });
       return;
     }
     
@@ -150,15 +152,15 @@ const Auth = () => {
       
       if (error) {
         toast({
-          title: "Échec de réinitialisation",
+          title: t('auth.resetFailed'),
           description: error.message,
           variant: "destructive",
         });
       } else {
         setResetEmailSent(true);
         toast({
-          title: "Email envoyé !",
-          description: "Vérifiez votre boîte de réception pour le lien de réinitialisation.",
+          title: t('auth.emailSent'),
+          description: t('auth.emailSentDesc'),
         });
       }
     } finally {
@@ -172,7 +174,7 @@ const Auth = () => {
       const { error } = await signInWithGoogle();
       if (error) {
         toast({
-          title: "Connexion Google échouée",
+          title: t('auth.googleFailed'),
           description: error.message,
           variant: "destructive",
         });
@@ -196,10 +198,10 @@ const Auth = () => {
                   <CheckCircle className="w-8 h-8 text-orange-500" />
                 </div>
                 <h1 className="text-2xl font-extrabold text-gray-900 mb-2">
-                  Vérifiez votre email
+                  {t('auth.checkEmail')}
                 </h1>
                 <p className="text-gray-500 mb-6">
-                  Nous avons envoyé un lien de réinitialisation à <strong className="text-gray-900">{email}</strong>
+                  {t('auth.resetSentTo')} <strong className="text-gray-900">{email}</strong>
                 </p>
                 <Button
                   variant="outline"
@@ -211,7 +213,7 @@ const Auth = () => {
                   }}
                 >
                   <ArrowLeft className="w-4 h-4" />
-                  Retour à la connexion
+                  {t('auth.backToLogin')}
                 </Button>
               </div>
             </div>
@@ -230,23 +232,23 @@ const Auth = () => {
           <div className="container mx-auto max-w-md">
             <div className="text-center mb-8">
               <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">
-                Mot de passe oublié ?
+                {t('auth.forgotTitle')}
               </h1>
               <p className="text-gray-500">
-                Entrez votre email et nous vous enverrons un lien de réinitialisation
+                {t('auth.forgotSubtitle')}
               </p>
             </div>
 
             <div className="bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
               <form onSubmit={handleForgotPassword} className="space-y-5">
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email">{t('auth.email')}</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <Input
                       id="email"
                       type="email"
-                      placeholder="vous@exemple.com"
+                      placeholder={t('auth.emailPlaceholder')}
                       value={email}
                       onChange={(e) => {
                         setEmail(e.target.value);
@@ -270,7 +272,7 @@ const Auth = () => {
                     <Loader2 className="w-5 h-5 animate-spin" />
                   ) : (
                     <>
-                      Envoyer le lien
+                      {t('auth.sendLink')}
                       <ArrowRight className="w-5 h-5" />
                     </>
                   )}
@@ -287,7 +289,7 @@ const Auth = () => {
                   className="text-orange-500 font-medium hover:underline inline-flex items-center gap-1"
                 >
                   <ArrowLeft className="w-4 h-4" />
-                  Retour à la connexion
+                  {t('auth.backToLogin')}
                 </button>
               </div>
             </div>
@@ -308,12 +310,12 @@ const Auth = () => {
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">
-              {isLogin ? "Bon retour" : "Créer un compte"}
+              {isLogin ? t('auth.loginTitle') : t('auth.signupTitle')}
             </h1>
             <p className="text-gray-500">
               {isLogin 
-                ? "Connectez-vous pour accéder à vos favoris et achats" 
-                : "Rejoignez-nous pour sauvegarder vos favoris et suivre vos commandes"}
+                ? t('auth.loginSubtitle') 
+                : t('auth.signupSubtitle')}
             </p>
           </div>
 
@@ -330,25 +332,25 @@ const Auth = () => {
               ) : (
                 <GoogleIcon />
               )}
-              Continuer avec Google
+              {t('auth.continueGoogle')}
             </button>
 
             <div className="flex items-center gap-3 my-5">
               <span className="flex-1 h-px bg-gray-200" />
-              <span className="text-xs text-gray-400 font-medium">ou</span>
+              <span className="text-xs text-gray-400 font-medium">{t('auth.or')}</span>
               <span className="flex-1 h-px bg-gray-200" />
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
               {!isLogin && (
                 <div className="space-y-2">
-                  <Label htmlFor="displayName">Nom d'affichage</Label>
+                  <Label htmlFor="displayName">{t('auth.displayName')}</Label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <Input
                       id="displayName"
                       type="text"
-                      placeholder="Votre nom"
+                      placeholder={t('auth.displayNamePlaceholder')}
                       value={displayName}
                       onChange={(e) => setDisplayName(e.target.value)}
                       className="pl-10"
@@ -358,13 +360,13 @@ const Auth = () => {
               )}
 
               <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email">{t('auth.email')}</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <Input
                       id="email"
                       type="email"
-                      placeholder="vous@exemple.com"
+                      placeholder={t('auth.emailPlaceholder')}
                     value={email}
                     onChange={(e) => {
                       setEmail(e.target.value);
@@ -380,7 +382,7 @@ const Auth = () => {
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="password">Mot de passe</Label>
+                  <Label htmlFor="password">{t('auth.password')}</Label>
                   {isLogin && (
                     <button
                       type="button"
@@ -390,7 +392,7 @@ const Auth = () => {
                       }}
                       className="text-sm text-orange-500 hover:underline"
                     >
-                      Mot de passe oublié ?
+                      {t('auth.forgotPassword')}
                     </button>
                   )}
                 </div>
@@ -431,7 +433,7 @@ const Auth = () => {
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
                   <>
-                    {isLogin ? "Se connecter" : "Créer un compte"}
+                    {isLogin ? t('auth.signIn') : t('auth.signUp')}
                     <ArrowRight className="w-5 h-5" />
                   </>
                 )}
@@ -440,7 +442,7 @@ const Auth = () => {
 
             <div className="mt-6 text-center">
               <p className="text-gray-500">
-                {isLogin ? "Pas encore de compte ?" : "Déjà un compte ?"}{" "}
+                {isLogin ? t('auth.noAccount') : t('auth.haveAccount')}{" "}
                 <button
                   type="button"
                   onClick={() => {
@@ -449,7 +451,7 @@ const Auth = () => {
                   }}
                   className="text-orange-500 font-medium hover:underline"
                 >
-                  {isLogin ? "S'inscrire" : "Se connecter"}
+                  {isLogin ? t('auth.register') : t('auth.signIn')}
                 </button>
               </p>
             </div>

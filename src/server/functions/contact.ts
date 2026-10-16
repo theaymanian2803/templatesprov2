@@ -3,6 +3,7 @@ import { db } from '../db/client'
 import { contacts } from '../db/schema'
 import { eq, desc } from 'drizzle-orm'
 import { requireAdmin } from '../admin'
+import { logAudit } from '../audit'
 
 export const submitContact = createServerFn({ method: 'POST' })
   .validator((v: { name: string; email: string; subject: string; message: string; templateId?: string; templateTitle?: string }) => v)
@@ -29,15 +30,17 @@ export const listContacts = createServerFn({ method: 'GET' }).handler(async () =
 export const markContactRead = createServerFn({ method: 'POST' })
   .validator((id: string) => id)
   .handler(async ({ data: id }) => {
-    await requireAdmin()
+    const admin = await requireAdmin()
     await db.update(contacts).set({ is_read: true }).where(eq(contacts.id, id))
+    await logAudit({ action: 'contact.read', entityType: 'contact', entityId: id, actor: admin })
     return { success: true }
   })
 
 export const deleteContact = createServerFn({ method: 'POST' })
   .validator((id: string) => id)
   .handler(async ({ data: id }) => {
-    await requireAdmin()
+    const admin = await requireAdmin()
     await db.delete(contacts).where(eq(contacts.id, id))
+    await logAudit({ action: 'contact.delete', entityType: 'contact', entityId: id, actor: admin })
     return { success: true }
   })

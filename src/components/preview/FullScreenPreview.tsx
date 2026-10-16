@@ -2,6 +2,7 @@ import { cn } from '@/lib/utils'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { ChevronDown, ChevronUp, ExternalLink, Loader2, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface FullScreenPreviewProps {
   url: string
@@ -22,6 +23,7 @@ interface FullScreenPreviewProps {
 */
 
 const FullScreenPreview = ({ url, title, open, onClose }: FullScreenPreviewProps) => {
+  const { t } = useTranslation()
   const [loaded, setLoaded] = useState(false)
   const [controlsVisible, setControlsVisible] = useState(true)
   const reduceMotion = useReducedMotion()
@@ -63,7 +65,7 @@ const FullScreenPreview = ({ url, title, open, onClose }: FullScreenPreviewProps
           className="fixed inset-0 z-[100] bg-white"
           role="dialog"
           aria-modal="true"
-          aria-label={`Aperçu en plein écran de ${title}`}
+          aria-label={t('previewUi.fsAria', { title })}
           onClick={onClose}>
           {/* inner layer stops the backdrop click from firing while the site is interactive */}
           <div className="absolute inset-0" onClick={(e) => e.stopPropagation()}>
@@ -77,7 +79,7 @@ const FullScreenPreview = ({ url, title, open, onClose }: FullScreenPreviewProps
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
               src={url}
-              title={`${title} – Aperçu en plein écran`}
+              title={t('previewUi.fsIframeTitle', { title })}
               className="h-full w-full border-none bg-white"
               sandbox="allow-scripts allow-same-origin allow-forms"
               onLoad={() => setLoaded(true)}
@@ -118,7 +120,7 @@ const FullScreenPreview = ({ url, title, open, onClose }: FullScreenPreviewProps
             )}
             <div
               role="group"
-              aria-label="Contrôles de l'aperçu"
+              aria-label={t('previewUi.fsControls')}
               aria-hidden={!controlsVisible}
               className={cn(
                 'flex flex-col items-center gap-0.5 rounded-full border border-[#EAEAEA] bg-white/85 px-1.5 py-1.5 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.12)] backdrop-blur-md transition-all duration-200 ease-out',
@@ -131,8 +133,8 @@ const FullScreenPreview = ({ url, title, open, onClose }: FullScreenPreviewProps
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Ouvrir dans un nouvel onglet"
-                title="Ouvrir dans un nouvel onglet"
+                aria-label={t('previewUi.fsOpenTab')}
+                title={t('previewUi.fsOpenTab')}
                 onClick={(e) => e.stopPropagation()}
                 className="inline-flex h-8 w-8 items-center justify-center rounded-full text-[#111111] transition-colors hover:bg-black/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e85a2d]/50">
                 <ExternalLink className="h-4 w-4" />
@@ -148,7 +150,7 @@ const FullScreenPreview = ({ url, title, open, onClose }: FullScreenPreviewProps
                   e.stopPropagation()
                   onClose()
                 }}
-                aria-label="Fermer l'aperçu"
+                aria-label={t('previewUi.fsClose')}
                 className="inline-flex h-8 w-8 items-center justify-center rounded-full text-[#111111] transition-colors hover:bg-black/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e85a2d]/50">
                 <X className="h-4 w-4" />
               </button>
@@ -162,8 +164,8 @@ const FullScreenPreview = ({ url, title, open, onClose }: FullScreenPreviewProps
                   e.stopPropagation()
                   setControlsVisible(false)
                 }}
-                aria-label="Masquer les contrôles"
-                title="Masquer les contrôles"
+                aria-label={t('previewUi.fsHide')}
+                title={t('previewUi.fsHide')}
                 className="inline-flex h-8 w-8 items-center justify-center rounded-full text-[#787774] transition-colors hover:bg-black/5 hover:text-[#111111] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e85a2d]/50">
                 <ChevronDown className="h-4 w-4" />
               </button>
@@ -176,8 +178,8 @@ const FullScreenPreview = ({ url, title, open, onClose }: FullScreenPreviewProps
                 e.stopPropagation()
                 setControlsVisible(true)
               }}
-              aria-label="Afficher les contrôles"
-              title="Afficher les contrôles"
+              aria-label={t('previewUi.fsShow')}
+              title={t('previewUi.fsShow')}
               aria-hidden={controlsVisible}
               className={cn(
                 'absolute left-1/2 top-1/2 inline-flex h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[#EAEAEA] bg-white/85 text-[#787774] shadow-[0_2px_10px_-4px_rgba(0,0,0,0.12)] backdrop-blur-md transition-all duration-200 ease-out hover:bg-white hover:text-[#111111] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e85a2d]/50',

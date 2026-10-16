@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, RotateCcw, CheckCircle2, Clock, XCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   Dialog,
   DialogContent,
@@ -22,18 +23,19 @@ interface RefundButtonProps {
   orderStatus: string;
 }
 
-const statusConfig: Record<string, { icon: React.ElementType; variant: "default" | "secondary" | "destructive" | "outline"; label: string }> = {
-  pending: { icon: Clock, variant: "outline", label: "Remboursement en attente" },
-  approved: { icon: CheckCircle2, variant: "default", label: "Remboursement approuvé" },
-  rejected: { icon: XCircle, variant: "destructive", label: "Remboursement refusé" },
-};
-
 const RefundButton = ({ orderId, orderStatus }: RefundButtonProps) => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [reason, setReason] = useState("");
+
+  const statusConfig: Record<string, { icon: React.ElementType; variant: "default" | "secondary" | "destructive" | "outline"; label: string }> = {
+    pending: { icon: Clock, variant: "outline", label: t("refund.pending") },
+    approved: { icon: CheckCircle2, variant: "default", label: t("refund.approved") },
+    rejected: { icon: XCircle, variant: "destructive", label: t("refund.rejected") },
+  };
 
   const { data: existingRequest, isLoading } = useQuery({
     queryKey: ["refund-request", orderId],
@@ -47,12 +49,12 @@ const RefundButton = ({ orderId, orderStatus }: RefundButtonProps) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["refund-request", orderId] });
-      toast({ title: "Demande de remboursement soumise", description: "Nous examinerons votre demande sous 1 à 3 jours ouvrés." });
+      toast({ title: t("refund.submittedTitle"), description: t("refund.submittedDesc") });
       setOpen(false);
       setReason("");
     },
     onError: (error: any) => {
-      toast({ title: "Erreur", description: error.message, variant: "destructive" });
+      toast({ title: t("refund.error"), description: error.message, variant: "destructive" });
     },
   });
 
@@ -82,31 +84,30 @@ const RefundButton = ({ orderId, orderStatus }: RefundButtonProps) => {
       <DialogTrigger asChild>
         <Button size="sm" variant="outline" className="gap-1 text-xs">
           <RotateCcw className="w-3 h-3" />
-          Demander un remboursement
+          {t("refund.request")}
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Demander un remboursement</DialogTitle>
+          <DialogTitle>{t("refund.dialogTitle")}</DialogTitle>
           <DialogDescription>
-            Veuillez nous indiquer pourquoi vous souhaitez un remboursement. Notre équipe examinera votre demande sous 1 à 3 jours ouvrés. 
-            Les remboursements sont disponibles dans les 14 jours suivant l'achat conformément à notre politique de remboursement.
+            {t("refund.dialogDesc")}
           </DialogDescription>
         </DialogHeader>
         <Textarea
-          placeholder="Veuillez décrire la raison de votre demande de remboursement..."
+          placeholder={t("refund.placeholder")}
           value={reason}
           onChange={(e) => setReason(e.target.value)}
           rows={4}
         />
         <DialogFooter>
-          <Button variant="outline" onClick={() => setOpen(false)}>Annuler</Button>
+          <Button variant="outline" onClick={() => setOpen(false)}>{t("refund.cancel")}</Button>
           <Button
             onClick={() => submitMutation.mutate()}
             disabled={!reason.trim() || submitMutation.isPending}
           >
             {submitMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-            Soumettre la demande
+            {t("refund.submit")}
           </Button>
         </DialogFooter>
       </DialogContent>

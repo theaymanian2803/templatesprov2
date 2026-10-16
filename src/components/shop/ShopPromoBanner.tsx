@@ -1,8 +1,10 @@
 import { ArrowRight } from 'lucide-react'
 import { useNavigate } from '@/lib/router'
 import { useCart } from '@/contexts/CartContext'
+import { useTranslation } from 'react-i18next'
 
 const ShopPromoBanner = () => {
+  const { t } = useTranslation()
   const { setAllAccess } = useCart()
   const navigate = useNavigate()
 
@@ -20,16 +22,16 @@ const ShopPromoBanner = () => {
       <div className="relative flex flex-col md:flex-row items-center justify-between gap-5 p-6 md:px-8">
         <div className="max-w-xl">
           <h3 className="text-xl md:text-2xl font-bold tracking-tight leading-tight">
-            Get unlimited downloads for all kinds of websites — SaaS, eCommerce, Blog &amp; more.
+            {t('shopPromo.heading')}
           </h3>
           <p className="text-lg md:text-xl font-bold text-white mt-4">
-            All templates. One price. <span className="text-yellow-300">$300 USD — Build anything.</span>
+            {t('shopPromo.priceLine')}<span className="text-yellow-300">{t('shopPromo.priceHighlight')}</span>
           </p>
         </div>
         <button
           onClick={handleGetAllTemplates}
           className="shrink-0 inline-flex items-center gap-2 h-11 px-6 rounded-lg bg-gray-900 text-white font-semibold text-sm hover:bg-gray-800 transition-colors group whitespace-nowrap cursor-pointer">
-          Get all templates
+          {t('shopPromo.cta')}
           <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
         </button>
       </div>

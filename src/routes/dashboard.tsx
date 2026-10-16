@@ -27,8 +27,10 @@ import {
 import TemplateCard from "@/components/TemplateCard";
 import ReviewReminderBanner from "@/components/dashboard/ReviewReminderBanner";
 import HostingWizard from "@/components/HostingWizard";
+import { useTranslation } from "react-i18next";
 
 const Dashboard = () => {
+  const { t } = useTranslation();
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { data: stats, isLoading: statsLoading } = useDashboardStats();
@@ -58,10 +60,10 @@ const Dashboard = () => {
   }
 
   const statCards = [
-    { label: "Commandes", value: stats?.totalOrders ?? 0, icon: Package, color: "text-primary" },
-    { label: "Dépensé", value: `$${(stats?.totalSpent ?? 0).toFixed(0)}`, icon: DollarSign, color: "text-primary" },
-    { label: "Templates", value: stats?.totalDownloads ?? 0, icon: Download, color: "text-primary" },
-    { label: "Avis en attente", value: stats?.pendingReviews ?? 0, icon: Star, color: "text-accent" },
+    { label: t('dashboard.statOrders'), value: stats?.totalOrders ?? 0, icon: Package, color: "text-primary" },
+    { label: t('dashboard.statSpent'), value: `$${(stats?.totalSpent ?? 0).toFixed(0)}`, icon: DollarSign, color: "text-primary" },
+    { label: t('dashboard.statTemplates'), value: stats?.totalDownloads ?? 0, icon: Download, color: "text-primary" },
+    { label: t('dashboard.statPendingReviews'), value: stats?.pendingReviews ?? 0, icon: Star, color: "text-accent" },
   ];
 
   const unreviewed = (purchased || []).filter((t) => !t.has_review);
@@ -75,9 +77,11 @@ const Dashboard = () => {
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-3xl md:text-4xl font-display font-bold text-foreground">
-              Bon retour{user?.user_metadata?.display_name ? `, ${user.user_metadata.display_name}` : ""} !
+              {user?.user_metadata?.display_name
+                ? t('dashboard.welcomeNamed', { name: user.user_metadata.display_name })
+                : t('dashboard.welcome')}
             </h1>
-            <p className="text-muted-foreground mt-1">Aperçu de votre compte</p>
+            <p className="text-muted-foreground mt-1">{t('dashboard.subtitle')}</p>
           </div>
 
           {/* Stats Grid */}
@@ -113,26 +117,25 @@ const Dashboard = () => {
                 <div>
                   <CardTitle className="text-lg flex items-center gap-2">
                     <Clock className="w-5 h-5 text-primary" />
-                    Recent Orders
-                    Commandes récentes
+                    {t('dashboard.recentOrders')}
                   </CardTitle>
-                  <CardDescription>Vos derniers achats</CardDescription>
+                  <CardDescription>{t('dashboard.recentOrdersDesc')}</CardDescription>
                 </div>
                 <Link to="/profile">
                   <Button variant="ghost" size="sm" className="gap-1">
-                    Tout voir <ArrowRight className="w-4 h-4" />
+                    {t('dashboard.viewAll')} <ArrowRight className="w-4 h-4" />
                   </Button>
                 </Link>
               </CardHeader>
               <CardContent>
                 {!recentOrders?.length ? (
-                  <p className="text-sm text-muted-foreground py-4">Aucune commande pour le moment. Parcourez nos templates !</p>
+                  <p className="text-sm text-muted-foreground py-4">{t('dashboard.noOrders')}</p>
                 ) : (
                   <div className="space-y-3">
                     {recentOrders.slice(0, 5).map((order) => (
                       <div key={order.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
                         <div>
-                          <p className="text-sm font-medium text-foreground">Order #{order.id.slice(0, 8)}</p>
+                          <p className="text-sm font-medium text-foreground">{t('dashboard.orderNumber', { id: order.id.slice(0, 8) })}</p>
                           <p className="text-xs text-muted-foreground">
                             {new Date(order.created_at).toLocaleDateString()}
                           </p>
@@ -160,17 +163,17 @@ const Dashboard = () => {
             {/* Quick Actions */}
             <Card className="border-border/50">
               <CardHeader className="pb-2">
-                <CardTitle className="text-lg">Actions rapides</CardTitle>
+                <CardTitle className="text-lg">{t('dashboard.quickActions')}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 <Link to="/downloads" className="block">
                   <Button variant="outline" className="w-full justify-start gap-2">
-                    <Download className="w-4 h-4" /> Mes téléchargements
+                    <Download className="w-4 h-4" /> {t('dashboard.myDownloads')}
                   </Button>
                 </Link>
                 <Link to="/favorites" className="block">
                   <Button variant="outline" className="w-full justify-start gap-2">
-                    <Heart className="w-4 h-4" /> Favoris
+                    <Heart className="w-4 h-4" /> {t('dashboard.favorites')}
                     {favorites.length > 0 && (
                       <Badge variant="secondary" className="ml-auto">{favorites.length}</Badge>
                     )}
@@ -178,12 +181,12 @@ const Dashboard = () => {
                 </Link>
                 <Link to="/templates" className="block">
                   <Button variant="outline" className="w-full justify-start gap-2">
-                    <ShoppingCart className="w-4 h-4" /> Parcourir
+                    <ShoppingCart className="w-4 h-4" /> {t('dashboard.browse')}
                   </Button>
                 </Link>
                 <Link to="/profile" className="block">
                   <Button variant="outline" className="w-full justify-start gap-2">
-                    <MessageSquare className="w-4 h-4" /> Paramètres
+                    <MessageSquare className="w-4 h-4" /> {t('dashboard.settings')}
                   </Button>
                 </Link>
                 <Button
@@ -191,7 +194,7 @@ const Dashboard = () => {
                   className="w-full justify-start gap-2"
                   onClick={() => setHostingOpen(true)}
                 >
-                  <Rocket className="w-4 h-4" /> Héberger
+                  <Rocket className="w-4 h-4" /> {t('dashboard.host')}
                 </Button>
               </CardContent>
             </Card>
@@ -201,10 +204,10 @@ const Dashboard = () => {
           {recommendedTemplates && recommendedTemplates.length > 0 && (
             <div>
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-display font-bold text-foreground">Recommandations</h2>
+                <h2 className="text-xl font-display font-bold text-foreground">{t('dashboard.recommendations')}</h2>
                 <Link to="/templates">
                   <Button variant="ghost" size="sm" className="gap-1">
-                    Tout voir <ArrowRight className="w-4 h-4" />
+                    {t('dashboard.viewAll')} <ArrowRight className="w-4 h-4" />
                   </Button>
                 </Link>
               </div>

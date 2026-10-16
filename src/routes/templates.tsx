@@ -15,12 +15,12 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Template, useTemplates } from '@/hooks/useTemplates'
-import { getDisplayRating, getDisplaySales } from '@/lib/seeded'
+import { Template, useSearchCatalog } from '@/hooks/useTemplates'
 import { Filter, LayoutGrid, List, Search, SlidersHorizontal, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from '@/lib/router'
+import { seoHead } from '@/lib/site'
 
 const ITEMS_PER_PAGE = 10
 
@@ -43,108 +43,33 @@ const Templates = () => {
   const [viewMode, setViewMode] = useState<ViewMode>('list')
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
 
-  const { data: allTemplates, isLoading } = useTemplates({ limit: 200 })
-
   useEffect(() => {
     setPage(1)
   }, [filters, searchQuery, sortBy])
 
-  const filteredTemplates = useMemo(() => {
-    if (!allTemplates) return []
-    let list = allTemplates as Template[]
-
-    // Category filter
-    if (filters.category) {
-      list = list.filter((t) => t.category === filters.category)
-    }
-
-    // Search query filter
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase()
-      list = list.filter(
-        (t) =>
-          t.title.toLowerCase().includes(q) ||
-          t.description?.toLowerCase().includes(q) ||
-          t.tech_stack?.some((s) => s.toLowerCase().includes(q)),
-      )
-    }
-
-    // Price range filter
-    if (filters.minPrice) {
-      const min = parseFloat(filters.minPrice)
-      if (!isNaN(min)) list = list.filter((t) => Number(t.price) >= min)
-    }
-    if (filters.maxPrice) {
-      const max = parseFloat(filters.maxPrice)
-      if (!isNaN(max)) list = list.filter((t) => Number(t.price) <= max)
-    }
-
-    // On Sale filter - templates with extended_price or price below original were on sale
-    if (filters.onSale) {
-      list = list.filter(
-        (t) => t.extended_price !== null && Number(t.extended_price) > Number(t.price),
-      )
-    }
-
-    // Rating filter (use display rating = placeholder fallback + real)
-    if (filters.rating !== null) {
-      list = list.filter((t) => getDisplayRating(t.id, t.rating) >= filters.rating!)
-    }
-
-    // Sales filter (use display sales = placeholder + real)
-    if (filters.sales.length > 0) {
-      list = list.filter((t) => {
-        const s = getDisplaySales(t.id, t.sales)
-        return filters.sales.some((bucket) => {
-          if (bucket === 'none') return s === 0
-          if (bucket === 'low') return s > 0 && s < 50
-          if (bucket === 'medium') return s >= 50 && s < 250
-          if (bucket === 'high') return s >= 250 && s < 1000
-          if (bucket === 'top') return s >= 1000
-          return false
-        })
-      })
-    }
-
-    // Sort
-    switch (sortBy) {
-      case 'best_sellers':
-        list = [...list].sort((a, b) => getDisplaySales(b.id, b.sales) - getDisplaySales(a.id, a.sales))
-        break
-      case 'newest':
-        list = [...list].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-        break
-      case 'best_rated':
-        list = [...list].sort((a, b) => getDisplayRating(b.id, b.rating) - getDisplayRating(a.id, a.rating))
-        break
-      case 'price':
-        list = [...list].sort((a, b) => Number(a.price) - Number(b.price))
-        break
-      case 'trending':
-        list = [...list].sort((a, b) => getDisplaySales(b.id, b.sales) * getDisplayRating(b.id, b.rating) - getDisplaySales(a.id, a.sales) * getDisplayRating(a.id, a.rating))
-        break
-    }
-
-    return list
-  }, [allTemplates, filters, searchQuery, sortBy])
-
-  const totalCount = filteredTemplates.length
-  const totalPages = Math.max(1, Math.ceil(totalCount / ITEMS_PER_PAGE))
-  const currentPage = Math.min(page, totalPages)
-  const pagedTemplates = filteredTemplates.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE,
+  const catalogParams = useMemo(
+    () => ({
+      category: filters.category,
+      query: searchQuery.trim() || undefined,
+      minPrice: filters.minPrice ? parseFloat(filters.minPrice) : undefined,
+      maxPrice: filters.maxPrice ? parseFloat(filters.maxPrice) : undefined,
+      onSale: filters.onSale,
+      rating: filters.rating,
+      sales: filters.sales,
+      sort: sortBy,
+      page,
+      pageSize: ITEMS_PER_PAGE,
+    }),
+    [filters, searchQuery, sortBy, page],
   )
 
-  const categoryCounts = useMemo<Record<string, number>>(() => {
-    const counts: Record<string, number> = { __all: allTemplates?.length ?? 0 }
-    if (!allTemplates) return counts
-    allTemplates.forEach((t) => {
-      const c = t.category || 'Uncategorized'
-      counts[c] = (counts[c] ?? 0) + 1
-    })
-    return counts
-  }, [allTemplates])
+  const { data: catalog, isLoading } = useSearchCatalog(catalogParams)
+
+  const pagedTemplates = (catalog?.data ?? []) as Template[]
+  const totalCount = catalog?.total ?? 0
+  const totalPages = catalog?.totalPages ?? 1
+  const currentPage = catalog?.page ?? 1
+  const categoryCounts: Record<string, number> = catalog?.categoryCounts ?? { __all: 0 }
 
   // Sync URL when filters/search change
   useEffect(() => {
@@ -455,4 +380,12 @@ const Templates = () => {
   )
 }
 
-export const Route = createFileRoute('/templates')({ component: Templates })
+export const Route = createFileRoute('/templates')({
+  component: Templates,
+  head: () =>
+    seoHead({
+      title: 'Templates',
+      description: 'Parcourez le catalogue de templates web premium et de code source.',
+      path: '/templates',
+    }),
+})

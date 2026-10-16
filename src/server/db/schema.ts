@@ -167,6 +167,23 @@ export const site_settings = sqliteTable('site_settings', {
   updated_at: integer('updated_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
 })
 
+export const audit_log = sqliteTable('audit_log', {
+  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
+  actor_user_id: text('actor_user_id').notNull(),
+  actor_email: text('actor_email'),
+  action: text('action').notNull(),
+  entity_type: text('entity_type').notNull(),
+  entity_id: text('entity_id'),
+  metadata: text('metadata', { mode: 'json' }).$type<Record<string, unknown>>().notNull().default({}),
+  created_at: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
+}, (t) => [index('audit_log_created_idx').on(t.created_at)])
+
+export const newsletter_subscribers = sqliteTable('newsletter_subscribers', {
+  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
+  email: text('email').notNull().unique(),
+  created_at: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
+})
+
 export const user = sqliteTable('user', {
   id: text('id').primaryKey(),
   name: text('name').notNull(),

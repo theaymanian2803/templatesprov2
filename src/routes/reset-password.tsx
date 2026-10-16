@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "@/lib/router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,8 +11,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Lock, ArrowRight, Loader2, CheckCircle, Eye, EyeOff } from "lucide-react";
 import { z } from "zod";
-
-const passwordSchema = z.string().min(6, "Le mot de passe doit contenir au moins 6 caractères");
 
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
@@ -24,31 +23,34 @@ const ResetPassword = () => {
   
   const { updatePassword } = useAuth();
   const { toast } = useToast();
+  const { t } = useTranslation();
   const navigate = useNavigate();
+
+  const passwordSchema = useMemo(() => z.string().min(6, t('resetPassword.passwordMin')), [t]);
 
   // Check if user arrived via reset link (token in URL query)
   useEffect(() => {
     const token = new URLSearchParams(window.location.search).get('token');
     if (!token) {
       toast({
-        title: "Lien invalide ou expiré",
-        description: "Veuillez demander un nouveau lien de réinitialisation.",
+        title: t('resetPassword.invalidLink'),
+        description: t('resetPassword.invalidLinkDesc'),
         variant: "destructive",
       });
       navigate("/auth");
     }
-  }, [navigate, toast]);
+  }, [navigate, toast, t]);
 
   const validateForm = () => {
     const newErrors: { password?: string; confirmPassword?: string } = {};
     
     const passwordResult = passwordSchema.safeParse(password);
     if (!passwordResult.success) {
-      newErrors.password = passwordResult.error.errors[0].message;
+      newErrors.password = passwordResult.error.issues[0].message;
     }
     
     if (password !== confirmPassword) {
-      newErrors.confirmPassword = "Les mots de passe ne correspondent pas";
+      newErrors.confirmPassword = t('resetPassword.mismatch');
     }
     
     setErrors(newErrors);
@@ -67,15 +69,15 @@ const ResetPassword = () => {
       
       if (error) {
         toast({
-          title: "Échec de la réinitialisation",
+          title: t('resetPassword.resetFailed'),
           description: error.message,
           variant: "destructive",
         });
       } else {
         setIsComplete(true);
         toast({
-          title: "Mot de passe mis à jour !",
-          description: "Votre mot de passe a été modifié avec succès.",
+          title: t('resetPassword.updatedTitle'),
+          description: t('resetPassword.updatedDesc'),
         });
       }
     } finally {
@@ -95,10 +97,10 @@ const ResetPassword = () => {
                 <CheckCircle className="w-8 h-8 text-primary" />
               </div>
               <h1 className="text-2xl font-display font-bold text-foreground mb-2">
-                Mot de passe mis à jour
+                {t('resetPassword.doneHeading')}
               </h1>
               <p className="text-muted-foreground mb-6">
-                Votre mot de passe a été changé. Vous pouvez maintenant vous connecter avec votre nouveau mot de passe.
+                {t('resetPassword.doneDesc')}
               </p>
               <Button
                 variant="hero"
@@ -106,7 +108,7 @@ const ResetPassword = () => {
                 className="gap-2"
                 onClick={() => navigate("/")}
               >
-                Retour à l'accueil
+                {t('resetPassword.backHome')}
                 <ArrowRight className="w-5 h-5" />
               </Button>
             </div>
@@ -126,17 +128,17 @@ const ResetPassword = () => {
         <div className="container mx-auto max-w-md">
           <div className="text-center mb-8">
             <h1 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-2">
-              Nouveau mot de passe
+              {t('resetPassword.heading')}
             </h1>
             <p className="text-muted-foreground">
-              Saisissez votre nouveau mot de passe ci-dessous
+              {t('resetPassword.subtitle')}
             </p>
           </div>
 
           <div className="glass-card p-8 rounded-2xl border border-border/50 shadow-lg">
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2">
-                <Label htmlFor="password">Nouveau mot de passe</Label>
+                <Label htmlFor="password">{t('resetPassword.newPassword')}</Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <Input
@@ -165,7 +167,7 @@ const ResetPassword = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirmer le mot de passe</Label>
+                <Label htmlFor="confirmPassword">{t('resetPassword.confirmPassword')}</Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <Input
@@ -204,7 +206,7 @@ const ResetPassword = () => {
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
                   <>
-                    Mettre à jour
+                    {t('resetPassword.update')}
                     <ArrowRight className="w-5 h-5" />
                   </>
                 )}
