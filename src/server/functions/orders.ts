@@ -11,7 +11,7 @@ import {
   site_settings,
 } from '../db/schema'
 import { eq, desc, inArray } from 'drizzle-orm'
-import { requireUser } from '../admin'
+import { requireUser, isAdmin } from '../admin'
 import { paypalAccessToken, PAYPAL_API } from './paypal'
 import { issueKeysForOrder } from './licenses-issue'
 
@@ -305,9 +305,12 @@ export const getMyOrders = createServerFn({ method: 'GET' }).handler(async () =>
 export const getOrderWithItems = createServerFn({ method: 'GET' })
   .validator((orderId: string) => orderId)
   .handler(async ({ data: orderId }) => {
-    await requireUser()
+    const user = await requireUser()
     const order = (await db.select().from(orders).where(eq(orders.id, orderId)).limit(1))[0]
     if (!order) throw new Error('Order not found')
+    if (order.user_id !== user.id && !(await isAdmin(user.id))) {
+      throw new Error('Not authorized to view this order')
+    }
     const items = await db.select().from(order_items).where(eq(order_items.order_id, orderId))
     return { ...order, items }
   })

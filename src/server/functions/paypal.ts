@@ -21,3 +21,38 @@ export async function paypalAccessToken(): Promise<string> {
 }
 
 export { PAYPAL_API }
+
+/**
+ * Refund the captured payment for a PayPal order (full refund). Looks up the
+ * capture id from the order, then refunds it. Idempotent: an already-refunded
+ * capture is treated as success.
+ */
+export async function refundPayPalOrder(paypalOrderId: string): Promise<{ refunded: boolean; captureId: string }> {
+  const token = await paypalAccessToken()
+
+  const orderRes = await fetch(`${PAYPAL_API}/v2/checkout/orders/${paypalOrderId}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  const orderData = await orderRes.json()
+  if (!orderRes.ok) {
+    throw new Error(`PayPal order lookup failed: ${orderData.message || orderRes.status}`)
+  }
+  const capture = orderData.purchase_units?.[0]?.payments?.captures?.[0]
+  if (!capture?.id) throw new Error('No PayPal capture found for this order')
+  if (capture.status === 'REFUNDED' || capture.status === 'PARTIALLY_REFUNDED') {
+    return { refunded: true, captureId: capture.id }
+  }
+
+  const refundRes = await fetch(`${PAYPAL_API}/v2/payments/captures/${capture.id}/refund`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+  })
+  const refundData = await refundRes.json()
+  if (!refundRes.ok) {
+    if (refundData?.details?.[0]?.issue === 'CAPTURE_FULLY_REFUNDED') {
+      return { refunded: true, captureId: capture.id }
+    }
+    throw new Error(`PayPal refund failed: ${refundData.message || refundRes.status}`)
+  }
+  return { refunded: true, captureId: capture.id }
+}

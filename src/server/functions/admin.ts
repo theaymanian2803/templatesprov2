@@ -32,12 +32,12 @@ const orderStatusSchema = z.object({
 
 const reviewStatusSchema = z.object({
   id: z.string().min(1),
-  status: z.enum(['pending', 'approved']),
+  status: z.enum(['pending', 'approved', 'rejected']),
 })
 
 const bulkReviewStatusSchema = z.object({
   ids: z.array(z.string().min(1)).min(1),
-  status: z.enum(['pending', 'approved']),
+  status: z.enum(['pending', 'approved', 'rejected']),
 })
 
 const idSchema = z.string().min(1, 'A valid id is required')
@@ -198,6 +198,7 @@ export const adminDeleteReviews = createServerFn({ method: 'POST' })
   })
 
 export const getSiteSettings = createServerFn({ method: 'GET' }).handler(async () => {
+  await requireAdmin()
   const rows = await db.select().from(site_settings)
   return Object.fromEntries(rows.map((r) => [r.key, r.value])) as any
 })

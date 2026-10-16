@@ -2,7 +2,7 @@ import { createServerFn } from '@tanstack/react-start'
 import { db } from '../db/client'
 import { orders, order_items, reviews, templates, template_downloads, all_access_passes } from '../db/schema'
 import { eq, and, desc, inArray, count } from 'drizzle-orm'
-import { requireUser } from '../admin'
+import { requireUser, isAdmin } from '../admin'
 
 export const getPurchasedTemplates = createServerFn({ method: 'GET' }).handler(async () => {
   const user = await requireUser()
@@ -82,7 +82,12 @@ export const getTemplateDownloadUrl = createServerFn({ method: 'GET' })
 export const getOrderItemsWithDownloads = createServerFn({ method: 'GET' })
   .validator((orderId: string) => orderId)
   .handler(async ({ data: orderId }) => {
-    await requireUser()
+    const user = await requireUser()
+    const order = (await db.select().from(orders).where(eq(orders.id, orderId)).limit(1))[0]
+    if (!order) throw new Error('Order not found')
+    if (order.user_id !== user.id && !(await isAdmin(user.id))) {
+      throw new Error('Not authorized to view this order')
+    }
     const items = await db.select().from(order_items).where(eq(order_items.order_id, orderId))
     const templateIds = items.map((i) => i.template_id)
     const downloads = templateIds.length

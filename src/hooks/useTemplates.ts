@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { listTemplates, listTemplatesPaginated, getTemplate, getCategories, searchCatalog } from "@/server/functions/templates"
+import { adminListTemplates } from "@/server/functions/admin"
 
 export interface Template {
   id: string; title: string; description: string | null; admin_description?: string | null; category: string
@@ -36,6 +37,11 @@ export const useTemplate = (id: string) => {
 
 export const useCategories = () => {
   return useQuery({ queryKey: ["template-categories"], queryFn: async () => getCategories() })
+}
+
+/** All templates (unpaginated, newest first) — admin only. */
+export const useAdminTemplates = () => {
+  return useQuery({ queryKey: ["admin-templates"], queryFn: async () => adminListTemplates() as unknown as Template[] })
 }
 
 export interface CatalogSearchInput {

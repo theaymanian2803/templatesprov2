@@ -37,7 +37,17 @@ type DeckCard = {
   artist: string
 }
 
-const HeroSection = () => {
+export interface HeroOverrides {
+  badge?: string
+  title1?: string
+  title2?: string
+  subtitle1?: string
+  subtitle2?: string
+  web_image?: string
+  phone_image?: string
+}
+
+const HeroSection = ({ overrides }: { overrides?: HeroOverrides } = {}) => {
   const [query, setQuery] = useState('')
   const [failedImgs, setFailedImgs] = useState<Record<string, boolean>>({})
   const stageRef = useRef<HTMLDivElement>(null)
@@ -50,8 +60,8 @@ const HeroSection = () => {
     .filter((c, i, arr) => arr.findIndex((x) => x.id === c.id) === i)
     .slice(0, 5)
 
-  const webImage = cards[1]?.image_url ?? topTemplates[1]?.image_url
-  const phoneImage = '/android.png'
+  const webImage = overrides?.web_image || cards[1]?.image_url || topTemplates[1]?.image_url
+  const phoneImage = overrides?.phone_image || '/android.png'
 
   useEffect(() => {
     let raf = 0
@@ -105,14 +115,14 @@ const HeroSection = () => {
       <div className="hero-shell">
         <div className="hero-copy">
           <div className="hero-badge">
-            <Sparkles size={13} /> {t('hero.badge')}
+            <Sparkles size={13} /> {overrides?.badge || t('hero.badge')}
           </div>
           <h1>
-            <span>{t('hero.title1')}</span> {t('hero.title2')}
+            <span>{overrides?.title1 || t('hero.title1')}</span> {overrides?.title2 || t('hero.title2')}
           </h1>
           <p>
-            <span>{t('hero.subtitle1')}</span>
-            <span>{t('hero.subtitle2')}</span>
+            <span>{overrides?.subtitle1 || t('hero.subtitle1')}</span>
+            <span>{overrides?.subtitle2 || t('hero.subtitle2')}</span>
           </p>
 
           <form className="hero-search" onSubmit={onSearch} role="search">

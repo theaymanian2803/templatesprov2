@@ -106,7 +106,7 @@ export const reviews = sqliteTable('reviews', {
   template_id: text('template_id').notNull().references(() => templates.id, { onDelete: 'cascade' }),
   rating: integer('rating').notNull(),
   comment: text('comment'),
-  status: text('status', { enum: ['pending', 'approved'] }).notNull().default('pending'),
+  status: text('status', { enum: ['pending', 'approved', 'rejected'] }).notNull().default('pending'),
   created_at: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
   updated_at: integer('updated_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
 }, (t) => [
@@ -182,6 +182,19 @@ export const newsletter_subscribers = sqliteTable('newsletter_subscribers', {
   id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
   email: text('email').notNull().unique(),
   created_at: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
+})
+
+export const landing_sections = sqliteTable('landing_sections', {
+  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
+  section_key: text('section_key').notNull().unique(),
+  title: text('title').notNull().default(''),
+  subtitle: text('subtitle').notNull().default(''),
+  image_url: text('image_url').notNull().default(''),
+  visible: integer('visible', { mode: 'boolean' }).notNull().default(true),
+  sort_order: integer('sort_order').notNull().default(0),
+  config: text('config', { mode: 'json' }).$type<Record<string, unknown>>().notNull().default({}),
+  created_at: integer('created_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
+  updated_at: integer('updated_at', { mode: 'timestamp' }).notNull().$defaultFn(() => new Date()),
 })
 
 export const user = sqliteTable('user', {

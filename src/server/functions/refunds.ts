@@ -4,9 +4,13 @@ import { refund_requests, orders } from '../db/schema'
 import { eq, and, desc, inArray } from 'drizzle-orm'
 import { requireAdmin, requireUser, isAdmin } from '../admin'
 import { logAudit } from '../audit'
+import { refundPayPalOrder } from './paypal'
+import { z } from 'zod'
+
+const idSchema = z.string().min(1)
 
 export const createRefundRequest = createServerFn({ method: 'POST' })
-  .validator((v: { orderId: string; reason: string }) => v)
+  .validator((v: unknown) => z.object({ orderId: z.string().min(1), reason: z.string().trim().min(1).max(2000) }).parse(v))
   .handler(async ({ data }) => {
     const user = await requireUser()
     const order = (
@@ -22,7 +26,7 @@ export const createRefundRequest = createServerFn({ method: 'POST' })
   })
 
 export const getRefundRequestByOrder = createServerFn({ method: 'GET' })
-  .validator((orderId: string) => orderId)
+  .validator((v: unknown) => idSchema.parse(v))
   .handler(async ({ data: orderId }) => {
     const user = await requireUser()
     const rows = await db
@@ -46,9 +50,36 @@ export const listRefundRequests = createServerFn({ method: 'GET' }).handler(asyn
 })
 
 export const updateRefundRequest = createServerFn({ method: 'POST' })
-  .validator((v: { id: string; status: string; adminNotes?: string }) => v)
+  .validator((v: unknown) =>
+    z
+      .object({
+        id: z.string().min(1),
+        status: z.enum(['pending', 'approved', 'rejected']),
+        adminNotes: z.string().max(2000).optional(),
+      })
+      .parse(v),
+  )
   .handler(async ({ data }) => {
     const admin = await requireAdmin()
+
+    // When approving, actually refund the money via PayPal and mark the order
+    // refunded before recording the decision. If the PayPal refund fails we
+    // throw and leave the request unchanged so the admin can retry.
+    if (data.status === 'approved') {
+      const request = (await db.select().from(refund_requests).where(eq(refund_requests.id, data.id)).limit(1))[0]
+      if (request) {
+        const order = (await db.select().from(orders).where(eq(orders.id, request.order_id)).limit(1))[0]
+        if (order) {
+          if (order.paypal_order_id && Number(order.total_amount) > 0) {
+            await refundPayPalOrder(order.paypal_order_id)
+          }
+          if (order.status !== 'refunded') {
+            await db.update(orders).set({ status: 'refunded', updated_at: new Date() }).where(eq(orders.id, order.id))
+          }
+        }
+      }
+    }
+
     await db
       .update(refund_requests)
       .set({ status: data.status, admin_notes: data.adminNotes ?? null, updated_at: new Date() })
@@ -76,7 +107,7 @@ export const adminListRefundRequestsWithDetails = createServerFn({ method: 'GET'
 })
 
 export const adminDeleteRefundRequest = createServerFn({ method: 'POST' })
-  .validator((id: string) => id)
+  .validator((v: unknown) => idSchema.parse(v))
   .handler(async ({ data: id }) => {
     const admin = await requireAdmin()
     await db.delete(refund_requests).where(eq(refund_requests.id, id))

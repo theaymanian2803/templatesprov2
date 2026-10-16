@@ -3,6 +3,7 @@ import { db } from '../db/client'
 import { reviews, profiles, order_items, orders, all_access_passes, templates } from '../db/schema'
 import { eq, and, desc, count, inArray } from 'drizzle-orm'
 import { requireUser } from '../admin'
+import { z } from 'zod'
 
 export const listReviews = createServerFn({ method: 'GET' })
   .validator((templateId: string) => templateId)
@@ -66,7 +67,15 @@ export const hasPurchased = createServerFn({ method: 'GET' })
   })
 
 export const submitReview = createServerFn({ method: 'POST' })
-  .validator((v: { templateId: string; rating: number; comment: string }) => v)
+  .validator((v: unknown) =>
+    z
+      .object({
+        templateId: z.string().min(1),
+        rating: z.number().int().min(1).max(5),
+        comment: z.string().max(2000),
+      })
+      .parse(v),
+  )
   .handler(async ({ data }) => {
     const user = await requireUser()
     if (!(await hasPurchasedInternal(user.id, data.templateId))) {
@@ -96,7 +105,7 @@ export const submitReview = createServerFn({ method: 'POST' })
   })
 
 export const deleteReview = createServerFn({ method: 'POST' })
-  .validator((v: { reviewId: string; templateId: string }) => v)
+  .validator((v: unknown) => z.object({ reviewId: z.string().min(1), templateId: z.string().min(1) }).parse(v))
   .handler(async ({ data }) => {
     const user = await requireUser()
     await db.delete(reviews).where(and(eq(reviews.id, data.reviewId), eq(reviews.user_id, user.id)))

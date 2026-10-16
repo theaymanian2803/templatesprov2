@@ -11,6 +11,7 @@ import {
   History,
   Mail,
   Settings,
+  PanelsTopLeft,
 } from "lucide-react";
 import {
   Sidebar,
@@ -27,6 +28,7 @@ import { cn } from "@/lib/utils";
 
 const managementItems = [
   { title: "Templates", value: "templates", icon: LayoutTemplate },
+  { title: "Landing page", value: "landing", icon: PanelsTopLeft },
   { title: "Downloads", value: "downloads", icon: Download },
   { title: "Orders", value: "orders", icon: ShoppingCart },
   { title: "Coupons", value: "coupons", icon: Tag },

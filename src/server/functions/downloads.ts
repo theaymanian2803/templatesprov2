@@ -3,9 +3,10 @@ import { db } from '../db/client'
 import { downloads, templates, template_downloads, order_items, orders, all_access_passes, user } from '../db/schema'
 import { eq, and, inArray, desc, count, sql } from 'drizzle-orm'
 import { requireUser, requireAdmin } from '../admin'
+import { z } from 'zod'
 
 export const recordDownload = createServerFn({ method: 'POST' })
-  .validator((templateId: string) => templateId)
+  .validator((v: unknown) => z.string().min(1).parse(v))
   .handler(async ({ data: templateId }) => {
     const currentUser = await requireUser()
 

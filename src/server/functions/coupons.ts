@@ -4,6 +4,7 @@ import { coupons } from '../db/schema'
 import { eq, desc } from 'drizzle-orm'
 import { requireAdmin } from '../admin'
 import { logAudit } from '../audit'
+import { z } from 'zod'
 
 export const listCoupons = createServerFn({ method: 'GET' }).handler(async () => {
   await requireAdmin()
@@ -11,7 +12,19 @@ export const listCoupons = createServerFn({ method: 'GET' }).handler(async () =>
 })
 
 export const createCoupon = createServerFn({ method: 'POST' })
-  .validator((c: { code: string; discount_type?: string; discount_value?: number; min_order_amount?: number; max_uses?: number | null; is_active?: boolean; expires_at?: string | null }) => c)
+  .validator((v: unknown) =>
+    z
+      .object({
+        code: z.string().trim().min(1).max(50),
+        discount_type: z.enum(['percentage', 'fixed']).optional(),
+        discount_value: z.number().min(0).optional(),
+        min_order_amount: z.number().min(0).optional(),
+        max_uses: z.number().int().min(0).nullable().optional(),
+        is_active: z.boolean().optional(),
+        expires_at: z.string().nullable().optional(),
+      })
+      .parse(v),
+  )
   .handler(async ({ data }) => {
     const admin = await requireAdmin()
     const [row] = await db
@@ -31,7 +44,7 @@ export const createCoupon = createServerFn({ method: 'POST' })
   })
 
 export const deleteCoupon = createServerFn({ method: 'POST' })
-  .validator((id: string) => id)
+  .validator((v: unknown) => z.string().min(1).parse(v))
   .handler(async ({ data: id }) => {
     const admin = await requireAdmin()
     await db.delete(coupons).where(eq(coupons.id, id))
@@ -40,7 +53,7 @@ export const deleteCoupon = createServerFn({ method: 'POST' })
   })
 
 export const toggleCoupon = createServerFn({ method: 'POST' })
-  .validator((v: { id: string; is_active: boolean }) => v)
+  .validator((v: unknown) => z.object({ id: z.string().min(1), is_active: z.boolean() }).parse(v))
   .handler(async ({ data }) => {
     const admin = await requireAdmin()
     await db.update(coupons).set({ is_active: data.is_active }).where(eq(coupons.id, data.id))
@@ -49,7 +62,7 @@ export const toggleCoupon = createServerFn({ method: 'POST' })
   })
 
 export const validateCoupon = createServerFn({ method: 'POST' })
-  .validator((v: { code: string; orderTotal: number }) => v)
+  .validator((v: unknown) => z.object({ code: z.string().min(1), orderTotal: z.number().min(0) }).parse(v))
   .handler(async ({ data }) => {
     const rows = await db.select().from(coupons).where(eq(coupons.code, data.code.toUpperCase().trim())).limit(1)
     const coupon = rows[0]

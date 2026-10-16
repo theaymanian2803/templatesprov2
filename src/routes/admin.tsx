@@ -4,6 +4,7 @@ import { AuditLogList } from '@/components/admin/AuditLogList'
 import { ContactList } from '@/components/admin/ContactList'
 import { CouponList } from '@/components/admin/CouponList'
 import { DownloadList } from '@/components/admin/DownloadList'
+import { LandingPageAdmin } from '@/components/admin/LandingPageAdmin'
 import { NewsletterList } from '@/components/admin/NewsletterList'
 import { OrderDetails } from '@/components/admin/OrderDetails'
 import { OrderList } from '@/components/admin/OrderList'
@@ -32,11 +33,11 @@ import { useIsMobile } from '@/hooks/use-mobile'
 import {
   Order,
   OrderStatus,
+  useAdminOrders,
   useDeleteOrder,
-  useOrders,
   useUpdateOrderStatus,
 } from '@/hooks/useOrders'
-import { Template, useTemplates } from '@/hooks/useTemplates'
+import { Template, useAdminTemplates } from '@/hooks/useTemplates'
 import { adminSaveTemplate, adminDeleteTemplate } from '@/server/functions/admin'
 import { getOrderWithItems } from '@/server/functions/orders'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -47,8 +48,8 @@ import { useNavigate } from '@/lib/router'
 const Admin = () => {
   const { user, loading: authLoading } = useAuth()
   const { data: isAdmin, isLoading: roleLoading } = useAdminRole()
-  const { data: templates = [], isLoading: templatesLoading } = useTemplates()
-  const { data: orders = [], isLoading: ordersLoading } = useOrders()
+  const { data: templates = [], isLoading: templatesLoading } = useAdminTemplates()
+  const { data: orders = [], isLoading: ordersLoading } = useAdminOrders()
 
   const [activeTab, setActiveTab] = useState('templates')
   const [showForm, setShowForm] = useState(false)
@@ -78,6 +79,7 @@ const Admin = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['templates'] })
+      queryClient.invalidateQueries({ queryKey: ['admin-templates'] })
       toast({ title: 'Template created successfully!' })
       setShowForm(false)
     },
@@ -96,6 +98,7 @@ const Admin = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['templates'] })
+      queryClient.invalidateQueries({ queryKey: ['admin-templates'] })
       toast({ title: 'Template updated successfully!' })
       setEditingTemplate(null)
       setShowForm(false)
@@ -116,6 +119,7 @@ const Admin = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['templates'] })
+      queryClient.invalidateQueries({ queryKey: ['admin-templates'] })
       toast({ title: 'Template deleted successfully!' })
       setDeletingId(null)
     },
@@ -258,6 +262,7 @@ const Admin = () => {
 
   const sectionTitle: Record<string, string> = {
     templates: 'Templates',
+    landing: 'Landing page',
     downloads: 'Downloads',
     orders: 'Orders',
     coupons: 'Coupons',
@@ -392,6 +397,7 @@ const Admin = () => {
                 {activeTab === 'reviews' && <ReviewList />}
                 {activeTab === 'contacts' && <ContactList />}
                 {activeTab === 'downloads' && <DownloadList />}
+                {activeTab === 'landing' && <LandingPageAdmin />}
                 {activeTab === 'users' && <UserList />}
                 {activeTab === 'newsletter' && <NewsletterList />}
                 {activeTab === 'settings' && <SettingsPanel />}
